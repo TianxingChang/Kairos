@@ -139,13 +139,15 @@ export function ChatPanel() {
                       initial={{ scale: 0.8 }}
                       animate={{ scale: 1 }}
                       transition={{ duration: 0.2, delay: 0.1 }}
-                      className={`max-w-[80%] rounded-lg px-3 py-2 ${
+                      className={`max-w-[80%] min-w-[120px] rounded-lg px-3 py-2 ${
                         message.isUser
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted"
                       }`}
                     >
-                      <p className="text-sm">{message.content}</p>
+                      <p className="text-sm break-words whitespace-pre-wrap leading-relaxed">
+                        {message.content}
+                      </p>
                       <p className="text-xs opacity-70 mt-1">
                         {mounted ? message.timestamp.toLocaleTimeString() : ""}
                       </p>
