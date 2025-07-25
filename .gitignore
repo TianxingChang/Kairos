@@ -5,8 +5,18 @@
 *.pem
 
 # Environment files
-.env*
+.env
+.env.*
 .envrc
+frontend/.env
+frontend/.env.*
+backend/.env
+backend/.env.*
+
+# Allow example files to be tracked
+!*.env.example
+!frontend/.env.example
+!backend/.env.example
 
 # IDEs and editors
 .idea
