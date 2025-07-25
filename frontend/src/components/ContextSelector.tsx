@@ -116,40 +116,51 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
       {selectedContexts.length > 0 && (
         <div className="mb-3 space-y-2">
           <AnimatePresence>
-            {selectedContexts.map((context) => (
-              <motion.div
-                key={context.id}
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg text-sm"
-              >
-                {getContextIcon(context.type)}
-                <span className="font-medium">{context.title}</span>
-                {context.timestamp !== undefined && (
-                  <span 
-                    className="text-muted-foreground flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleJumpToTime(context.timestamp!);
-                    }}
-                    title="点击跳转到此时间点"
-                  >
-                    <Clock className="w-3 h-3" />
-                    {formatTime(context.timestamp)}
-                  </span>
-                )}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-5 w-5 ml-auto"
-                  onClick={() => removeContext(context.id)}
+            {selectedContexts.map((context) => {
+              // 为"当前视频时间点"动态更新显示内容
+              const isCurrentVideoTime = context.id === "current-video-time";
+              const displayTitle = isCurrentVideoTime 
+                ? `视频时间点 ${formatTime(currentVideoTime)}`
+                : context.title;
+              const displayTimestamp = isCurrentVideoTime 
+                ? currentVideoTime 
+                : context.timestamp;
+
+              return (
+                <motion.div
+                  key={context.id}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg text-sm"
                 >
-                  <X className="w-3 h-3" />
-                </Button>
-              </motion.div>
-            ))}
+                  {getContextIcon(context.type)}
+                  <span className="font-medium">{displayTitle}</span>
+                  {displayTimestamp !== undefined && (
+                    <span 
+                      className="text-muted-foreground flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleJumpToTime(displayTimestamp);
+                      }}
+                      title="点击跳转到此时间点"
+                    >
+                      <Clock className="w-3 h-3" />
+                      {formatTime(displayTimestamp)}
+                    </span>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 ml-auto"
+                    onClick={() => removeContext(context.id)}
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
       )}
