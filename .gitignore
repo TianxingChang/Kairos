@@ -62,12 +62,16 @@ frontend/next-env.d.ts
 # Cache
 .mypy_cache
 *__pycache__*
-*.egg-info
 *.pyc
 *.pytest_cache
 *.ruff_cache
 *.cache*
 *.config*
+
+# Build artifacts
+build/
+dist/
+*.egg-info
 
 # Virtual environments
 .venv*
