@@ -181,17 +181,23 @@ export function ChatPanel() {
                 <div className="h-px bg-border/30 mx-3" />
 
                 {/* 输入框区域 */}
-                <div className="flex items-end gap-3 px-3 pb-3 pt-2">
+                <div className="flex items-end gap-3 px-3 pb-3 pt-2 border-0 shadow-none">
                   {/* 输入框 */}
-                  <div className="flex-1 relative">
+                  <div className="flex-1 relative border-0 shadow-none">
                     <Textarea
                       ref={textareaRef}
                       value={chatInput}
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyDown={handleKeyPress}
                       placeholder="询问关于这个视频的问题..."
-                      className="w-full min-h-[24px] max-h-[120px] resize-none border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent leading-6"
-                      style={{ height: "24px" }}
+                      className="w-full min-h-[24px] max-h-[120px] resize-none border-none outline-none bg-transparent p-0 text-sm placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-none focus:outline-none focus:shadow-none hover:border-none hover:shadow-none shadow-none scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent leading-6"
+                      style={{ 
+                        height: "24px", 
+                        border: "none", 
+                        outline: "none", 
+                        boxShadow: "none",
+                        borderRadius: "0"
+                      }}
                     />
                   </div>
 
