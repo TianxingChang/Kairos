@@ -8,28 +8,49 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { MessageCircle, NotebookPen, ArrowUp, AtSign, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAppStore } from "@/store/appStore";
+import { useAppStore } from "@/store";
+import { useChat, useAutoResize, useScrollToBottom } from "@/hooks";
 import { ContextSelector } from "./ContextSelector";
+import { LoadingDots } from "./ui/loading-dots";
 
 export function ChatPanel() {
   const [chatInput, setChatInput] = useState("");
   const [mounted, setMounted] = useState(false);
-  const [contextMenuOpen, setContextMenuOpen] = useState(false);
-  const [isSending, setIsSending] = useState(false);
-  const [webSearchEnabled, setWebSearchEnabled] = useState(true);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const loadingStartTimeRef = useRef<Date | null>(null);
 
+  // 获取store状态
   const {
     messages,
-    addMessage,
     notes,
     setNotes,
     currentMode,
     setCurrentMode,
     currentVideoTime,
     setCurrentVideoTime,
+    webSearchEnabled,
+    setWebSearchEnabled,
+    contextMenuOpen,
+    setContextMenuOpen,
+    toggleWebSearch,
+    toggleContextMenu,
   } = useAppStore();
+
+  // 使用hooks
+  const { isSending, sendToWebAgent, sendToAgnoAssist } = useChat();
+
+  // 记录加载开始时间
+  useEffect(() => {
+    if (isSending && !loadingStartTimeRef.current) {
+      loadingStartTimeRef.current = new Date();
+    } else if (!isSending) {
+      loadingStartTimeRef.current = null;
+    }
+  }, [isSending]);
+  const messagesEndRef = useScrollToBottom<HTMLDivElement>({
+    dependencies: [messages, isSending, mounted],
+  });
+  useAutoResize(textareaRef, chatInput);
 
   useEffect(() => {
     setMounted(true);
@@ -42,78 +63,20 @@ export function ChatPanel() {
     return () => clearInterval(interval);
   }, [currentVideoTime, setCurrentVideoTime]);
 
-  // 自动调整textarea高度
-  const adjustTextareaHeight = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "auto";
-      const scrollHeight = textarea.scrollHeight;
-      const maxHeight = 72; // 约3行的高度
-      textarea.style.height = Math.min(scrollHeight, maxHeight) + "px";
-    }
-  };
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [chatInput]);
-
-  // 自动滚动到最新消息
-  useEffect(() => {
-    if (messagesEndRef.current && mounted) {
-      messagesEndRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-      });
-    }
-  }, [messages, mounted]);
-
   const handleSendMessage = async () => {
     if (!chatInput.trim() || isSending) return;
 
-    setIsSending(true);
     const userMessage = chatInput.trim();
-
-    addMessage({
-      content: userMessage,
-      isUser: true,
-    });
-
     setChatInput("");
 
     try {
-      const agentType = webSearchEnabled ? 'web_agent' : 'agno_assist';
-      const response = await fetch(`/api/v1/agents/${agentType}/runs`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: userMessage,
-          stream: false,
-          model: 'gpt-4.1',
-          user_id: 'user_1',
-          session_id: 'session_1'
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (webSearchEnabled) {
+        await sendToWebAgent(userMessage);
+      } else {
+        await sendToAgnoAssist(userMessage);
       }
-
-      const aiResponse = await response.text();
-      
-      addMessage({
-        content: aiResponse,
-        isUser: false,
-      });
     } catch (error) {
-      console.error('Error sending message:', error);
-      addMessage({
-        content: '抱歉，发生了错误。请稍后再试。',
-        isUser: false,
-      });
-    } finally {
-      setIsSending(false);
+      console.error("Error sending message:", error);
     }
   };
 
@@ -160,18 +123,14 @@ export function ChatPanel() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
-                    className={`flex ${
-                      message.isUser ? "justify-end" : "justify-start"
-                    }`}
+                    className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}
                   >
                     <motion.div
                       initial={{ scale: 0.8 }}
                       animate={{ scale: 1 }}
                       transition={{ duration: 0.2, delay: 0.1 }}
                       className={`max-w-[80%] min-w-[120px] rounded-lg px-3 py-2 ${
-                        message.isUser
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted"
+                        message.isUser ? "bg-primary text-primary-foreground" : "bg-muted"
                       }`}
                     >
                       <p className="text-sm break-words whitespace-pre-wrap leading-relaxed">
@@ -183,6 +142,35 @@ export function ChatPanel() {
                     </motion.div>
                   </motion.div>
                 ))}
+
+                {/* 加载消息 */}
+                {isSending && (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex justify-start"
+                  >
+                    <motion.div
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.2, delay: 0.1 }}
+                      className="max-w-[80%] min-w-[120px] rounded-lg px-3 py-2 bg-muted"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <LoadingDots size="sm" className="text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">正在思考...</span>
+                      </div>
+                      <p className="text-xs opacity-70 mt-1">
+                        {mounted && loadingStartTimeRef.current
+                          ? loadingStartTimeRef.current.toLocaleTimeString()
+                          : ""}
+                      </p>
+                    </motion.div>
+                  </motion.div>
+                )}
               </AnimatePresence>
               {/* 滚动目标 */}
               <div ref={messagesEndRef} />
@@ -198,7 +186,7 @@ export function ChatPanel() {
                   <Button
                     variant={webSearchEnabled ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setWebSearchEnabled(!webSearchEnabled)}
+                    onClick={toggleWebSearch}
                     className="h-8"
                   >
                     <Search className="w-4 h-4 mr-1" />
@@ -212,10 +200,7 @@ export function ChatPanel() {
 
               {/* Context 选择器和显示 */}
               <div className="relative">
-                <ContextSelector
-                  isOpen={contextMenuOpen}
-                  setIsOpen={setContextMenuOpen}
-                />
+                <ContextSelector isOpen={contextMenuOpen} setIsOpen={setContextMenuOpen} />
               </div>
 
               {/* 输入框容器 */}
@@ -225,7 +210,7 @@ export function ChatPanel() {
                   variant="ghost"
                   size="sm"
                   className="h-8 w-8 p-0 absolute left-2 top-1/2 -translate-y-1/2 z-10"
-                  onClick={() => setContextMenuOpen(!contextMenuOpen)}
+                  onClick={toggleContextMenu}
                 >
                   <AtSign className="w-4 h-4" />
                 </Button>
@@ -249,16 +234,20 @@ export function ChatPanel() {
                     onClick={handleSendMessage}
                     disabled={!chatInput.trim() || isSending}
                     className={`h-8 w-14 rounded-xl border-0 transition-all duration-200 ${
-                      chatInput.trim()
+                      chatInput.trim() && !isSending
                         ? "bg-[#5B9BD5] hover:bg-[#4A8BC2] shadow-md"
                         : "bg-gray-300"
                     } disabled:cursor-not-allowed`}
                   >
-                    <ArrowUp
-                      className={`w-4 h-4 ${
-                        chatInput.trim() ? "text-white" : "text-gray-500"
-                      }`}
-                    />
+                    {isSending ? (
+                      <LoadingDots size="sm" className="text-white" />
+                    ) : (
+                      <ArrowUp
+                        className={`w-4 h-4 ${
+                          chatInput.trim() && !isSending ? "text-white" : "text-gray-500"
+                        }`}
+                      />
+                    )}
                   </Button>
                 </motion.div>
               </div>

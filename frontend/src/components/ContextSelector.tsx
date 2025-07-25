@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useAppStore, type ContextItem } from "@/store/appStore";
+import { useAppStore } from "@/store";
+import type { ContextItem } from "@/types";
 import { X, Clock, FileText, Video, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -15,13 +16,8 @@ interface ContextSelectorProps {
 export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const {
-    selectedContexts,
-    currentVideo,
-    currentVideoTime,
-    addContext,
-    removeContext,
-  } = useAppStore();
+  const { selectedContexts, currentVideo, currentVideoTime, addContext, removeContext } =
+    useAppStore();
 
   // 点击外部关闭菜单 & ESC 键关闭菜单
   useEffect(() => {
@@ -159,9 +155,7 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
               <h3 className="font-semibold mb-3">选择上下文</h3>
               <div className="space-y-2">
                 {availableContexts.map((context) => {
-                  const isSelected = selectedContexts.find(
-                    (ctx) => ctx.id === context.id
-                  );
+                  const isSelected = selectedContexts.find((ctx) => ctx.id === context.id);
                   return (
                     <Button
                       key={context.id}
