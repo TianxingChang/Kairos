@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
 import { ArrowUp, AtSign } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "@/store";
@@ -156,62 +155,75 @@ export function ChatPanel() {
               <div ref={messagesEndRef} />
             </div>
 
-            <Separator />
-
             {/* 输入区域 */}
-            <div className="p-4 border-t bg-background/95 backdrop-blur-sm">
-              {/* Context 选择器和显示 */}
-              <div className="relative mb-3">
-                <ContextSelector isOpen={contextMenuOpen} setIsOpen={setContextMenuOpen} />
-              </div>
-
-              {/* 输入框容器 */}
-              <div className="relative bg-background border border-border/50 rounded-2xl focus-within:border-primary/50 transition-colors shadow-sm">
-                {/* @ 按钮 */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 absolute left-2 top-1/2 -translate-y-1/2 z-10"
-                  onClick={toggleContextMenu}
-                >
-                  <AtSign className="w-4 h-4" />
-                </Button>
-
-                <Textarea
-                  ref={textareaRef}
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  onKeyDown={handleKeyPress}
-                  placeholder="询问关于这个视频的问题..."
-                  className="min-h-[44px] max-h-[72px] resize-none border-0 bg-transparent pl-12 py-3 pr-12 focus-visible:ring-0 focus-visible:ring-offset-0 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent"
-                  style={{ height: "44px" }}
-                />
-                <motion.div
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                  whileHover={!isSending ? { scale: 1.05 } : {}}
-                  whileTap={!isSending ? { scale: 0.95 } : {}}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                >
+            <div className="p-4 bg-background/95 backdrop-blur-sm">
+              {/* Cursor风格完整输入框 */}
+              <div className="relative bg-background border border-border rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
+                {/* 上方工具栏 */}
+                <div className="flex items-center gap-3 px-3 pt-3 pb-2 min-h-[32px]">
+                  {/* @ 按钮 */}
                   <Button
-                    onClick={handleSendMessage}
-                    disabled={!chatInput.trim() || isSending}
-                    className={`h-8 w-14 rounded-xl border-0 transition-all duration-200 ${
-                      chatInput.trim() && !isSending
-                        ? "bg-[#5B9BD5] hover:bg-[#4A8BC2] shadow-md"
-                        : "bg-gray-300"
-                    } disabled:cursor-not-allowed`}
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0 rounded-md hover:bg-muted flex-shrink-0"
+                    onClick={toggleContextMenu}
                   >
-                    {isSending ? (
-                      <LoadingDots size="sm" className="text-white" />
-                    ) : (
-                      <ArrowUp
-                        className={`w-4 h-4 ${
-                          chatInput.trim() && !isSending ? "text-white" : "text-gray-500"
-                        }`}
-                      />
-                    )}
+                    <AtSign className="w-4 h-4" />
                   </Button>
-                </motion.div>
+                  
+                  {/* Context 选择器显示区域 */}
+                  <div className="relative flex-1 flex items-center">
+                    <ContextSelector isOpen={contextMenuOpen} setIsOpen={setContextMenuOpen} />
+                  </div>
+                </div>
+
+                {/* 轻微分割线 */}
+                <div className="h-px bg-border/30 mx-3" />
+
+                {/* 输入框区域 */}
+                <div className="flex items-end gap-3 px-3 pb-3 pt-2">
+                  {/* 输入框 */}
+                  <div className="flex-1 relative">
+                    <Textarea
+                      ref={textareaRef}
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      placeholder="询问关于这个视频的问题..."
+                      className="w-full min-h-[24px] max-h-[120px] resize-none border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent leading-6"
+                      style={{ height: "24px" }}
+                    />
+                  </div>
+
+                  {/* 发送按钮 */}
+                  <motion.div
+                    className="flex-shrink-0"
+                    whileHover={!isSending ? { scale: 1.02 } : {}}
+                    whileTap={!isSending ? { scale: 0.98 } : {}}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                  >
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!chatInput.trim() || isSending}
+                      size="sm"
+                      className={`h-7 w-7 p-0 rounded-md border-0 transition-all duration-150 ${
+                        chatInput.trim() && !isSending
+                          ? "bg-[#5B9BD5] hover:bg-[#4A8BC2] shadow-sm"
+                          : "bg-gray-300 hover:bg-gray-400"
+                      } disabled:cursor-not-allowed`}
+                    >
+                      {isSending ? (
+                        <LoadingDots size="sm" className="text-white" />
+                      ) : (
+                        <ArrowUp
+                          className={`w-4 h-4 ${
+                            chatInput.trim() && !isSending ? "text-white" : "text-gray-500"
+                          }`}
+                        />
+                      )}
+                    </Button>
+                  </motion.div>
+                </div>
               </div>
             </div>
           </>

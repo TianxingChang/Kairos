@@ -111,10 +111,10 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
   };
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center min-h-[28px]">
       {/* Context 显示区域 */}
       {selectedContexts.length > 0 && (
-        <div className="mb-3 space-y-2">
+        <div className="flex flex-wrap gap-2">
           <AnimatePresence>
             {selectedContexts.map((context) => {
               // 为"当前视频时间点"动态更新显示内容
@@ -134,7 +134,7 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg text-sm"
+                  className="flex items-center gap-2 px-2 py-1 bg-muted rounded-md text-xs"
                 >
                   {getContextIcon(context.type)}
                   <span className="font-medium">{displayTitle}</span>
@@ -154,10 +154,10 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-5 w-5 ml-auto"
+                    className="h-4 w-4 ml-auto"
                     onClick={() => removeContext(context.id)}
                   >
-                    <X className="w-3 h-3" />
+                    <X className="w-2.5 h-2.5" />
                   </Button>
                 </motion.div>
               );
