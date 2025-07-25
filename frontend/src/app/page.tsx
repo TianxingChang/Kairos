@@ -1,5 +1,7 @@
-import { ResizablePanels } from "@/components/ResizablePanels";
+"use client";
+
+import { VideoUpload } from "@/components/VideoUpload";
 
 export default function Home() {
-  return <ResizablePanels />;
+  return <VideoUpload />;
 }
