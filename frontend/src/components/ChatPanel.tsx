@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { MessageCircle, NotebookPen, ArrowUp, AtSign } from "lucide-react";
+import { ArrowUp, AtSign } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "@/store";
 import { useChat, useAutoResize, useScrollToBottom } from "@/hooks";
@@ -25,7 +24,6 @@ export function ChatPanel() {
     notes,
     setNotes,
     currentMode,
-    setCurrentMode,
     contextMenuOpen,
     setContextMenuOpen,
     toggleContextMenu,
@@ -92,29 +90,7 @@ export function ChatPanel() {
   };
 
   return (
-    <Card className="h-full flex flex-col">
-      {/* 头部切换按钮 */}
-      <div className="flex border-b">
-        <Button
-          variant={currentMode === "chat" ? "default" : "ghost"}
-          className="flex-1 rounded-none"
-          onClick={() => setCurrentMode("chat")}
-        >
-          <MessageCircle className="w-4 h-4 mr-2" />
-          提问
-        </Button>
-        <Button
-          variant={currentMode === "notes" ? "default" : "ghost"}
-          className="flex-1 rounded-none"
-          onClick={() => setCurrentMode("notes")}
-        >
-          <NotebookPen className="w-4 h-4 mr-2" />
-          笔记
-        </Button>
-      </div>
-
-      {/* 内容区域 */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="h-full flex flex-col bg-background border-l">
         {currentMode === "chat" ? (
           <>
             {/* 聊天消息区域 */}
@@ -250,7 +226,6 @@ export function ChatPanel() {
             />
           </div>
         )}
-      </div>
-    </Card>
+    </div>
   );
 }
