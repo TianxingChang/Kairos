@@ -15,16 +15,7 @@ export interface ContextSlice {
 
 export const createContextSlice: StateCreator<ContextSlice> = (set) => ({
   // 初始状态
-  selectedContexts: [
-    {
-      id: 'current-video',
-      type: 'video',
-      title: '当前视频',
-      description: '示例视频',
-      timestamp: 0,
-      icon: '🎥'
-    }
-  ],
+  selectedContexts: [],
 
   // 操作方法
   addContext: (context) => set((state) => {

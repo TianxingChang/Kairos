@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { MessageCircle, NotebookPen, ArrowUp, AtSign, Search } from "lucide-react";
+import { MessageCircle, NotebookPen, ArrowUp, AtSign } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "@/store";
 import { useChat, useAutoResize, useScrollToBottom } from "@/hooks";
@@ -15,6 +15,7 @@ import { LoadingDots } from "./ui/loading-dots";
 export function ChatPanel() {
   const [chatInput, setChatInput] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const loadingStartTimeRef = useRef<Date | null>(null);
 
@@ -25,15 +26,16 @@ export function ChatPanel() {
     setNotes,
     currentMode,
     setCurrentMode,
-    webSearchEnabled,
     contextMenuOpen,
     setContextMenuOpen,
-    toggleWebSearch,
     toggleContextMenu,
+    currentVideo,
+    selectedContexts,
+    addContext,
   } = useAppStore();
 
   // 使用hooks
-  const { isSending, sendToWebAgent, sendToAgnoAssist } = useChat();
+  const { isSending, sendToWebAgent } = useChat();
 
   // 记录加载开始时间
   useEffect(() => {
@@ -52,6 +54,22 @@ export function ChatPanel() {
     setMounted(true);
   }, []);
 
+  // 默认添加当前视频时间点上下文（仅在首次初始化时）
+  useEffect(() => {
+    // 只在首次挂载且没有初始化过且没有选择任何上下文时添加
+    if (mounted && !hasInitialized && selectedContexts.length === 0) {
+      const defaultContext = {
+        id: "current-video-time",
+        type: "video" as const,
+        title: `视频时间点 0:00`, // 这个title会被ContextSelector动态覆盖
+        description: currentVideo.title,
+        timestamp: 0, // 初始为 0，会动态更新
+      };
+      addContext(defaultContext);
+      setHasInitialized(true);
+    }
+  }, [mounted, hasInitialized, selectedContexts.length, currentVideo.title, addContext]);
+
   const handleSendMessage = async () => {
     if (!chatInput.trim() || isSending) return;
 
@@ -59,11 +77,8 @@ export function ChatPanel() {
     setChatInput("");
 
     try {
-      if (webSearchEnabled) {
-        await sendToWebAgent(userMessage);
-      } else {
-        await sendToAgnoAssist(userMessage);
-      }
+      // 默认使用 web search agent
+      await sendToWebAgent(userMessage);
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -86,7 +101,7 @@ export function ChatPanel() {
           onClick={() => setCurrentMode("chat")}
         >
           <MessageCircle className="w-4 h-4 mr-2" />
-          聊天
+          提问
         </Button>
         <Button
           variant={currentMode === "notes" ? "default" : "ghost"}
@@ -169,26 +184,8 @@ export function ChatPanel() {
 
             {/* 输入区域 */}
             <div className="p-4 border-t bg-background/95 backdrop-blur-sm">
-              {/* Web Search 开关 */}
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant={webSearchEnabled ? "default" : "outline"}
-                    size="sm"
-                    onClick={toggleWebSearch}
-                    className="h-8"
-                  >
-                    <Search className="w-4 h-4 mr-1" />
-                    Web搜索
-                  </Button>
-                  <span className="text-xs text-muted-foreground">
-                    {webSearchEnabled ? "启用网络搜索" : "使用本地助手"}
-                  </span>
-                </div>
-              </div>
-
               {/* Context 选择器和显示 */}
-              <div className="relative">
+              <div className="relative mb-3">
                 <ContextSelector isOpen={contextMenuOpen} setIsOpen={setContextMenuOpen} />
               </div>
 

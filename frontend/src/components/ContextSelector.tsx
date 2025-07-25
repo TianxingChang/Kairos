@@ -125,6 +125,7 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
               const displayTimestamp = isCurrentVideoTime 
                 ? currentVideoTime 
                 : context.timestamp;
+              
 
               return (
                 <motion.div
