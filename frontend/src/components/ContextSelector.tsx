@@ -69,7 +69,7 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
     {
       id: "current-video-time",
       type: "video",
-      title: `视频时间点 ${formatTime(currentVideoTime)}`,
+      title: `视频时间点提问`,
       description: currentVideo.title,
       timestamp: currentVideoTime,
     },
@@ -120,7 +120,7 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
               // 为"当前视频时间点"动态更新显示内容
               const isCurrentVideoTime = context.id === "current-video-time";
               const displayTitle = isCurrentVideoTime 
-                ? `视频时间点 ${formatTime(currentVideoTime)}`
+                ? `视频时间点提问`
                 : context.title;
               const displayTimestamp = isCurrentVideoTime 
                 ? currentVideoTime 

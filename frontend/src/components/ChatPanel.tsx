@@ -61,7 +61,7 @@ export function ChatPanel() {
       const defaultContext = {
         id: "current-video-time",
         type: "video" as const,
-        title: `视频时间点 0:00`, // 这个title会被ContextSelector动态覆盖
+        title: `视频时间点提问`, // 与ContextSelector显示保持一致
         description: currentVideo.title,
         timestamp: 0, // 初始为 0，会动态更新
       };
