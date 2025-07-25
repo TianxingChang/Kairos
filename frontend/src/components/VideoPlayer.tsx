@@ -22,10 +22,8 @@ export function VideoPlayer() {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="aspect-video"
       >
-        <Card className="w-full h-full rounded-xl overflow-hidden">
-          <div className="w-full h-full relative">
-            <VideoPlayerSimple />
-          </div>
+        <Card className="w-full h-full rounded-xl overflow-hidden p-0 py-0 gap-0">
+          <VideoPlayerSimple />
         </Card>
       </motion.div>
       <motion.div

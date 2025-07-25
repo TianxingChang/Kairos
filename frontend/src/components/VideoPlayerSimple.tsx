@@ -74,14 +74,14 @@ export function VideoPlayerSimple() {
 
   if (!mounted) {
     return (
-      <div className="aspect-video w-full bg-gray-200 flex items-center justify-center">
+      <div className="w-full h-full bg-gray-200 rounded-xl flex items-center justify-center">
         <div>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="aspect-video w-full">
+    <div className="w-full h-full rounded-xl overflow-hidden">
       <ReactPlayer
         ref={playerRef}
         url={currentVideo.url}
@@ -89,6 +89,10 @@ export function VideoPlayerSimple() {
         height="100%"
         controls
         playing={false}
+        style={{ 
+          borderRadius: '0.75rem',
+          overflow: 'hidden'
+        }}
         onProgress={(state) => {
           setCurrentVideoTime(Math.floor(state.playedSeconds));
         }}
