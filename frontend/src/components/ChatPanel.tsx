@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { MessageCircle, NotebookPen, ArrowUp, AtSign } from "lucide-react";
+import { MessageCircle, NotebookPen, ArrowUp, AtSign, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "@/store/appStore";
 import { ContextSelector } from "./ContextSelector";
@@ -16,6 +16,7 @@ export function ChatPanel() {
   const [mounted, setMounted] = useState(false);
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [webSearchEnabled, setWebSearchEnabled] = useState(true);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -66,26 +67,54 @@ export function ChatPanel() {
     }
   }, [messages, mounted]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!chatInput.trim() || isSending) return;
 
     setIsSending(true);
+    const userMessage = chatInput.trim();
 
     addMessage({
-      content: chatInput,
+      content: userMessage,
       isUser: true,
     });
 
     setChatInput("");
 
-    // 模拟AI回复
-    setTimeout(() => {
+    try {
+      const agentType = webSearchEnabled ? 'web_agent' : 'agno_assist';
+      const response = await fetch(`/api/v1/agents/${agentType}/runs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          stream: false,
+          model: 'gpt-4.1',
+          user_id: 'user_1',
+          session_id: 'session_1'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const aiResponse = await response.text();
+      
       addMessage({
-        content: "这是一个模拟的AI回复。",
+        content: aiResponse,
         isUser: false,
       });
+    } catch (error) {
+      console.error('Error sending message:', error);
+      addMessage({
+        content: '抱歉，发生了错误。请稍后再试。',
+        isUser: false,
+      });
+    } finally {
       setIsSending(false);
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -163,6 +192,24 @@ export function ChatPanel() {
 
             {/* 输入区域 */}
             <div className="p-4 border-t bg-background/95 backdrop-blur-sm">
+              {/* Web Search 开关 */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant={webSearchEnabled ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setWebSearchEnabled(!webSearchEnabled)}
+                    className="h-8"
+                  >
+                    <Search className="w-4 h-4 mr-1" />
+                    Web搜索
+                  </Button>
+                  <span className="text-xs text-muted-foreground">
+                    {webSearchEnabled ? "启用网络搜索" : "使用本地助手"}
+                  </span>
+                </div>
+              </div>
+
               {/* Context 选择器和显示 */}
               <div className="relative">
                 <ContextSelector
@@ -187,7 +234,7 @@ export function ChatPanel() {
                   ref={textareaRef}
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyPress}
                   placeholder="询问关于这个视频的问题..."
                   className="min-h-[44px] max-h-[72px] resize-none border-0 bg-transparent pl-12 py-3 pr-12 focus-visible:ring-0 focus-visible:ring-offset-0 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent"
                   style={{ height: "44px" }}
