@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { MessageCircle, NotebookPen, ArrowUp, AtSign, Search } from "lucide-react";
@@ -26,10 +25,7 @@ export function ChatPanel() {
     setNotes,
     currentMode,
     setCurrentMode,
-    currentVideoTime,
-    setCurrentVideoTime,
     webSearchEnabled,
-    setWebSearchEnabled,
     contextMenuOpen,
     setContextMenuOpen,
     toggleWebSearch,
@@ -54,14 +50,7 @@ export function ChatPanel() {
 
   useEffect(() => {
     setMounted(true);
-
-    // 模拟视频播放时间更新
-    const interval = setInterval(() => {
-      setCurrentVideoTime(currentVideoTime + 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [currentVideoTime, setCurrentVideoTime]);
+  }, []);
 
   const handleSendMessage = async () => {
     if (!chatInput.trim() || isSending) return;

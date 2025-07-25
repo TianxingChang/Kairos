@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { useAppStore } from "@/store";
 import { PrerequisiteKnowledge } from "./PrerequisiteKnowledge";
+import { VideoPlayerSimple } from "./VideoPlayerSimple";
 
 export function VideoPlayer() {
   const { currentVideo } = useAppStore();
@@ -23,13 +24,7 @@ export function VideoPlayer() {
       >
         <Card className="w-full h-full rounded-xl overflow-hidden">
           <div className="w-full h-full relative">
-            <iframe
-              src={currentVideo.url}
-              title="Video Player"
-              className="w-full h-full border-0"
-              // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            <VideoPlayerSimple />
           </div>
         </Card>
       </motion.div>

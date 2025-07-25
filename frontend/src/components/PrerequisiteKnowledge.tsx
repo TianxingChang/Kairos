@@ -13,12 +13,21 @@ function formatTime(seconds: number): string {
 }
 
 function KnowledgePointItem({ point }: { point: KnowledgePoint }) {
+  const handleJumpToTime = () => {
+    // 使用全局播放器控制方法跳转到指定时间
+    if (typeof window !== 'undefined' && window.videoPlayer) {
+      window.videoPlayer.seekTo(point.timestamp);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -10 }}
       className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer group"
+      onClick={handleJumpToTime}
+      title={`点击跳转到 ${formatTime(point.timestamp)}`}
     >
       <div className="flex-shrink-0 mt-1">
         <Play className="w-4 h-4 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />

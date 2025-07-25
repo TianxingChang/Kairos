@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useAppStore } from "@/store";
@@ -103,6 +103,13 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
     setIsOpen(false);
   };
 
+  const handleJumpToTime = (timestamp: number) => {
+    // 使用全局播放器控制方法跳转到指定时间
+    if (typeof window !== 'undefined' && window.videoPlayer) {
+      window.videoPlayer.seekTo(timestamp);
+    }
+  };
+
   return (
     <div className="relative">
       {/* Context 显示区域 */}
@@ -121,7 +128,14 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
                 {getContextIcon(context.type)}
                 <span className="font-medium">{context.title}</span>
                 {context.timestamp !== undefined && (
-                  <span className="text-muted-foreground flex items-center gap-1">
+                  <span 
+                    className="text-muted-foreground flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleJumpToTime(context.timestamp!);
+                    }}
+                    title="点击跳转到此时间点"
+                  >
                     <Clock className="w-3 h-3" />
                     {formatTime(context.timestamp)}
                   </span>
@@ -175,7 +189,14 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
                           )}
                         </div>
                         {context.timestamp !== undefined && (
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <span 
+                            className="text-xs text-muted-foreground flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleJumpToTime(context.timestamp!);
+                            }}
+                            title="点击跳转到此时间点"
+                          >
                             <Clock className="w-3 h-3" />
                             {formatTime(context.timestamp)}
                           </span>

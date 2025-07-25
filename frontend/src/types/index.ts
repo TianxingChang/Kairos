@@ -72,3 +72,18 @@ export interface AppError {
   message: string;
   details?: unknown;
 }
+
+// 全局播放器控制接口
+export interface VideoPlayerControl {
+  seekTo: (time: number) => void;
+  getCurrentTime: () => number;
+  play: () => void;
+  pause: () => void;
+}
+
+// 扩展 Window 接口
+declare global {
+  interface Window {
+    videoPlayer?: VideoPlayerControl;
+  }
+}

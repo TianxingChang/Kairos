@@ -16,9 +16,9 @@ export interface VideoSlice {
 export const createVideoSlice: StateCreator<VideoSlice> = (set) => ({
   // 初始状态
   currentVideo: {
-    url: 'https://www.youtube.com/embed/AVIKFXLCPY8?list=PLJV_el3uVTsPz6CTopeRp2L2t4aL_KgiI&index=1',
-    title: '示例视频',
-    description: '这里是视频描述信息，可以显示视频的详细说明。',
+    url: 'https://www.youtube.com/watch?v=AVIKFXLCPY8',
+    title: '李宏毅机器学习',
+    description: '李宏毅机器学习第一章',
     prerequisites: [
       {
         id: '1',
