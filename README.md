@@ -330,7 +330,7 @@ ORDER BY vs.start_seconds;
 
 ## API Testing Scripts
 
-The project includes three Python test scripts to validate different API endpoints:
+The project includes **four** Python test scripts to validate different API endpoints:
 
 ### 1. Question Diagnosis API (`test_question_diagnosis.py`)
 
@@ -351,7 +351,7 @@ Content-Type: application/json
 - `user_question` (string): The question to analyze
 - `context_resource_id` (int): Resource ID for context
 
-#### Output:
+#### Output (JSON):
 ```json
 {
   "success": true,
@@ -405,12 +405,11 @@ Content-Type: application/json
 - `video_title` (string, optional): Custom title for the video
 - `model_type` (string): AI model to use (default: "o3-mini")
 
-#### Output:
+#### Output (JSON):
 ```json
 {
-  "message": "分析成功",
-  "confidence_score": 85,
-  "analysis_model": "o3-mini",
+  "success": true,
+  "message": "成功分析视频前置知识，共识别出 3 个前置知识点",
   "video_info": {
     "title": "PPO Algorithm Explanation",
     "url": "https://youtu.be/OAKAZhFmYoI",
@@ -418,15 +417,243 @@ Content-Type: application/json
   },
   "prerequisite_knowledge": [
     {
+      "knowledge_id": 156,
       "title": "强化学习基础",
       "domain": "机器学习",
       "estimated_hours": 8,
       "description": "强化学习的基本概念和原理...",
       "learning_resources": [
         {
+          "id": 201,
           "title": "强化学习入门教程",
-          "quality_score": 9,
           "resource_type": "视频",
+          "url": "https://example.com/rl-intro",
+          "description": "系统介绍强化学习基础概念"
+        }
+      ]
+    }
+  ],
+  "analysis_summary": {
+    "model_used": "o3-mini",
+    "confidence_score": 85,
+    "main_knowledge_points": ["PPO算法", "策略优化", "强化学习"],
+    "matched_knowledge_count": 15,
+    "prerequisite_count": 3
+  },
+  "created_at": "2025-01-26T10:30:00Z"
+}
+```
+
+#### Usage:
+```bash
+python test_learning_api.py
+```
+
+### 3. Video Segmentation API (`test_video_chunk.py`)
+
+Tests the video analysis API that segments videos by knowledge points with precise timestamps.
+
+#### API Call:
+```http
+POST /v1/videos/analyze-segments-from-video-link
+Content-Type: application/json
+
+{
+  "video_url": "https://youtu.be/OAKAZhFmYoI",
+  "knowledge_context_id": 1,
+  "resource_title": "PPO算法讲解视频",
+  "preferred_subtitle_language": "en"
+}
+```
+
+#### Input:
+- `video_url` (string): YouTube video URL
+- `knowledge_context_id` (int): Knowledge context for filtering relevant points
+- `resource_title` (string, optional): Custom resource title
+- `preferred_subtitle_language` (string): Subtitle language preference
+
+#### Output (Initial Response - JSON):
+```json
+{
+  "job_id": "12345-67890",
+  "resource_id": 298,
+  "status_url": "/v1/videos/analyze-segments/status/12345-67890",
+  "message": "Video analysis started"
+}
+```
+
+#### Status Check API:
+```http
+GET /v1/videos/analyze-segments/status/{job_id}
+```
+
+#### Status Response (JSON):
+```json
+{
+  "status": "completed",
+  "progress_percentage": 100,
+  "message": "Analysis completed successfully",
+  "segments_created": 8
+}
+```
+
+#### Final Database Query Result (JSON):
+```json
+{
+  "resource": {
+    "id": 298,
+    "title": "PPO Algorithm Explanation",
+    "resource_url": "https://youtu.be/OAKAZhFmYoI",
+    "duration_minutes": 15
+  },
+  "segments": [
+    {
+      "segment_id": 123,
+      "time_range": "00:00:43.460 - 00:01:30.300",
+      "start_seconds": 43,
+      "end_seconds": 90,
+      "duration": 47,
+      "knowledge_title": "On-Policy vs Off-Policy",
+      "knowledge_domain": "深度学习",
+      "knowledge_level": "L3",
+      "description": "Explains the difference between on-policy and off-policy methods",
+      "importance_level": 3
+    }
+  ],
+  "summary": {
+    "total_segments": 8,
+    "total_duration_seconds": 450,
+    "average_segment_duration": 56.25
+  }
+}
+```
+
+#### Usage:
+```bash
+# Full workflow: submit analysis, wait for completion, query results
+python test_video_chunk.py
+
+# Demo mode: query existing resource
+python test_video_chunk.py demo
+```
+
+### 4. Video-based Question Answering API (`test_video_answer_api.py`)
+
+Tests the intelligent video-based question answering system that combines question diagnosis with video segment retrieval.
+
+#### API Call:
+```http
+POST /v1/video-answers/sync
+Content-Type: application/json
+
+{
+  "user_question": "为什么PPO算法里要用clip函数来限制策略更新的幅度？",
+  "context_resource_id": 298,
+  "max_video_segments": 5,
+  "enable_global_search": true
+}
+```
+
+#### Input:
+- `user_question` (string): The complex question to analyze and answer
+- `context_resource_id` (int, optional): Resource ID to prioritize in search
+- `max_video_segments` (int): Maximum number of video segments per sub-question
+- `enable_global_search` (bool): Whether to search all video resources
+
+#### Output (JSON):
+```json
+{
+  "success": true,
+  "user_question": "为什么PPO算法里要用clip函数来限制策略更新的幅度？",
+  "question_breakdowns": [
+    {
+      "sub_question": "什么是PPO算法的基本原理？",
+      "knowledge_focus": "强化学习算法基础",
+      "video_segments": [
+        {
+          "segment_id": 123,
+          "video_resource": {
+            "resource_id": 298,
+            "title": "PPO Algorithm Explanation",
+            "url": "https://youtu.be/OAKAZhFmYoI",
+            "duration_minutes": 15
+          },
+          "time_range": {
+            "start_seconds": 43,
+            "end_seconds": 90,
+            "start_time": "00:00:43",
+            "end_time": "00:01:30",
+            "duration": 47
+          },
+          "knowledge_point": {
+            "id": 156,
+            "title": "PPO策略优化",
+            "domain": "强化学习",
+            "level": "L3"
+          },
+          "relevance_score": 0.92,
+          "segment_description": "Explains PPO algorithm basics and policy optimization",
+          "answer_explanation": "该视频片段讲解了PPO算法的基本概念和策略优化原理..."
+        }
+      ],
+      "answer_summary": "PPO (Proximal Policy Optimization) 是一种策略梯度算法，通过限制策略更新幅度来提高训练稳定性..."
+    }
+  ],
+  "total_video_segments": 8,
+  "search_strategy": "context_with_global_fallback",
+  "processing_time_seconds": 3.45,
+  "created_at": "2025-01-26T10:30:00Z"
+}
+```
+
+#### Async API:
+```http
+POST /v1/video-answers/async
+Content-Type: application/json
+
+{
+  "user_question": "解释深度学习中的反向传播算法",
+  "max_video_segments": 8,
+  "enable_global_search": true
+}
+```
+
+#### Async Response (JSON):
+```json
+{
+  "job_id": "12345-67890",
+  "status_url": "/v1/video-answers/status/12345-67890"
+}
+```
+
+#### Status Check:
+```http
+GET /v1/video-answers/status/{job_id}
+```
+
+#### Features:
+- **Question Breakdown**: Automatically splits complex questions into manageable sub-questions
+- **Video Segment Search**: Uses AI to find relevant video segments for each sub-question
+- **Comprehensive Answers**: Generates detailed answers based on video content
+- **Context-aware Search**: Prioritizes specific video resources when provided
+- **Global Fallback**: Searches all available videos if context search is insufficient
+- **Agent Tool Integration**: Includes tools for video segment search and knowledge lookup
+
+#### Usage:
+```bash
+# Test complete video answer workflow
+python test_video_answer_api.py
+
+# Test async API (optional when prompted)
+python test_video_answer_api.py
+# Choose 'y' when asked about async testing
+```
+
+#### Tool Integration:
+The API includes agent tools for advanced video search:
+- `VideoSegmentSearchTool`: Search video segments by question and keywords
+- `KnowledgePointLookupTool`: Look up detailed knowledge point information
+- `VideoResourceSearchTool`: Search and filter video resources
           "resource_url": "https://example.com/rl-intro"
         }
       ]
@@ -535,6 +762,141 @@ python test_video_chunk.py demo
 - **Timeout Support**: Extended timeouts for long-running operations
 - **Database Integration**: Results stored in PostgreSQL with pgvector
 - **Async Processing**: Video analysis uses background job processing
+
+## JSON Format Summary
+
+All four test scripts verify that their respective APIs return **standard JSON format**:
+
+| Test Script | API Endpoint | JSON Output | Raw JSON Display |
+|-------------|--------------|-------------|------------------|
+| `test_question_diagnosis.py` | `/v1/questions/diagnose/sync` | ✅ JSON | ✅ Option 1 shows raw JSON |
+| `test_learning_api.py` | `/v1/learning/video/prerequisites` | ✅ JSON | ✅ Always shows raw JSON |
+| `test_video_chunk.py` | `/v1/videos/analyze-segments-from-video-link` | ✅ JSON | ✅ Query results in JSON |
+| `test_video_answer_api.py` | `/v1/video-answers/sync` | ✅ JSON | ✅ Complete JSON responses |
+
+**Key JSON Features:**
+- **UTF-8 Encoding**: Full support for Chinese characters
+- **Structured Data**: Nested objects and arrays
+- **Type Safety**: Pydantic models ensure correct data types
+- **Consistent Format**: All APIs follow the same JSON structure patterns
+- **Error Responses**: Even errors are returned in JSON format
+
+### 4. Video-based Question Answering API (`test_video_answer_api.py`)
+
+Tests the intelligent video-based question answering system that combines question diagnosis with video segment retrieval.
+
+#### API Call:
+```http
+POST /v1/video-answers/sync
+Content-Type: application/json
+
+{
+  "user_question": "为什么PPO算法里要用clip函数来限制策略更新的幅度？",
+  "context_resource_id": 298,
+  "max_video_segments": 5,
+  "enable_global_search": true
+}
+```
+
+#### Input:
+- `user_question` (string): The complex question to analyze and answer
+- `context_resource_id` (int, optional): Resource ID to prioritize in search
+- `max_video_segments` (int): Maximum number of video segments per sub-question
+- `enable_global_search` (bool): Whether to search all video resources
+
+#### Output:
+```json
+{
+  "success": true,
+  "user_question": "为什么PPO算法里要用clip函数来限制策略更新的幅度？",
+  "question_breakdowns": [
+    {
+      "sub_question": "什么是PPO算法的基本原理？",
+      "knowledge_focus": "强化学习算法基础",
+      "video_segments": [
+        {
+          "segment_id": 123,
+          "video_resource": {
+            "resource_id": 298,
+            "title": "PPO Algorithm Explanation",
+            "url": "https://youtu.be/OAKAZhFmYoI",
+            "duration_minutes": 15
+          },
+          "time_range": {
+            "start_seconds": 43,
+            "end_seconds": 90,
+            "start_time": "00:00:43",
+            "end_time": "00:01:30",
+            "duration": 47
+          },
+          "knowledge_point": {
+            "id": 156,
+            "title": "PPO策略优化",
+            "domain": "强化学习",
+            "level": "L3"
+          },
+          "relevance_score": 0.92,
+          "segment_description": "Explains PPO algorithm basics and policy optimization",
+          "answer_explanation": "该视频片段讲解了PPO算法的基本概念和策略优化原理..."
+        }
+      ],
+      "answer_summary": "PPO (Proximal Policy Optimization) 是一种策略梯度算法，通过限制策略更新幅度来提高训练稳定性..."
+    }
+  ],
+  "total_video_segments": 8,
+  "search_strategy": "context_with_global_fallback",
+  "processing_time_seconds": 3.45
+}
+```
+
+#### Async API:
+```http
+POST /v1/video-answers/async
+Content-Type: application/json
+
+{
+  "user_question": "解释深度学习中的反向传播算法",
+  "max_video_segments": 8,
+  "enable_global_search": true
+}
+```
+
+#### Async Response:
+```json
+{
+  "job_id": "12345-67890",
+  "status_url": "/v1/video-answers/status/12345-67890"
+}
+```
+
+#### Status Check:
+```http
+GET /v1/video-answers/status/{job_id}
+```
+
+#### Features:
+- **Question Breakdown**: Automatically splits complex questions into manageable sub-questions
+- **Video Segment Search**: Uses AI to find relevant video segments for each sub-question
+- **Comprehensive Answers**: Generates detailed answers based on video content
+- **Context-aware Search**: Prioritizes specific video resources when provided
+- **Global Fallback**: Searches all available videos if context search is insufficient
+- **Agent Tool Integration**: Includes tools for video segment search and knowledge lookup
+
+#### Usage:
+```bash
+# Test complete video answer workflow
+python test_video_answer_api.py
+
+# Test async API (optional when prompted)
+python test_video_answer_api.py
+# Choose 'y' when asked about async testing
+```
+
+#### Tool Integration:
+The API includes agent tools for advanced video search:
+- `VideoSegmentSearchTool`: Search video segments by question and keywords
+- `KnowledgePointLookupTool`: Look up detailed knowledge point information
+- `VideoResourceSearchTool`: Search and filter video resources
 
 ### Web Scraping
 
