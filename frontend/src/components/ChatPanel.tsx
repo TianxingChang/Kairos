@@ -10,6 +10,7 @@ import { useChat, useAutoResize, useScrollToBottom } from "@/hooks";
 import { ContextSelector } from "./ContextSelector";
 import { LoadingDots } from "./ui/loading-dots";
 import { ChatMessage } from "./ChatMessage";
+import { TiptapEditor } from "./TiptapEditor";
 
 export function ChatPanel() {
   const [chatInput, setChatInput] = useState("");
@@ -217,12 +218,12 @@ export function ChatPanel() {
           </>
         ) : (
           /* 笔记区域 */
-          <div className="flex-1 p-4">
-            <Textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="在这里记录你的笔记..."
-              className="h-full resize-none"
+          <div className="flex-1">
+            <TiptapEditor
+              content={notes}
+              onChange={setNotes}
+              placeholder="开始记录你的笔记..."
+              className="h-full"
             />
           </div>
         )}

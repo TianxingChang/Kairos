@@ -21,9 +21,10 @@ export const useAppStore = create<AppStore>()(
       {
         name: 'app-store',
         partialize: (state) => ({
-          // 只持久化视频相关状态，不持久化聊天消息等临时状态
+          // 持久化视频相关状态和笔记内容，不持久化聊天消息等临时状态
           currentVideo: state.currentVideo,
           currentVideoTime: state.currentVideoTime,
+          notes: state.notes,
         }),
       }
     ),

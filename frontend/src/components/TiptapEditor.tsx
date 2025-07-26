@@ -1,0 +1,412 @@
+"use client";
+
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Typography from "@tiptap/extension-typography";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Placeholder from "@tiptap/extension-placeholder";
+import { createLowlight, common } from "lowlight";
+import { Button } from "@/components/ui/button";
+import {
+  Bold,
+  Italic,
+  Strikethrough,
+  Code,
+  Code2,
+  Quote,
+  List,
+  ListOrdered,
+  Heading1,
+  Heading2,
+  Heading3,
+  Link as LinkIcon,
+  Image as ImageIcon,
+  Undo,
+  Redo,
+} from "lucide-react";
+import { useCallback } from "react";
+
+// 创建lowlight实例并注册常用语言
+const lowlight = createLowlight(common);
+
+interface TiptapEditorProps {
+  content: string;
+  onChange: (content: string) => void;
+  placeholder?: string;
+  className?: string;
+}
+
+export function TiptapEditor({
+  content,
+  onChange,
+  placeholder = "开始记录你的笔记...",
+  className = "",
+}: TiptapEditorProps) {
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        codeBlock: false, // 禁用默认的代码块，使用lowlight版本
+      }),
+      Typography,
+      Placeholder.configure({
+        placeholder,
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: "text-primary underline decoration-1 underline-offset-2 hover:decoration-2 transition-all",
+        },
+      }),
+      Image.configure({
+        HTMLAttributes: {
+          class: "max-w-full h-auto rounded-lg",
+        },
+      }),
+      CodeBlockLowlight.configure({
+        lowlight,
+        defaultLanguage: "plaintext",
+        HTMLAttributes: {
+          class: "code-block-custom",
+        },
+      }),
+    ],
+    content,
+    immediatelyRender: false, // 修复SSR水合问题
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class: `prose prose-sm max-w-none focus:outline-none min-h-full ${className}`,
+      },
+    },
+  });
+
+  const addLink = useCallback(() => {
+    const previousUrl = editor?.getAttributes("link").href;
+    const url = window.prompt("URL", previousUrl);
+
+    if (url === null) {
+      return;
+    }
+
+    if (url === "") {
+      editor?.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+
+    editor?.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+  }, [editor]);
+
+  const addImage = useCallback(() => {
+    const url = window.prompt("图片URL");
+    if (url) {
+      editor?.chain().focus().setImage({ src: url }).run();
+    }
+  }, [editor]);
+
+  if (!editor) {
+    return null;
+  }
+
+  return (
+    <div className="h-full flex flex-col border-0">
+      {/* 工具栏 */}
+      <div className="flex-shrink-0 border-b border-border p-2 bg-background/50">
+        <div className="flex gap-1">
+          {/* 基础格式 */}
+          <Button
+            variant={editor.isActive("bold") ? "default" : "ghost"}
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={() => editor.chain().focus().toggleBold().run()}
+          >
+            <Bold className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={editor.isActive("italic") ? "default" : "ghost"}
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+          >
+            <Italic className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={editor.isActive("code") ? "default" : "ghost"}
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={() => editor.chain().focus().toggleCode().run()}
+          >
+            <Code className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={editor.isActive("codeBlock") ? "default" : "ghost"}
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          >
+            <Code2 className="h-4 w-4" />
+          </Button>
+
+          {/* 分割线 */}
+          <div className="w-px h-6 bg-border mx-2" />
+
+          {/* 列表 */}
+          <Button
+            variant={editor.isActive("bulletList") ? "default" : "ghost"}
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+          >
+            <List className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={editor.isActive("orderedList") ? "default" : "ghost"}
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          >
+            <ListOrdered className="h-4 w-4" />
+          </Button>
+
+          {/* 分割线 */}
+          <div className="w-px h-6 bg-border mx-2" />
+
+          {/* 链接 */}
+          <Button
+            variant={editor.isActive("link") ? "default" : "ghost"}
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={addLink}
+          >
+            <LinkIcon className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* 编辑器内容区域 */}
+      <div className="flex-1 overflow-y-auto">
+        <EditorContent
+          editor={editor}
+          className="h-full focus-within:outline-none tiptap-content"
+        />
+      </div>
+
+      <style jsx global>{`
+        .tiptap-content .ProseMirror {
+          min-height: 100%;
+          padding: 1rem;
+          font-size: 14px;
+          line-height: 1.6;
+          color: hsl(var(--foreground));
+          background: transparent;
+          border: none;
+          outline: none;
+        }
+
+        .tiptap-content .ProseMirror p {
+          margin: 0.5rem 0;
+          line-height: 1.6;
+        }
+
+        .tiptap-content .ProseMirror p:first-child {
+          margin-top: 0;
+        }
+
+        .tiptap-content .ProseMirror p:last-child {
+          margin-bottom: 0;
+        }
+
+        .tiptap-content .ProseMirror h1,
+        .tiptap-content .ProseMirror h2,
+        .tiptap-content .ProseMirror h3 {
+          font-weight: 600;
+          margin: 1.5rem 0 0.75rem 0;
+          line-height: 1.4;
+        }
+
+        .tiptap-content .ProseMirror h1:first-child,
+        .tiptap-content .ProseMirror h2:first-child,
+        .tiptap-content .ProseMirror h3:first-child {
+          margin-top: 0;
+        }
+
+        .tiptap-content .ProseMirror h1 {
+          font-size: 1.5rem;
+          border-bottom: 1px solid hsl(var(--border));
+          padding-bottom: 0.5rem;
+        }
+
+        .tiptap-content .ProseMirror h2 {
+          font-size: 1.25rem;
+        }
+
+        .tiptap-content .ProseMirror h3 {
+          font-size: 1.125rem;
+        }
+
+        .tiptap-content .ProseMirror ul {
+          margin: 0.75rem 0;
+          padding-left: 1.5rem;
+          list-style-type: disc;
+        }
+
+        .tiptap-content .ProseMirror ol {
+          margin: 0.75rem 0;
+          padding-left: 1.5rem;
+          list-style-type: decimal;
+        }
+
+        .tiptap-content .ProseMirror li {
+          margin: 0.25rem 0;
+          line-height: 1.6;
+          list-style-position: outside;
+        }
+
+        .tiptap-content .ProseMirror ul li {
+          list-style-type: disc;
+        }
+
+        .tiptap-content .ProseMirror ol li {
+          list-style-type: decimal;
+        }
+
+        .tiptap-content .ProseMirror code {
+          background: hsl(var(--muted));
+          padding: 0.125rem 0.25rem;
+          border-radius: 0.25rem;
+          font-size: 0.875rem;
+          font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        .tiptap-content .ProseMirror .code-block-custom {
+          background: #f8f9fa;
+          border: 1px solid #e9ecef;
+          border-radius: 0.5rem;
+          margin: 1rem 0;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .tiptap-content .ProseMirror .code-block-custom pre {
+          background: #f8f9fa !important;
+          padding: 1rem !important;
+          margin: 0 !important;
+          border-radius: 0 !important;
+          border: none !important;
+          overflow-x: auto;
+          font-size: 0.875rem;
+          line-height: 1.5;
+          font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        .tiptap-content .ProseMirror .code-block-custom code {
+          background: transparent !important;
+          padding: 0 !important;
+          border-radius: 0 !important;
+          font-size: inherit !important;
+          color: inherit !important;
+          font-family: inherit !important;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+          .tiptap-content .ProseMirror .code-block-custom {
+            background: #1e1e1e;
+            border-color: #3e3e3e;
+          }
+          
+          .tiptap-content .ProseMirror .code-block-custom pre {
+            background: #1e1e1e !important;
+          }
+        }
+
+        /* 确保语法高亮样式正确应用 */
+        .tiptap-content .hljs {
+          background: transparent !important;
+          padding: 0 !important;
+        }
+
+        .tiptap-content .hljs-keyword {
+          color: #d73a49;
+          font-weight: bold;
+        }
+
+        .tiptap-content .hljs-string {
+          color: #032f62;
+        }
+
+        .tiptap-content .hljs-comment {
+          color: #6a737d;
+          font-style: italic;
+        }
+
+        .tiptap-content .hljs-number {
+          color: #005cc5;
+        }
+
+        .tiptap-content .hljs-function {
+          color: #6f42c1;
+        }
+
+        .tiptap-content .hljs-variable {
+          color: #e36209;
+        }
+
+        .tiptap-content .ProseMirror blockquote {
+          border-left: 3px solid hsl(var(--border));
+          padding-left: 1rem;
+          margin: 1rem 0;
+          color: hsl(var(--muted-foreground));
+          font-style: italic;
+        }
+
+        .tiptap-content .ProseMirror a {
+          color: hsl(var(--primary));
+          text-decoration: underline;
+          text-decoration-thickness: 1px;
+          text-underline-offset: 2px;
+          transition: all 0.2s;
+        }
+
+        .tiptap-content .ProseMirror a:hover {
+          text-decoration-thickness: 2px;
+        }
+
+        .tiptap-content .ProseMirror img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 0.5rem;
+          margin: 1rem 0;
+        }
+
+        .tiptap-content .ProseMirror p.is-editor-empty:first-child::before {
+          content: attr(data-placeholder);
+          float: left;
+          color: #9ca3af;
+          pointer-events: none;
+          height: 0;
+          opacity: 0.6;
+        }
+
+        .tiptap-content .ProseMirror:focus p.is-editor-empty:first-child::before {
+          opacity: 0.8;
+        }
+
+        .tiptap-content .ProseMirror:focus {
+          outline: none;
+        }
+
+        .tiptap-content .ProseMirror strong {
+          font-weight: 600;
+        }
+
+        .tiptap-content .ProseMirror em {
+          font-style: italic;
+        }
+      `}</style>
+    </div>
+  );
+}
