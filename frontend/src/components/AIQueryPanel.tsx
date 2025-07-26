@@ -78,6 +78,37 @@ export function AIQueryPanel({ onClose, onInsertResponse, currentVideoTime }: AI
     };
   }, [contextMenuOpen]);
 
+  // 监听选中文本作为上下文的事件
+  useEffect(() => {
+    const handleSelectionContext = (event: CustomEvent) => {
+      const { selectedText } = event.detail;
+
+      if (selectedText && selectedText.trim()) {
+        // 创建一个选中文本的上下文项
+        const selectionContext: ContextItem = {
+          id: `selection-${Date.now()}`,
+          type: "note",
+          title: "选中文本",
+          description:
+            selectedText.length > 50 ? selectedText.substring(0, 50) + "..." : selectedText,
+        };
+
+        // 添加到已选择的上下文中
+        setSelectedContexts((prev) => {
+          // 先移除之前的选中文本上下文（如果有）
+          const filtered = prev.filter((ctx) => !ctx.id.startsWith("selection-"));
+          return [...filtered, selectionContext];
+        });
+      }
+    };
+
+    window.addEventListener("add-selection-context", handleSelectionContext as EventListener);
+
+    return () => {
+      window.removeEventListener("add-selection-context", handleSelectionContext as EventListener);
+    };
+  }, []);
+
   const formatTime = (seconds?: number) => {
     if (!seconds) return "";
     const minutes = Math.floor(seconds / 60);

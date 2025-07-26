@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { TimestampExtension } from "@/extensions/TimestampExtension";
 import SlashCommand from "@/extensions/SlashCommand";
 import { AIQueryPanel } from "@/components/AIQueryPanel";
+import { SelectionMenu } from "@/components/SelectionMenu";
 import { aiService } from "@/services/aiService";
 import {
   Code2,
@@ -50,6 +51,11 @@ export function TiptapEditor({
 }: TiptapEditorProps) {
   const { currentVideoTime } = useAppStore();
   const [showAIQuery, setShowAIQuery] = useState(false);
+  const [selectionMenu, setSelectionMenu] = useState({
+    isVisible: false,
+    position: { x: 0, y: 0 },
+    selectedText: "",
+  });
 
   const handleShowAIQuery = useCallback(() => {
     setShowAIQuery(true);
@@ -99,6 +105,46 @@ export function TiptapEditor({
     immediatelyRender: false, // 修复SSR水合问题
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
+    },
+    onSelectionUpdate: ({ editor }) => {
+      const { from, to, empty } = editor.state.selection;
+
+      if (!empty) {
+        // 有文本被选中
+        const selectedText = editor.state.doc.textBetween(from, to, " ");
+
+        if (selectedText.trim()) {
+          // 获取选择的位置
+          const coordsStart = editor.view.coordsAtPos(from);
+          const coordsEnd = editor.view.coordsAtPos(to);
+
+          // 计算选中区域的中心点
+          const centerX = coordsStart.left + (coordsEnd.right - coordsStart.left) / 2;
+
+          // 菜单高度约为120px，检查上方是否有足够空间
+          const menuHeight = 120;
+          const spaceAbove = coordsStart.top;
+          const spaceBelow = window.innerHeight - coordsEnd.bottom;
+
+          // 智能选择菜单位置：优先在上方，空间不足时放在下方
+          const showAbove = spaceAbove >= menuHeight + 10;
+          const positionY = showAbove
+            ? coordsStart.top - menuHeight - 10 // 上方显示
+            : coordsEnd.bottom + 10; // 下方显示
+
+          setSelectionMenu({
+            isVisible: true,
+            position: {
+              x: centerX,
+              y: positionY,
+            },
+            selectedText: selectedText.trim(),
+          });
+        }
+      } else {
+        // 没有选中文本，隐藏菜单
+        setSelectionMenu((prev) => ({ ...prev, isVisible: false }));
+      }
     },
     editorProps: {
       attributes: {
@@ -359,6 +405,43 @@ export function TiptapEditor({
         .run();
     }
   }, [editor]);
+
+  // 处理选择菜单的操作
+  const handleSelectionAskAI = useCallback((selectedText: string) => {
+    // 将选中的文本作为上下文自动添加到AI查询中
+    setShowAIQuery(true);
+
+    // 使用全局事件来传递选中文本作为上下文
+    const event = new CustomEvent("add-selection-context", {
+      detail: { selectedText },
+    });
+    window.dispatchEvent(event);
+  }, []);
+
+  const handleSelectionCopy = useCallback(() => {
+    if (selectionMenu.selectedText) {
+      navigator.clipboard
+        .writeText(selectionMenu.selectedText)
+        .then(() => {
+          // 可以添加一个toast提示复制成功
+          console.log("文本已复制到剪贴板");
+        })
+        .catch((err) => {
+          console.error("复制失败:", err);
+        });
+    }
+  }, [selectionMenu.selectedText]);
+
+  const handleSelectionDelete = useCallback(() => {
+    if (editor && !editor.state.selection.empty) {
+      editor.chain().focus().deleteSelection().run();
+    }
+    setSelectionMenu((prev) => ({ ...prev, isVisible: false }));
+  }, [editor]);
+
+  const handleSelectionMenuClose = useCallback(() => {
+    setSelectionMenu((prev) => ({ ...prev, isVisible: false }));
+  }, []);
 
   // 监听斜杠命令触发的费曼笔记事件
   useEffect(() => {
@@ -833,6 +916,17 @@ export function TiptapEditor({
           />
         </div>
       )}
+
+      {/* 选择文本浮动菜单 */}
+      <SelectionMenu
+        isVisible={selectionMenu.isVisible}
+        position={selectionMenu.position}
+        selectedText={selectionMenu.selectedText}
+        onAskAI={handleSelectionAskAI}
+        onCopy={handleSelectionCopy}
+        onDelete={handleSelectionDelete}
+        onClose={handleSelectionMenuClose}
+      />
     </div>
   );
 }
