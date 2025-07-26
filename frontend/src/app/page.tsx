@@ -14,7 +14,6 @@ import {
   Link,
   GraduationCap,
   Brain,
-  Target,
   Upload,
 } from "lucide-react";
 import { useAutoResize } from "@/hooks/useAutoResize";
@@ -86,13 +85,13 @@ export default function Home() {
     <div className="app-container">
       <div className="min-h-screen bg-gray-50 flex flex-col">
         {/* Header */}
-        <header className="w-full p-6 bg-white shadow-sm">
+        <header className="w-full p-6 bg-white border-b border-gray-100">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-semibold text-gray-800">SteepAI</span>
+              <span className="text-xl font-semibold text-gray-900">Gradient AI</span>
             </div>
           </div>
         </header>
@@ -107,12 +106,12 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                  开始你的
-                  <span className="text-blue-600">智能学习</span>
-                  之旅
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+                  让天下没有
+                  <span className="text-indigo-600">难懂</span>
+                  的知识
                 </h1>
-                <p className="text-lg text-gray-600 mb-8">
+                <p className="text-lg text-gray-500 mb-8 max-w-xl mx-auto">
                   输入视频链接或提出问题，让AI为你创建个性化的学习体验
                 </p>
               </motion.div>
@@ -125,7 +124,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="mb-8"
             >
-              <Card className="p-4 shadow-lg border bg-white">
+              <Card className="p-6 border border-gray-200 bg-white rounded-xl">
                 <div className="relative">
                   <Textarea
                     ref={inputRef}
@@ -133,7 +132,7 @@ export default function Home() {
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="粘贴视频链接或问个问题..."
-                    className="min-h-[120px] border-0 focus:ring-0 resize-none text-base leading-relaxed pr-12"
+                    className="min-h-[120px] border-0 focus:ring-0 resize-none text-base leading-relaxed pr-12 placeholder:text-gray-400"
                     style={{ boxShadow: "none" }}
                   />
 
@@ -150,20 +149,20 @@ export default function Home() {
                       onClick={handleSubmit}
                       disabled={!inputValue.trim()}
                       size="sm"
-                      className="h-8 w-8 rounded-full p-0 bg-blue-600 hover:bg-blue-700"
+                      className="h-8 w-8 rounded-full p-0 bg-indigo-600 hover:bg-indigo-700 transition-colors"
                     >
                       <ArrowUp className="h-4 w-4" />
                     </Button>
                   </motion.div>
                 </div>
 
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <div className="flex items-center space-x-1">
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center space-x-6 text-sm text-gray-400">
+                    <div className="flex items-center space-x-2">
                       <Link className="w-4 h-4" />
                       <span>支持视频链接</span>
                     </div>
-                    <div className="flex items-center space-x-1">
+                    <div className="flex items-center space-x-2">
                       <Sparkles className="w-4 h-4" />
                       <span>AI智能解析</span>
                     </div>
@@ -180,38 +179,38 @@ export default function Home() {
               className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
             >
               {/* Create Learning Plan */}
-              <Card className="p-6 hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-2 hover:border-blue-200">
+              <Card className="p-6 hover:shadow-sm transition-all duration-200 cursor-pointer bg-white border border-gray-200 hover:border-indigo-200 rounded-xl">
                 <Button
                   variant="ghost"
                   className="w-full h-auto p-0 flex flex-col items-start space-y-3"
                   onClick={() => setShowPlanForm(true)}
                 >
-                  <div className="flex items-center space-x-3 w-full">
-                    <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                      <Target className="w-5 h-5 text-white" />
+                  <div className="flex items-center space-x-4 w-full">
+                    <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                      <span className="text-lg">🎯</span>
                     </div>
                     <div className="text-left">
                       <h3 className="font-semibold text-gray-900">定制学习计划</h3>
-                      <p className="text-sm text-gray-600">与AI共创个性化学习路径</p>
+                      <p className="text-sm text-gray-500">与AI共创个性化学习路径</p>
                     </div>
                   </div>
                 </Button>
               </Card>
 
               {/* Browse Courses */}
-              <Card className="p-6 hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-2 hover:border-purple-200">
+              <Card className="p-6 hover:shadow-sm transition-all duration-200 cursor-pointer bg-white border border-gray-200 hover:border-emerald-200 rounded-xl">
                 <Button
                   variant="ghost"
                   className="w-full h-auto p-0 flex flex-col items-start space-y-3"
                   onClick={() => setShowCourseSearch(true)}
                 >
-                  <div className="flex items-center space-x-3 w-full">
-                    <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
-                      <BookOpen className="w-5 h-5 text-white" />
+                  <div className="flex items-center space-x-4 w-full">
+                    <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
+                      <span className="text-lg">📚</span>
                     </div>
                     <div className="text-left">
-                      <h3 className="font-semibold text-gray-900">探索现有课程</h3>
-                      <p className="text-sm text-gray-600">学习CS231n等热门课程</p>
+                      <h3 className="font-semibold text-gray-900">学习现有课程</h3>
+                      <p className="text-sm text-gray-500">学习CS231n等热门课程</p>
                     </div>
                   </div>
                 </Button>
@@ -239,7 +238,7 @@ export default function Home() {
               >
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-semibold flex items-center space-x-2">
-                    <GraduationCap className="w-5 h-5 text-blue-600" />
+                    <GraduationCap className="w-5 h-5 text-indigo-600" />
                     <span>创建学习计划</span>
                   </h2>
                   <Button
@@ -310,7 +309,7 @@ export default function Home() {
                   </Button>
                   <Button
                     onClick={handlePlanSubmit}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700"
+                    className="flex-1 bg-indigo-600 hover:bg-indigo-700"
                   >
                     创建计划
                   </Button>
@@ -339,7 +338,7 @@ export default function Home() {
               >
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-semibold flex items-center space-x-2">
-                    <BookOpen className="w-5 h-5 text-purple-600" />
+                    <BookOpen className="w-5 h-5 text-emerald-600" />
                     <span>选择课程</span>
                   </h2>
                   <Button
@@ -389,16 +388,16 @@ export default function Home() {
                       .map((course) => (
                         <Card
                           key={course.id}
-                          className="p-4 hover:shadow-md transition-all duration-200 cursor-pointer border border-gray-200 hover:border-blue-300"
+                          className="p-4 hover:shadow-sm transition-all duration-200 cursor-pointer border border-gray-200 hover:border-gray-300 rounded-lg"
                           onClick={() => handleCourseSelect(course.id)}
                         >
                           <div className="flex items-start space-x-3">
-                            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
                               <BookOpen className="w-5 h-5 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h4 className="font-medium text-gray-900 truncate">{course.name}</h4>
-                              <p className="text-sm text-gray-600">{course.university}</p>
+                              <p className="text-sm text-gray-500">{course.university}</p>
                             </div>
                           </div>
                         </Card>
