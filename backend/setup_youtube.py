@@ -34,12 +34,13 @@ def main():
     
     # 1. 安装依赖
     success = run_command(
-        "pip install youtube-transcript-api", 
-        "安装youtube-transcript-api依赖"
+        "pip install youtube-transcript-api yt-dlp", 
+        "安装youtube-transcript-api和yt-dlp依赖"
     )
     if not success:
         print("💡 尝试使用uv安装...")
-        run_command("uv add youtube-transcript-api", "使用uv安装依赖")
+        run_command("uv add youtube-transcript-api", "使用uv安装youtube-transcript-api")
+        run_command("uv add yt-dlp", "使用uv安装yt-dlp")
     
     # 2. 运行数据库迁移
     print("\n🔄 运行数据库迁移...")

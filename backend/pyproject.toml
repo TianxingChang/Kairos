@@ -15,6 +15,7 @@ dependencies = [
   "sqlalchemy",
   "yfinance",
   "youtube-transcript-api",
+  "yt-dlp",
 ]
 
 [project.optional-dependencies]

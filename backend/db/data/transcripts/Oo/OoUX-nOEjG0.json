@@ -1,0 +1,6270 @@
+{
+  "video_id": "OoUX-nOEjG0",
+  "created_at": "2025-07-26T19:19:30.951792",
+  "segment_count": 1043,
+  "metadata": {
+    "video_id": "OoUX-nOEjG0",
+    "language": "en",
+    "segment_count": 1043
+  },
+  "transcript": [
+    {
+      "text": "Okay, so welcome to lecture two of CS231N.",
+      "start": 6.971,
+      "duration": 3.135,
+      "language": "en"
+    },
+    {
+      "text": "On Tuesday we, just recall,\nwe, sort of, gave you",
+      "start": 10.106,
+      "duration": 2.54,
+      "language": "en"
+    },
+    {
+      "text": "the big picture view of\nwhat is computer vision,",
+      "start": 12.646,
+      "duration": 2.452,
+      "language": "en"
+    },
+    {
+      "text": "what is the history, and a little bit of the\noverview of the class.",
+      "start": 15.098,
+      "duration": 3.0029999999999983,
+      "language": "en"
+    },
+    {
+      "text": "And today, we're really going\nto dive in, for the first time,",
+      "start": 18.101,
+      "duration": 2.239,
+      "language": "en"
+    },
+    {
+      "text": "into the details. And we'll start to see,\nin much more depth,",
+      "start": 20.34,
+      "duration": 2.9989999999999988,
+      "language": "en"
+    },
+    {
+      "text": "exactly how some of\nthese learning algorithms",
+      "start": 23.339,
+      "duration": 2.413,
+      "language": "en"
+    },
+    {
+      "text": "actually work in practice.",
+      "start": 25.752,
+      "duration": 2.112,
+      "language": "en"
+    },
+    {
+      "text": "So, the first lecture of the class is probably, sort of, the\nlargest big picture vision.",
+      "start": 27.864,
+      "duration": 4.062999999999999,
+      "language": "en"
+    },
+    {
+      "text": "And the majority of the\nlectures in this class will be much more detail orientated,",
+      "start": 31.927,
+      "duration": 3.6469999999999985,
+      "language": "en"
+    },
+    {
+      "text": "much more focused on\nthe specific mechanics, of these different algorithms.",
+      "start": 35.574,
+      "duration": 4.043000000000006,
+      "language": "en"
+    },
+    {
+      "text": "So, today we'll see our\nfirst learning algorithm and that'll be really exciting, I think.",
+      "start": 39.617,
+      "duration": 3.8020000000000067,
+      "language": "en"
+    },
+    {
+      "text": "But, before we get to that, I wanted to talk about a couple\nof administrative issues.",
+      "start": 43.419,
+      "duration": 4.116000000000007,
+      "language": "en"
+    },
+    {
+      "text": "One, is Piazza. So, I saw it when I checked yesterday,",
+      "start": 47.535,
+      "duration": 4.045000000000009,
+      "language": "en"
+    },
+    {
+      "text": "it seemed like we had maybe 500 students",
+      "start": 51.58,
+      "duration": 2.588,
+      "language": "en"
+    },
+    {
+      "text": "signed up on Piazza. Which means that there\nare several hundred of you",
+      "start": 54.168,
+      "duration": 2.6709999999999994,
+      "language": "en"
+    },
+    {
+      "text": "who are not yet there. So, we really want Piazza\nto be the main source",
+      "start": 56.839,
+      "duration": 4.618000000000002,
+      "language": "en"
+    },
+    {
+      "text": "of communication between the\nstudents and the core staff.",
+      "start": 61.457,
+      "duration": 2.765,
+      "language": "en"
+    },
+    {
+      "text": "So, we've gotten a lot of\nquestions to the staff list",
+      "start": 64.222,
+      "duration": 3.179,
+      "language": "en"
+    },
+    {
+      "text": "about project ideas or questions\nabout midterm attendance",
+      "start": 67.401,
+      "duration": 3.769,
+      "language": "en"
+    },
+    {
+      "text": "or poster session attendance. And, any, sort of, questions like that",
+      "start": 71.17,
+      "duration": 3.218999999999994,
+      "language": "en"
+    },
+    {
+      "text": "should really go to Piazza. You'll probably get answers\nto your questions faster",
+      "start": 74.389,
+      "duration": 3.7450000000000045,
+      "language": "en"
+    },
+    {
+      "text": "on Piazza, because all the\nTAs are knowing to check that.",
+      "start": 78.134,
+      "duration": 3.434,
+      "language": "en"
+    },
+    {
+      "text": "And it's, sort of, easy\nfor emails to get lost in the shuffle if you just\nsend to the course list.",
+      "start": 81.568,
+      "duration": 4.665999999999997,
+      "language": "en"
+    },
+    {
+      "text": "It's also come to my attention\nthat some SCPD students",
+      "start": 86.234,
+      "duration": 2.749,
+      "language": "en"
+    },
+    {
+      "text": "are having a bit of a hard\ntime signing up for Piazza.",
+      "start": 88.983,
+      "duration": 4.646,
+      "language": "en"
+    },
+    {
+      "text": "SCPD students are supposed to receive a @stanford.edu email address.",
+      "start": 93.629,
+      "duration": 4.161999999999992,
+      "language": "en"
+    },
+    {
+      "text": "So, once you get that email address, then you can use the Stanford\nemail to sign into Piazza.",
+      "start": 98.804,
+      "duration": 5.472000000000008,
+      "language": "en"
+    },
+    {
+      "text": "Probably that doesn't\naffect those of you who are sitting in the room right now,",
+      "start": 104.276,
+      "duration": 2.632000000000005,
+      "language": "en"
+    },
+    {
+      "text": "but, for those students listening on SCPD.",
+      "start": 106.908,
+      "duration": 3.5,
+      "language": "en"
+    },
+    {
+      "text": "The next administrative issue\nis about assignment one.",
+      "start": 112.191,
+      "duration": 3.452,
+      "language": "en"
+    },
+    {
+      "text": "Assignment one will be up later today,",
+      "start": 115.643,
+      "duration": 2.535,
+      "language": "en"
+    },
+    {
+      "text": "probably sometime this afternoon, but I promise, before\nI go to sleep tonight,",
+      "start": 118.178,
+      "duration": 3.4749999999999943,
+      "language": "en"
+    },
+    {
+      "text": "it'll be up. But, if you're getting a little bit antsy",
+      "start": 121.653,
+      "duration": 2.936000000000007,
+      "language": "en"
+    },
+    {
+      "text": "and really want to start\nworking on it right now,",
+      "start": 124.589,
+      "duration": 2.715,
+      "language": "en"
+    },
+    {
+      "text": "then you can look at last year's version of assignment one.",
+      "start": 127.304,
+      "duration": 3.227000000000004,
+      "language": "en"
+    },
+    {
+      "text": "It'll be pretty much the same content.",
+      "start": 130.531,
+      "duration": 2.153,
+      "language": "en"
+    },
+    {
+      "text": "We're just reshuffling it\na little bit to make it,",
+      "start": 132.684,
+      "duration": 2.397,
+      "language": "en"
+    },
+    {
+      "text": "like, for example, upgrading\nto work with Python 3,",
+      "start": 135.081,
+      "duration": 2.088,
+      "language": "en"
+    },
+    {
+      "text": "rather than Python 2.7. And some of these minor cosmetic changes,",
+      "start": 137.169,
+      "duration": 3.7739999999999725,
+      "language": "en"
+    },
+    {
+      "text": "but the content of the\nassignment will still be the same",
+      "start": 140.943,
+      "duration": 2.125,
+      "language": "en"
+    },
+    {
+      "text": "as last year. So, in this assignment you'll\nbe implementing your own",
+      "start": 143.068,
+      "duration": 4.263999999999982,
+      "language": "en"
+    },
+    {
+      "text": "k-nearest neighbor classifier, which we're going to talk\nabout in this lecture.",
+      "start": 147.332,
+      "duration": 3.353999999999985,
+      "language": "en"
+    },
+    {
+      "text": "You'll also implement several\ndifferent linear classifiers,",
+      "start": 150.686,
+      "duration": 2.828,
+      "language": "en"
+    },
+    {
+      "text": "including the SVM and Softmax,",
+      "start": 153.514,
+      "duration": 2.18,
+      "language": "en"
+    },
+    {
+      "text": "as well as a simple\ntwo-layer neural network.",
+      "start": 155.694,
+      "duration": 2.233,
+      "language": "en"
+    },
+    {
+      "text": "And we'll cover all this content over the next couple of lectures.",
+      "start": 157.927,
+      "duration": 4.233000000000004,
+      "language": "en"
+    },
+    {
+      "text": "So, all of our assignments\nare using Python and NumPy.",
+      "start": 163.112,
+      "duration": 3.056,
+      "language": "en"
+    },
+    {
+      "text": "If you aren't familiar\nwith Python or NumPy,",
+      "start": 166.168,
+      "duration": 3.061,
+      "language": "en"
+    },
+    {
+      "text": "then we have written a\ntutorial that you can find",
+      "start": 169.229,
+      "duration": 2.379,
+      "language": "en"
+    },
+    {
+      "text": "on the course website to\ntry and get you up to speed.",
+      "start": 171.608,
+      "duration": 2.704,
+      "language": "en"
+    },
+    {
+      "text": "But, this is, actually, pretty important.",
+      "start": 174.312,
+      "duration": 2.544,
+      "language": "en"
+    },
+    {
+      "text": "NumPy lets you write these\nvery efficient vectorized",
+      "start": 176.856,
+      "duration": 2.355,
+      "language": "en"
+    },
+    {
+      "text": "operations that let you do\nquite a lot of computation",
+      "start": 179.211,
+      "duration": 3.025,
+      "language": "en"
+    },
+    {
+      "text": "in just a couple lines of code. So this is super important for pretty much",
+      "start": 182.236,
+      "duration": 3.844999999999999,
+      "language": "en"
+    },
+    {
+      "text": "all aspects of numerical\ncomputing and machine learning",
+      "start": 186.081,
+      "duration": 3.006,
+      "language": "en"
+    },
+    {
+      "text": "and everything like that, is efficiently implementing\nthese vectorized operations.",
+      "start": 189.087,
+      "duration": 4.3370000000000175,
+      "language": "en"
+    },
+    {
+      "text": "And you'll get a lot of practice with this",
+      "start": 193.424,
+      "duration": 2.176,
+      "language": "en"
+    },
+    {
+      "text": "on the first assignment. So, for those of you who\ndon't have a lot of experience",
+      "start": 195.6,
+      "duration": 3.8329999999999984,
+      "language": "en"
+    },
+    {
+      "text": "with Matlab or NumPy or\nother types of vectorized",
+      "start": 199.433,
+      "duration": 4.016,
+      "language": "en"
+    },
+    {
+      "text": "tensor computation, I recommend\nthat you start looking",
+      "start": 203.449,
+      "duration": 2.958,
+      "language": "en"
+    },
+    {
+      "text": "at this assignment pretty early and also, read carefully\nthrough the tutorial.",
+      "start": 206.407,
+      "duration": 5.767999999999972,
+      "language": "en"
+    },
+    {
+      "text": "The other thing I wanted to talk about",
+      "start": 212.175,
+      "duration": 2.08,
+      "language": "en"
+    },
+    {
+      "text": "is that we're happy to announce that",
+      "start": 214.255,
+      "duration": 2.032,
+      "language": "en"
+    },
+    {
+      "text": "we're officially supported\nthrough Google Cloud",
+      "start": 216.287,
+      "duration": 2.58,
+      "language": "en"
+    },
+    {
+      "text": "for this class. So, Google Cloud is somewhat\nsimilar to Amazon AWS.",
+      "start": 218.867,
+      "duration": 4.763000000000005,
+      "language": "en"
+    },
+    {
+      "text": "You can go and start virtual\nmachines up in the cloud.",
+      "start": 223.63,
+      "duration": 3.064,
+      "language": "en"
+    },
+    {
+      "text": "These virtual machines can have GPUs.",
+      "start": 226.694,
+      "duration": 3.738,
+      "language": "en"
+    },
+    {
+      "text": "We're working on the tutorial\nfor exactly how to use",
+      "start": 230.432,
+      "duration": 2.765,
+      "language": "en"
+    },
+    {
+      "text": "Google Cloud and get it to\nwork for the assignments.",
+      "start": 233.197,
+      "duration": 2.189,
+      "language": "en"
+    },
+    {
+      "text": "But our intention is that\nyou'll be able to just download",
+      "start": 235.386,
+      "duration": 3.131,
+      "language": "en"
+    },
+    {
+      "text": "some image, and it'll be very seamless",
+      "start": 238.517,
+      "duration": 2.259,
+      "language": "en"
+    },
+    {
+      "text": "for you to work on the assignments on one of these instances on the cloud.",
+      "start": 240.776,
+      "duration": 3.9470000000000027,
+      "language": "en"
+    },
+    {
+      "text": "And because Google has, very generously,",
+      "start": 244.723,
+      "duration": 2.363,
+      "language": "en"
+    },
+    {
+      "text": "supported this course, we'll be able to distribute to each of you",
+      "start": 247.086,
+      "duration": 3.328000000000003,
+      "language": "en"
+    },
+    {
+      "text": "coupons that let you use\nGoogle Cloud credits for free",
+      "start": 250.414,
+      "duration": 3.708,
+      "language": "en"
+    },
+    {
+      "text": "for the class. So you can feel free to use\nthese for the assignments",
+      "start": 254.122,
+      "duration": 4.448999999999955,
+      "language": "en"
+    },
+    {
+      "text": "and also for the course projects when you want to start using\nGPUs and larger machines",
+      "start": 258.571,
+      "duration": 4.036000000000001,
+      "language": "en"
+    },
+    {
+      "text": "and whatnot. So, we'll post more details about that,",
+      "start": 262.607,
+      "duration": 3.3689999999999714,
+      "language": "en"
+    },
+    {
+      "text": "probably, on Piazza later today.",
+      "start": 265.976,
+      "duration": 2.047,
+      "language": "en"
+    },
+    {
+      "text": "But, I just wanted to mention, because I know there had\nbeen a couple of questions",
+      "start": 268.023,
+      "duration": 3.217999999999961,
+      "language": "en"
+    },
+    {
+      "text": "about, can I use my laptop?",
+      "start": 271.241,
+      "duration": 2.128,
+      "language": "en"
+    },
+    {
+      "text": "Do I have to run on corn? Do I have to, whatever?",
+      "start": 273.369,
+      "duration": 2.1970000000000027,
+      "language": "en"
+    },
+    {
+      "text": "And the answer is that,\nyou'll be able to run on",
+      "start": 275.566,
+      "duration": 2.041,
+      "language": "en"
+    },
+    {
+      "text": "Google Cloud and we'll provide\nyou some coupons for that.",
+      "start": 277.607,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "Yeah, so, those are, kind of, the\nmajor administrative issues",
+      "start": 283.923,
+      "duration": 3.894999999999982,
+      "language": "en"
+    },
+    {
+      "text": "I wanted to talk about today. And then, let's dive into the content.",
+      "start": 287.818,
+      "duration": 5.8629999999999995,
+      "language": "en"
+    },
+    {
+      "text": "So, the last lecture\nwe talked a little bit about this task of image classification,",
+      "start": 293.681,
+      "duration": 4.444000000000017,
+      "language": "en"
+    },
+    {
+      "text": "which is really a core\ntask in computer vision.",
+      "start": 298.125,
+      "duration": 2.325,
+      "language": "en"
+    },
+    {
+      "text": "And this is something\nthat we'll really focus on throughout the course of the class.",
+      "start": 300.45,
+      "duration": 3.598000000000013,
+      "language": "en"
+    },
+    {
+      "text": "Is, exactly, how do we work on this\nimage classification task?",
+      "start": 304.048,
+      "duration": 3.783999999999992,
+      "language": "en"
+    },
+    {
+      "text": "So, a little bit more concretely, when you're doing image classification,",
+      "start": 307.832,
+      "duration": 4.310000000000002,
+      "language": "en"
+    },
+    {
+      "text": "your system receives some input image,",
+      "start": 312.142,
+      "duration": 2.117,
+      "language": "en"
+    },
+    {
+      "text": "which is this cute cat in this example,",
+      "start": 314.259,
+      "duration": 2.198,
+      "language": "en"
+    },
+    {
+      "text": "and the system is aware\nof some predetermined set",
+      "start": 316.457,
+      "duration": 3.55,
+      "language": "en"
+    },
+    {
+      "text": "of categories or labels.",
+      "start": 320.007,
+      "duration": 2.448,
+      "language": "en"
+    },
+    {
+      "text": "So, these might be, like,\na dog or a cat or a truck",
+      "start": 322.455,
+      "duration": 3.01,
+      "language": "en"
+    },
+    {
+      "text": "or a plane, and there's some\nfixed set of category labels,",
+      "start": 325.465,
+      "duration": 3.669,
+      "language": "en"
+    },
+    {
+      "text": "and the job of the computer\nis to look at the picture",
+      "start": 329.134,
+      "duration": 2.158,
+      "language": "en"
+    },
+    {
+      "text": "and assign it one of these\nfixed category labels.",
+      "start": 331.292,
+      "duration": 3.539,
+      "language": "en"
+    },
+    {
+      "text": "This seems like a really easy problem, because so much of your own\nvisual system in your brain",
+      "start": 334.831,
+      "duration": 5.437000000000012,
+      "language": "en"
+    },
+    {
+      "text": "is hardwired to doing these, sort of,",
+      "start": 340.268,
+      "duration": 2.212,
+      "language": "en"
+    },
+    {
+      "text": "visual recognition tasks. But this is actually a\nreally, really hard problem",
+      "start": 342.48,
+      "duration": 3.8559999999999945,
+      "language": "en"
+    },
+    {
+      "text": "for a machine. So, if you dig in and\nthink about, actually,",
+      "start": 346.336,
+      "duration": 3.9700000000000273,
+      "language": "en"
+    },
+    {
+      "text": "what does a computer see\nwhen it looks at this image,",
+      "start": 350.306,
+      "duration": 2.93,
+      "language": "en"
+    },
+    {
+      "text": "it definitely doesn't get\nthis holistic idea of a cat",
+      "start": 353.236,
+      "duration": 2.616,
+      "language": "en"
+    },
+    {
+      "text": "that you see when you look at it. And the computer really\nis representing the image",
+      "start": 355.852,
+      "duration": 3.566000000000031,
+      "language": "en"
+    },
+    {
+      "text": "as this gigantic grid of numbers.",
+      "start": 359.418,
+      "duration": 2.337,
+      "language": "en"
+    },
+    {
+      "text": "So, the image might be something\nlike 800 by 600 pixels.",
+      "start": 361.755,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "And each pixel is\nrepresented by three numbers,",
+      "start": 367.371,
+      "duration": 2.764,
+      "language": "en"
+    },
+    {
+      "text": "giving the red, green, and\nblue values for that pixel.",
+      "start": 370.135,
+      "duration": 3.041,
+      "language": "en"
+    },
+    {
+      "text": "So, to the computer, this is just a gigantic grid of numbers.",
+      "start": 373.176,
+      "duration": 2.5930000000000177,
+      "language": "en"
+    },
+    {
+      "text": "And it's very difficult\nto distill the cat-ness",
+      "start": 375.769,
+      "duration": 2.8,
+      "language": "en"
+    },
+    {
+      "text": "out of this, like, giant array\nof thousands, or whatever,",
+      "start": 378.569,
+      "duration": 3.939,
+      "language": "en"
+    },
+    {
+      "text": "very many different numbers.",
+      "start": 382.508,
+      "duration": 2.333,
+      "language": "en"
+    },
+    {
+      "text": "So, we refer to this\nproblem as the semantic gap.",
+      "start": 386.956,
+      "duration": 3.23,
+      "language": "en"
+    },
+    {
+      "text": "This idea of a cat, or\nthis label of a cat,",
+      "start": 390.186,
+      "duration": 2.549,
+      "language": "en"
+    },
+    {
+      "text": "is a semantic label that\nwe're assigning to this image,",
+      "start": 392.735,
+      "duration": 2.727,
+      "language": "en"
+    },
+    {
+      "text": "and there's this huge gap between\nthe semantic idea of a cat",
+      "start": 395.462,
+      "duration": 3.309,
+      "language": "en"
+    },
+    {
+      "text": "and these pixel values that the\ncomputer is actually seeing.",
+      "start": 398.771,
+      "duration": 4.126,
+      "language": "en"
+    },
+    {
+      "text": "And this is a really hard problem because",
+      "start": 402.897,
+      "duration": 2.606,
+      "language": "en"
+    },
+    {
+      "text": "you can change the picture\nin very small, subtle ways",
+      "start": 405.503,
+      "duration": 3.398,
+      "language": "en"
+    },
+    {
+      "text": "that will cause this pixel\ngrid to change entirely.",
+      "start": 408.901,
+      "duration": 3.015,
+      "language": "en"
+    },
+    {
+      "text": "So, for example, if we took this same cat,",
+      "start": 411.916,
+      "duration": 2.122,
+      "language": "en"
+    },
+    {
+      "text": "and if the cat happened to sit still and not even twitch, not move a muscle,",
+      "start": 414.038,
+      "duration": 3.3140000000000214,
+      "language": "en"
+    },
+    {
+      "text": "which is never going to happen, but we moved the camera to the other side,",
+      "start": 417.352,
+      "duration": 3.7250000000000227,
+      "language": "en"
+    },
+    {
+      "text": "then every single grid,\nevery single pixel,",
+      "start": 421.077,
+      "duration": 2.973,
+      "language": "en"
+    },
+    {
+      "text": "in this giant grid of numbers would be completely different.",
+      "start": 424.05,
+      "duration": 2.870999999999981,
+      "language": "en"
+    },
+    {
+      "text": "But, somehow, it's still\nrepresenting the same cat.",
+      "start": 426.921,
+      "duration": 2.51,
+      "language": "en"
+    },
+    {
+      "text": "And our algorithms need\nto be robust to this.",
+      "start": 429.431,
+      "duration": 3.323,
+      "language": "en"
+    },
+    {
+      "text": "But, not only viewpoint is one problem,",
+      "start": 432.754,
+      "duration": 2.377,
+      "language": "en"
+    },
+    {
+      "text": "another is illumination. There can be different\nlighting conditions going on",
+      "start": 435.131,
+      "duration": 2.992999999999995,
+      "language": "en"
+    },
+    {
+      "text": "in the scene. Whether the cat is appearing\nin this very dark, moody scene,",
+      "start": 438.124,
+      "duration": 4.375999999999976,
+      "language": "en"
+    },
+    {
+      "text": "or like is this very bright,\nsunlit scene, it's still a cat,",
+      "start": 442.5,
+      "duration": 3.02,
+      "language": "en"
+    },
+    {
+      "text": "and our algorithms need\nto be robust to that.",
+      "start": 445.52,
+      "duration": 2.968,
+      "language": "en"
+    },
+    {
+      "text": "Objects can also deform. I think cats are, maybe,\namong the more deformable",
+      "start": 448.488,
+      "duration": 3.866999999999962,
+      "language": "en"
+    },
+    {
+      "text": "of animals that you might see out there.",
+      "start": 452.355,
+      "duration": 2.194,
+      "language": "en"
+    },
+    {
+      "text": "And cats can really assume a\nlot of different, varied poses",
+      "start": 454.549,
+      "duration": 3.276,
+      "language": "en"
+    },
+    {
+      "text": "and positions. And our algorithms should\nbe robust to these different",
+      "start": 457.825,
+      "duration": 2.9490000000000123,
+      "language": "en"
+    },
+    {
+      "text": "kinds of transforms. There can also be problems of occlusion,",
+      "start": 460.774,
+      "duration": 5.048999999999978,
+      "language": "en"
+    },
+    {
+      "text": "where you might only see part\nof a cat, like, just the face,",
+      "start": 465.823,
+      "duration": 3.939,
+      "language": "en"
+    },
+    {
+      "text": "or in this extreme example,\njust a tail peeking out",
+      "start": 469.762,
+      "duration": 2.103,
+      "language": "en"
+    },
+    {
+      "text": "from under the couch cushion. But, in these cases, it's pretty\neasy for you, as a person,",
+      "start": 471.865,
+      "duration": 4.760999999999967,
+      "language": "en"
+    },
+    {
+      "text": "to realize that this is probably a cat,",
+      "start": 476.626,
+      "duration": 2.271,
+      "language": "en"
+    },
+    {
+      "text": "and you still recognize\nthese images as cats.",
+      "start": 478.897,
+      "duration": 2.635,
+      "language": "en"
+    },
+    {
+      "text": "And this is something that our algorithms",
+      "start": 481.532,
+      "duration": 2.397,
+      "language": "en"
+    },
+    {
+      "text": "also must be robust to, which is quite difficult, I think.",
+      "start": 483.929,
+      "duration": 4.531000000000006,
+      "language": "en"
+    },
+    {
+      "text": "There can also be problems\nof background clutter,",
+      "start": 488.46,
+      "duration": 2.332,
+      "language": "en"
+    },
+    {
+      "text": "where maybe the foreground\nobject of the cat,",
+      "start": 490.792,
+      "duration": 2.537,
+      "language": "en"
+    },
+    {
+      "text": "could actually look quite\nsimilar in appearance",
+      "start": 493.329,
+      "duration": 2.253,
+      "language": "en"
+    },
+    {
+      "text": "to the background. And this is another thing\nthat we need to handle.",
+      "start": 495.582,
+      "duration": 4.807000000000016,
+      "language": "en"
+    },
+    {
+      "text": "There's also this problem\nof intraclass variation,",
+      "start": 500.389,
+      "duration": 3.248,
+      "language": "en"
+    },
+    {
+      "text": "that this one notion of\ncat-ness, actually spans a lot of",
+      "start": 503.637,
+      "duration": 3.139,
+      "language": "en"
+    },
+    {
+      "text": "different visual appearances. And cats can come in\ndifferent shapes and sizes",
+      "start": 506.776,
+      "duration": 3.5639999999999645,
+      "language": "en"
+    },
+    {
+      "text": "and colors and ages. And our algorithm, again, needs to work",
+      "start": 510.34,
+      "duration": 3.8140000000000214,
+      "language": "en"
+    },
+    {
+      "text": "and handle all these different variations.",
+      "start": 514.154,
+      "duration": 2.191,
+      "language": "en"
+    },
+    {
+      "text": "So, this is actually a really,\nreally challenging problem.",
+      "start": 516.345,
+      "duration": 3.688,
+      "language": "en"
+    },
+    {
+      "text": "And it's sort of easy to\nforget how easy this is",
+      "start": 520.033,
+      "duration": 3.369,
+      "language": "en"
+    },
+    {
+      "text": "because so much of your\nbrain is specifically tuned",
+      "start": 523.402,
+      "duration": 2.862,
+      "language": "en"
+    },
+    {
+      "text": "for dealing with these things. But now if we want our computer programs",
+      "start": 526.264,
+      "duration": 3.340000000000032,
+      "language": "en"
+    },
+    {
+      "text": "to deal with all of these\nproblems, all simultaneously,",
+      "start": 529.604,
+      "duration": 2.986,
+      "language": "en"
+    },
+    {
+      "text": "and not just for cats, by the way, but for just about any object\ncategory you can imagine,",
+      "start": 532.59,
+      "duration": 4.241999999999962,
+      "language": "en"
+    },
+    {
+      "text": "this is a fantastically\nchallenging problem.",
+      "start": 536.832,
+      "duration": 2.22,
+      "language": "en"
+    },
+    {
+      "text": "And it's, actually, somewhat miraculous that this works at all, in my opinion.",
+      "start": 539.052,
+      "duration": 4.026000000000067,
+      "language": "en"
+    },
+    {
+      "text": "But, actually, not only does it work, but these things work very\nclose to human accuracy",
+      "start": 543.078,
+      "duration": 4.206999999999994,
+      "language": "en"
+    },
+    {
+      "text": "in some limited situations. And take only hundreds\nof milliseconds to do so.",
+      "start": 547.285,
+      "duration": 5.094000000000051,
+      "language": "en"
+    },
+    {
+      "text": "So, this is some pretty\namazing, incredible technology,",
+      "start": 552.379,
+      "duration": 2.542,
+      "language": "en"
+    },
+    {
+      "text": "in my opinion, and over the\ncourse of the rest of the class",
+      "start": 554.921,
+      "duration": 3.497,
+      "language": "en"
+    },
+    {
+      "text": "we will really see what\nkinds of advancements have made this possible.",
+      "start": 558.418,
+      "duration": 3.822999999999979,
+      "language": "en"
+    },
+    {
+      "text": "So now, if you, kind of, think about what is the API for writing\nan image classifier,",
+      "start": 563.492,
+      "duration": 4.072999999999979,
+      "language": "en"
+    },
+    {
+      "text": "you might sit down and try\nto write a method in Python",
+      "start": 567.565,
+      "duration": 2.533,
+      "language": "en"
+    },
+    {
+      "text": "like this. Where you want to take in an image",
+      "start": 570.098,
+      "duration": 2.6409999999999627,
+      "language": "en"
+    },
+    {
+      "text": "and then do some crazy magic and then, eventually,\nspit out this class label",
+      "start": 572.739,
+      "duration": 3.4459999999999127,
+      "language": "en"
+    },
+    {
+      "text": "to say cat or dog or whatnot. And there's really no obvious\nway to do this, right?",
+      "start": 576.185,
+      "duration": 5.509999999999991,
+      "language": "en"
+    },
+    {
+      "text": "If you're taking an algorithms class and your task is to sort numbers",
+      "start": 581.695,
+      "duration": 3.2859999999999445,
+      "language": "en"
+    },
+    {
+      "text": "or compute a convex hull or, even, do something\nlike RSA encryption,",
+      "start": 584.981,
+      "duration": 4.553999999999974,
+      "language": "en"
+    },
+    {
+      "text": "you, sort of, can write down an algorithm",
+      "start": 589.535,
+      "duration": 2.049,
+      "language": "en"
+    },
+    {
+      "text": "and enumerate all the\nsteps that need to happen",
+      "start": 591.584,
+      "duration": 2.141,
+      "language": "en"
+    },
+    {
+      "text": "in order for this things to work.",
+      "start": 593.725,
+      "duration": 2.048,
+      "language": "en"
+    },
+    {
+      "text": "But, when we're trying\nto recognize objects,",
+      "start": 595.773,
+      "duration": 2.552,
+      "language": "en"
+    },
+    {
+      "text": "or recognize cats or images,",
+      "start": 598.325,
+      "duration": 2.065,
+      "language": "en"
+    },
+    {
+      "text": "there's no really clear,\nexplicit algorithm",
+      "start": 600.39,
+      "duration": 2.448,
+      "language": "en"
+    },
+    {
+      "text": "that makes intuitive sense, for how you might go about\nrecognizing these objects.",
+      "start": 602.838,
+      "duration": 5.071000000000026,
+      "language": "en"
+    },
+    {
+      "text": "So, this is, again, quite challenging, if you think about,",
+      "start": 607.909,
+      "duration": 4.254000000000019,
+      "language": "en"
+    },
+    {
+      "text": "if it was your first day programming and you had to sit down\nand write this function,",
+      "start": 612.163,
+      "duration": 3.3010000000000446,
+      "language": "en"
+    },
+    {
+      "text": "I think most people would be in trouble.",
+      "start": 615.464,
+      "duration": 3.405,
+      "language": "en"
+    },
+    {
+      "text": "That being said, people have definitely\nmade explicit attempts",
+      "start": 618.869,
+      "duration": 3.038000000000011,
+      "language": "en"
+    },
+    {
+      "text": "to try to write, sort\nof, high-end coded rules",
+      "start": 621.907,
+      "duration": 3.122,
+      "language": "en"
+    },
+    {
+      "text": "for recognizing different animals. So, we touched on this a\nlittle bit in the last lecture,",
+      "start": 625.029,
+      "duration": 4.163999999999987,
+      "language": "en"
+    },
+    {
+      "text": "but maybe one idea for cats is that,",
+      "start": 629.193,
+      "duration": 2.902,
+      "language": "en"
+    },
+    {
+      "text": "we know that cats have ears\nand eyes and mouths and noses.",
+      "start": 632.095,
+      "duration": 3.501,
+      "language": "en"
+    },
+    {
+      "text": "And we know that edges,\nfrom Hubel and Wiesel,",
+      "start": 635.596,
+      "duration": 2.349,
+      "language": "en"
+    },
+    {
+      "text": "we know that edges are pretty important when it comes to visual recognition.",
+      "start": 637.945,
+      "duration": 3.6959999999999127,
+      "language": "en"
+    },
+    {
+      "text": "So one thing we might try to do is",
+      "start": 641.641,
+      "duration": 2.179,
+      "language": "en"
+    },
+    {
+      "text": "compute the edges of this image and then go in and try to\ncategorize all the different",
+      "start": 643.82,
+      "duration": 3.7229999999999563,
+      "language": "en"
+    },
+    {
+      "text": "corners and boundaries, and\nsay that, if we have maybe",
+      "start": 647.543,
+      "duration": 3.44,
+      "language": "en"
+    },
+    {
+      "text": "three lines meeting this way,\nthen it might be a corner,",
+      "start": 650.983,
+      "duration": 2.163,
+      "language": "en"
+    },
+    {
+      "text": "and an ear has one corner\nhere and one corner there",
+      "start": 653.146,
+      "duration": 2.04,
+      "language": "en"
+    },
+    {
+      "text": "and one corner there, and then, kind of, write down\nthis explicit set of rules",
+      "start": 655.186,
+      "duration": 3.8899999999998727,
+      "language": "en"
+    },
+    {
+      "text": "for recognizing cats.",
+      "start": 659.076,
+      "duration": 2.532,
+      "language": "en"
+    },
+    {
+      "text": "But this turns out not to work very well.",
+      "start": 661.608,
+      "duration": 2.783,
+      "language": "en"
+    },
+    {
+      "text": "One, it's super brittle. And, two, say, if you want\nto start over for another",
+      "start": 664.391,
+      "duration": 4.621999999999957,
+      "language": "en"
+    },
+    {
+      "text": "object category, and maybe\nnot worry about cats,",
+      "start": 669.013,
+      "duration": 2.863,
+      "language": "en"
+    },
+    {
+      "text": "but talk about trucks or dogs\nor fishes or something else,",
+      "start": 671.876,
+      "duration": 3.129,
+      "language": "en"
+    },
+    {
+      "text": "then you need to start all over again.",
+      "start": 675.005,
+      "duration": 2.076,
+      "language": "en"
+    },
+    {
+      "text": "So, this is really not a\nvery scalable approach.",
+      "start": 677.081,
+      "duration": 2.772,
+      "language": "en"
+    },
+    {
+      "text": "We want to come up with some\nalgorithm, or some method,",
+      "start": 679.853,
+      "duration": 2.726,
+      "language": "en"
+    },
+    {
+      "text": "for these recognition tasks",
+      "start": 682.579,
+      "duration": 2.602,
+      "language": "en"
+    },
+    {
+      "text": "which scales much more\nnaturally to all the variety",
+      "start": 685.181,
+      "duration": 2.179,
+      "language": "en"
+    },
+    {
+      "text": "of objects in the world.",
+      "start": 687.36,
+      "duration": 2.0,
+      "language": "en"
+    },
+    {
+      "text": "So, the insight that, sort\nof, makes this all work",
+      "start": 691.311,
+      "duration": 3.455,
+      "language": "en"
+    },
+    {
+      "text": "is this idea of the data-driven approach.",
+      "start": 694.766,
+      "duration": 3.326,
+      "language": "en"
+    },
+    {
+      "text": "Rather than sitting down and\nwriting these hand-specified",
+      "start": 698.092,
+      "duration": 2.954,
+      "language": "en"
+    },
+    {
+      "text": "rules to try to craft exactly\nwhat is a cat or a fish",
+      "start": 701.046,
+      "duration": 3.294,
+      "language": "en"
+    },
+    {
+      "text": "or what have you, instead, we'll go out onto the internet",
+      "start": 704.34,
+      "duration": 3.5049999999998818,
+      "language": "en"
+    },
+    {
+      "text": "and collect a large\ndataset of many, many cats",
+      "start": 707.845,
+      "duration": 3.468,
+      "language": "en"
+    },
+    {
+      "text": "and many, many airplanes\nand many, many deer",
+      "start": 711.313,
+      "duration": 2.211,
+      "language": "en"
+    },
+    {
+      "text": "and different things like this. And we can actually use tools\nlike Google Image Search,",
+      "start": 713.524,
+      "duration": 4.551000000000045,
+      "language": "en"
+    },
+    {
+      "text": "or something like that, to go out and collect a very\nlarge number of examples",
+      "start": 718.075,
+      "duration": 3.4710000000000036,
+      "language": "en"
+    },
+    {
+      "text": "of these different categories.",
+      "start": 721.546,
+      "duration": 2.32,
+      "language": "en"
+    },
+    {
+      "text": "By the way, this actually\ntakes quite a lot of effort",
+      "start": 723.866,
+      "duration": 2.337,
+      "language": "en"
+    },
+    {
+      "text": "to go out and actually\ncollect these datasets",
+      "start": 726.203,
+      "duration": 2.135,
+      "language": "en"
+    },
+    {
+      "text": "but, luckily, there's a lot\nof really good, high quality",
+      "start": 728.338,
+      "duration": 2.535,
+      "language": "en"
+    },
+    {
+      "text": "datasets out there already for you to use.",
+      "start": 730.873,
+      "duration": 3.232,
+      "language": "en"
+    },
+    {
+      "text": "Then once we get this dataset, we train this machine learning classifier",
+      "start": 734.105,
+      "duration": 4.430999999999926,
+      "language": "en"
+    },
+    {
+      "text": "that is going to ingest all of the data,",
+      "start": 738.536,
+      "duration": 2.333,
+      "language": "en"
+    },
+    {
+      "text": "summarize it in some way, and then spit out a model",
+      "start": 740.869,
+      "duration": 2.8640000000000327,
+      "language": "en"
+    },
+    {
+      "text": "that summarizes the\nknowledge of how to recognize",
+      "start": 743.733,
+      "duration": 2.397,
+      "language": "en"
+    },
+    {
+      "text": "these different object categories.",
+      "start": 746.13,
+      "duration": 2.316,
+      "language": "en"
+    },
+    {
+      "text": "Then finally, we'll\nuse this training model and apply it on new images",
+      "start": 748.446,
+      "duration": 3.3099999999999454,
+      "language": "en"
+    },
+    {
+      "text": "that will then be able to recognize cats and dogs and whatnot.",
+      "start": 751.756,
+      "duration": 4.173999999999978,
+      "language": "en"
+    },
+    {
+      "text": "So here our API has changed a little bit.",
+      "start": 755.93,
+      "duration": 2.498,
+      "language": "en"
+    },
+    {
+      "text": "Rather than a single function that just inputs an image\nand recognizes a cat,",
+      "start": 758.428,
+      "duration": 3.671000000000049,
+      "language": "en"
+    },
+    {
+      "text": "we have these two functions. One, called, train, that's\ngoing to input images and labels",
+      "start": 762.099,
+      "duration": 5.9849999999999,
+      "language": "en"
+    },
+    {
+      "text": "and then output a model, and then, separately, another\nfunction called, predict,",
+      "start": 768.084,
+      "duration": 3.9460000000000264,
+      "language": "en"
+    },
+    {
+      "text": "which will input the model\nand than make predictions for images.",
+      "start": 772.03,
+      "duration": 3.2460000000000946,
+      "language": "en"
+    },
+    {
+      "text": "And this is, kind of, the key insight that allowed all these things\nto start working really well",
+      "start": 775.276,
+      "duration": 3.9020000000000437,
+      "language": "en"
+    },
+    {
+      "text": "over the last 10, 20 years or so.",
+      "start": 779.178,
+      "duration": 2.75,
+      "language": "en"
+    },
+    {
+      "text": "So, this class is primarily\nabout neural networks",
+      "start": 785.784,
+      "duration": 2.312,
+      "language": "en"
+    },
+    {
+      "text": "and convolutional neural networks and deep learning and all that,",
+      "start": 788.096,
+      "duration": 3.0149999999999864,
+      "language": "en"
+    },
+    {
+      "text": "but this idea of a data-driven\napproach is much more general",
+      "start": 791.111,
+      "duration": 3.335,
+      "language": "en"
+    },
+    {
+      "text": "than just deep learning. And I think it's useful to, sort of,",
+      "start": 794.446,
+      "duration": 3.3859999999999673,
+      "language": "en"
+    },
+    {
+      "text": "step through this process for a very simple classifier first,",
+      "start": 797.832,
+      "duration": 3.0919999999999845,
+      "language": "en"
+    },
+    {
+      "text": "before we get to these big, complex ones.",
+      "start": 800.924,
+      "duration": 2.134,
+      "language": "en"
+    },
+    {
+      "text": "So, probably, the simplest\nclassifier you can imagine",
+      "start": 803.058,
+      "duration": 3.84,
+      "language": "en"
+    },
+    {
+      "text": "is something we call nearest neighbor.",
+      "start": 806.898,
+      "duration": 2.009,
+      "language": "en"
+    },
+    {
+      "text": "The algorithm is pretty dumb, honestly.",
+      "start": 808.907,
+      "duration": 2.336,
+      "language": "en"
+    },
+    {
+      "text": "So, during the training\nstep we won't do anything,",
+      "start": 811.243,
+      "duration": 3.072,
+      "language": "en"
+    },
+    {
+      "text": "we'll just memorize all\nof the training data.",
+      "start": 814.315,
+      "duration": 2.651,
+      "language": "en"
+    },
+    {
+      "text": "So this is very simple.",
+      "start": 816.966,
+      "duration": 2.142,
+      "language": "en"
+    },
+    {
+      "text": "And now, during the prediction step, we're going to take some new image",
+      "start": 819.108,
+      "duration": 4.08299999999997,
+      "language": "en"
+    },
+    {
+      "text": "and go and try to find\nthe most similar image",
+      "start": 823.191,
+      "duration": 2.406,
+      "language": "en"
+    },
+    {
+      "text": "in the training data to that new image,",
+      "start": 825.597,
+      "duration": 2.367,
+      "language": "en"
+    },
+    {
+      "text": "and now predict the label\nof that most similar image.",
+      "start": 827.964,
+      "duration": 3.489,
+      "language": "en"
+    },
+    {
+      "text": "A very simple algorithm. But it, sort of, has a lot\nof these nice properties",
+      "start": 831.453,
+      "duration": 3.6509999999999536,
+      "language": "en"
+    },
+    {
+      "text": "with respect to\ndata-drivenness and whatnot.",
+      "start": 835.104,
+      "duration": 3.667,
+      "language": "en"
+    },
+    {
+      "text": "So, to be a little bit more concrete, you might imagine working on\nthis dataset called CIFAR-10,",
+      "start": 839.977,
+      "duration": 4.973999999999933,
+      "language": "en"
+    },
+    {
+      "text": "which is very commonly\nused in machine learning,",
+      "start": 844.951,
+      "duration": 2.38,
+      "language": "en"
+    },
+    {
+      "text": "as kind of a small test case. And you'll be working with\nthis dataset on your homework.",
+      "start": 847.331,
+      "duration": 4.248000000000047,
+      "language": "en"
+    },
+    {
+      "text": "So, the CIFAR-10 dataset gives\nyou 10 different classes,",
+      "start": 851.579,
+      "duration": 3.58,
+      "language": "en"
+    },
+    {
+      "text": "airplanes and automobiles and\nbirds and cats and different",
+      "start": 855.159,
+      "duration": 2.806,
+      "language": "en"
+    },
+    {
+      "text": "things like that. And for each of those 10 categories",
+      "start": 857.965,
+      "duration": 4.107999999999947,
+      "language": "en"
+    },
+    {
+      "text": "it provides 50,000 training images,",
+      "start": 862.073,
+      "duration": 2.917,
+      "language": "en"
+    },
+    {
+      "text": "roughly evenly distributed\nacross these 10 categories.",
+      "start": 867.173,
+      "duration": 3.077,
+      "language": "en"
+    },
+    {
+      "text": "And then 10,000 additional testing images",
+      "start": 870.25,
+      "duration": 3.398,
+      "language": "en"
+    },
+    {
+      "text": "that you're supposed to\ntest your algorithm on.",
+      "start": 873.648,
+      "duration": 3.917,
+      "language": "en"
+    },
+    {
+      "text": "So here's an example\nof applying this simple",
+      "start": 878.707,
+      "duration": 2.558,
+      "language": "en"
+    },
+    {
+      "text": "nearest neighbor classifier\nto some of these test images",
+      "start": 881.265,
+      "duration": 2.738,
+      "language": "en"
+    },
+    {
+      "text": "on CIFAR-10. So, on this grid on the right,",
+      "start": 884.003,
+      "duration": 4.699999999999932,
+      "language": "en"
+    },
+    {
+      "text": "for the left most column,",
+      "start": 888.703,
+      "duration": 2.16,
+      "language": "en"
+    },
+    {
+      "text": "gives a test image in\nthe CIFAR-10 dataset.",
+      "start": 890.863,
+      "duration": 2.83,
+      "language": "en"
+    },
+    {
+      "text": "And now on the right, we've\nsorted the training images",
+      "start": 893.693,
+      "duration": 4.682,
+      "language": "en"
+    },
+    {
+      "text": "and show the most similar training images",
+      "start": 898.375,
+      "duration": 2.953,
+      "language": "en"
+    },
+    {
+      "text": "to each of these test examples.",
+      "start": 901.328,
+      "duration": 2.243,
+      "language": "en"
+    },
+    {
+      "text": "And you can see that they\nlook kind of visually similar",
+      "start": 903.571,
+      "duration": 2.307,
+      "language": "en"
+    },
+    {
+      "text": "to the training images,",
+      "start": 905.878,
+      "duration": 2.06,
+      "language": "en"
+    },
+    {
+      "text": "although they are not\nalways correct, right?",
+      "start": 907.938,
+      "duration": 3.036,
+      "language": "en"
+    },
+    {
+      "text": "So, maybe on the second row,\nwe see that the testing,",
+      "start": 910.974,
+      "duration": 2.433,
+      "language": "en"
+    },
+    {
+      "text": "this is kind of hard to see, because these images are 32 by 32 pixels,",
+      "start": 913.407,
+      "duration": 3.9329999999999927,
+      "language": "en"
+    },
+    {
+      "text": "you need to really dive in there and try to make your best guess.",
+      "start": 917.34,
+      "duration": 3.8840000000000146,
+      "language": "en"
+    },
+    {
+      "text": "But, this image is a dog and\nit's nearest neighbor is also",
+      "start": 921.224,
+      "duration": 2.626,
+      "language": "en"
+    },
+    {
+      "text": "a dog, but this next one,\nI think is actually a deer",
+      "start": 923.85,
+      "duration": 4.222,
+      "language": "en"
+    },
+    {
+      "text": "or a horse or something else. But, you can see that it\nlooks quite visually similar,",
+      "start": 928.072,
+      "duration": 5.164999999999964,
+      "language": "en"
+    },
+    {
+      "text": "because there's kind of a\nwhite blob in the middle and whatnot.",
+      "start": 933.237,
+      "duration": 3.133000000000038,
+      "language": "en"
+    },
+    {
+      "text": "So, if we're applying the\nnearest neighbor algorithm",
+      "start": 936.37,
+      "duration": 2.26,
+      "language": "en"
+    },
+    {
+      "text": "to this image, we'll find the closest\nexample in the training set.",
+      "start": 938.63,
+      "duration": 4.076999999999998,
+      "language": "en"
+    },
+    {
+      "text": "And now, the closest\nexample, we know it's label,",
+      "start": 942.707,
+      "duration": 2.4,
+      "language": "en"
+    },
+    {
+      "text": "because it comes from the training set.",
+      "start": 945.107,
+      "duration": 2.028,
+      "language": "en"
+    },
+    {
+      "text": "And now, we'll simply say that\nthis testing image is also",
+      "start": 947.135,
+      "duration": 2.6,
+      "language": "en"
+    },
+    {
+      "text": "a dog. You can see from these\nexamples that is probably not",
+      "start": 949.735,
+      "duration": 4.211000000000013,
+      "language": "en"
+    },
+    {
+      "text": "going to work very well, but it's still kind of a\nnice example to work through.",
+      "start": 953.946,
+      "duration": 6.072000000000003,
+      "language": "en"
+    },
+    {
+      "text": "But then, one detail\nthat we need to know is,",
+      "start": 960.939,
+      "duration": 2.785,
+      "language": "en"
+    },
+    {
+      "text": "given a pair of images, how can we actually compare them?",
+      "start": 963.724,
+      "duration": 3.183999999999969,
+      "language": "en"
+    },
+    {
+      "text": "Because, if we're going to take\nour test image and compare it",
+      "start": 966.908,
+      "duration": 2.244,
+      "language": "en"
+    },
+    {
+      "text": "to all the training images, we actually have many different choices",
+      "start": 969.152,
+      "duration": 3.01299999999992,
+      "language": "en"
+    },
+    {
+      "text": "for exactly what that comparison\nfunction should look like.",
+      "start": 972.165,
+      "duration": 3.475,
+      "language": "en"
+    },
+    {
+      "text": "So, in the example in the previous slide,",
+      "start": 975.64,
+      "duration": 2.047,
+      "language": "en"
+    },
+    {
+      "text": "we've used what's called the L1 distance,",
+      "start": 977.687,
+      "duration": 2.321,
+      "language": "en"
+    },
+    {
+      "text": "also sometimes called\nthe Manhattan distance.",
+      "start": 980.008,
+      "duration": 2.539,
+      "language": "en"
+    },
+    {
+      "text": "So, this is a really\nsort of simple, easy idea",
+      "start": 982.547,
+      "duration": 3.178,
+      "language": "en"
+    },
+    {
+      "text": "for comparing images. And that's that we're going to\njust compare individual pixels",
+      "start": 985.725,
+      "duration": 5.966000000000008,
+      "language": "en"
+    },
+    {
+      "text": "in these images. So, supposing that our test\nimage is maybe just a tiny",
+      "start": 991.691,
+      "duration": 4.8279999999999745,
+      "language": "en"
+    },
+    {
+      "text": "four by four image of pixel values,",
+      "start": 996.519,
+      "duration": 2.827,
+      "language": "en"
+    },
+    {
+      "text": "then we're take this upper-left hand pixel",
+      "start": 999.346,
+      "duration": 2.456,
+      "language": "en"
+    },
+    {
+      "text": "of the test image, subtract off the value\nin the training image,",
+      "start": 1001.802,
+      "duration": 3.2749999999999773,
+      "language": "en"
+    },
+    {
+      "text": "take the absolute value, and get the difference in that\npixel between the two images.",
+      "start": 1005.077,
+      "duration": 3.9909999999999854,
+      "language": "en"
+    },
+    {
+      "text": "And then, sum all these\nup across all the pixels in the image.",
+      "start": 1009.068,
+      "duration": 2.882000000000062,
+      "language": "en"
+    },
+    {
+      "text": "So, this is kind of a stupid\nway to compare images,",
+      "start": 1011.95,
+      "duration": 2.263,
+      "language": "en"
+    },
+    {
+      "text": "but it does some reasonable\nthings sometimes.",
+      "start": 1014.213,
+      "duration": 3.75,
+      "language": "en"
+    },
+    {
+      "text": "But, this gives us a very concrete way to measure the difference\nbetween two images.",
+      "start": 1017.963,
+      "duration": 4.02800000000002,
+      "language": "en"
+    },
+    {
+      "text": "And in this case, we have\nthis difference of 456",
+      "start": 1021.991,
+      "duration": 3.073,
+      "language": "en"
+    },
+    {
+      "text": "between these two images.",
+      "start": 1025.064,
+      "duration": 2.083,
+      "language": "en"
+    },
+    {
+      "text": "So, here's some full Python code",
+      "start": 1028.447,
+      "duration": 2.498,
+      "language": "en"
+    },
+    {
+      "text": "for implementing this\nnearest neighbor classifier",
+      "start": 1030.945,
+      "duration": 2.289,
+      "language": "en"
+    },
+    {
+      "text": "and you can see it's pretty\nshort and pretty concise",
+      "start": 1033.234,
+      "duration": 3.349,
+      "language": "en"
+    },
+    {
+      "text": "because we've made use of\nmany of these vectorized",
+      "start": 1036.583,
+      "duration": 2.221,
+      "language": "en"
+    },
+    {
+      "text": "operations offered by NumPy.",
+      "start": 1038.804,
+      "duration": 2.545,
+      "language": "en"
+    },
+    {
+      "text": "So, here we can see that\nthis training function,",
+      "start": 1041.349,
+      "duration": 3.73,
+      "language": "en"
+    },
+    {
+      "text": "that we talked about earlier, is, again, very simple, in\nthe case of nearest neighbor,",
+      "start": 1045.079,
+      "duration": 3.867000000000189,
+      "language": "en"
+    },
+    {
+      "text": "you just memorize the training data, there's not really much to do here.",
+      "start": 1048.946,
+      "duration": 4.481000000000222,
+      "language": "en"
+    },
+    {
+      "text": "And now, at test time, we're\ngoing to take in our image",
+      "start": 1053.427,
+      "duration": 2.442,
+      "language": "en"
+    },
+    {
+      "text": "and then go in and compare\nusing this L1 distance function,",
+      "start": 1055.869,
+      "duration": 3.257,
+      "language": "en"
+    },
+    {
+      "text": "our test image to each of\nthese training examples",
+      "start": 1059.126,
+      "duration": 2.858,
+      "language": "en"
+    },
+    {
+      "text": "and find the most similar\nexample in the training set.",
+      "start": 1061.984,
+      "duration": 3.411,
+      "language": "en"
+    },
+    {
+      "text": "And you can see that, we're\nactually able to do this in just one or two lines of Python code",
+      "start": 1065.395,
+      "duration": 4.718000000000075,
+      "language": "en"
+    },
+    {
+      "text": "by utilizing these vectorized\noperations in NumPy.",
+      "start": 1070.113,
+      "duration": 3.769,
+      "language": "en"
+    },
+    {
+      "text": "So, this is something that\nyou'll get practice with on the first assignment.",
+      "start": 1073.882,
+      "duration": 3.8969999999999345,
+      "language": "en"
+    },
+    {
+      "text": "So now, a couple questions\nabout this simple classifier.",
+      "start": 1078.628,
+      "duration": 3.551,
+      "language": "en"
+    },
+    {
+      "text": "First, if we have N examples\nin our training set,",
+      "start": 1082.179,
+      "duration": 2.731,
+      "language": "en"
+    },
+    {
+      "text": "then how fast can we expect\ntraining and testing to be?",
+      "start": 1084.91,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "Well, training is probably constant because we don't really\nneed to do anything,",
+      "start": 1092.233,
+      "duration": 3.479000000000042,
+      "language": "en"
+    },
+    {
+      "text": "we just need to memorize the data.",
+      "start": 1095.712,
+      "duration": 2.166,
+      "language": "en"
+    },
+    {
+      "text": "And if you're just copying a pointer, that's going to be constant time",
+      "start": 1097.878,
+      "duration": 2.785000000000082,
+      "language": "en"
+    },
+    {
+      "text": "no matter how big your dataset is.",
+      "start": 1100.663,
+      "duration": 2.04,
+      "language": "en"
+    },
+    {
+      "text": "But now, at test time we need\nto do this comparison stop",
+      "start": 1102.703,
+      "duration": 3.506,
+      "language": "en"
+    },
+    {
+      "text": "and compare our test image to each of the N training\nexamples in the dataset.",
+      "start": 1106.209,
+      "duration": 4.8900000000001,
+      "language": "en"
+    },
+    {
+      "text": "And this is actually quite slow.",
+      "start": 1111.099,
+      "duration": 2.667,
+      "language": "en"
+    },
+    {
+      "text": "So, this is actually somewhat backwards,",
+      "start": 1114.991,
+      "duration": 2.457,
+      "language": "en"
+    },
+    {
+      "text": "if you think about it. Because, in practice,",
+      "start": 1117.448,
+      "duration": 2.9020000000000437,
+      "language": "en"
+    },
+    {
+      "text": "we want our classifiers to\nbe slow at training time",
+      "start": 1120.35,
+      "duration": 3.139,
+      "language": "en"
+    },
+    {
+      "text": "and then fast at testing time. Because, you might imagine,\nthat a classifier might go",
+      "start": 1123.489,
+      "duration": 4.3689999999999145,
+      "language": "en"
+    },
+    {
+      "text": "and be trained in a data center somewhere",
+      "start": 1127.858,
+      "duration": 2.024,
+      "language": "en"
+    },
+    {
+      "text": "and you can afford to\nspend a lot of computation",
+      "start": 1129.882,
+      "duration": 2.163,
+      "language": "en"
+    },
+    {
+      "text": "at training time to make\nthe classifier really good.",
+      "start": 1132.045,
+      "duration": 2.595,
+      "language": "en"
+    },
+    {
+      "text": "But then, when you go and deploy the\nclassifier at test time,",
+      "start": 1134.64,
+      "duration": 2.925999999999931,
+      "language": "en"
+    },
+    {
+      "text": "you want it to run on your mobile phone or in a browser or some\nother low power device,",
+      "start": 1137.566,
+      "duration": 4.681999999999789,
+      "language": "en"
+    },
+    {
+      "text": "and you really want the\ntesting time performance",
+      "start": 1142.248,
+      "duration": 2.245,
+      "language": "en"
+    },
+    {
+      "text": "of your classifier to be quite fast.",
+      "start": 1144.493,
+      "duration": 2.582,
+      "language": "en"
+    },
+    {
+      "text": "So, from this perspective, this\nnearest neighbor algorithm,",
+      "start": 1147.075,
+      "duration": 2.854,
+      "language": "en"
+    },
+    {
+      "text": "is, actually, a little bit backwards. And we'll see that once we move to",
+      "start": 1149.929,
+      "duration": 3.6620000000000346,
+      "language": "en"
+    },
+    {
+      "text": "convolutional neural networks, and other types of parametric models,",
+      "start": 1153.591,
+      "duration": 2.8290000000001783,
+      "language": "en"
+    },
+    {
+      "text": "they'll be the reverse of this. Where you'll spend a lot of\ncompute at training time,",
+      "start": 1156.42,
+      "duration": 3.80600000000004,
+      "language": "en"
+    },
+    {
+      "text": "but then they'll be quite\nfast at testing time.",
+      "start": 1160.226,
+      "duration": 4.71,
+      "language": "en"
+    },
+    {
+      "text": "So then, the question is, what exactly does this\nnearest neighbor algorithm",
+      "start": 1164.936,
+      "duration": 3.203000000000202,
+      "language": "en"
+    },
+    {
+      "text": "look like when you apply it in practice?",
+      "start": 1168.139,
+      "duration": 2.677,
+      "language": "en"
+    },
+    {
+      "text": "So, here we've drawn, what\nwe call the decision regions",
+      "start": 1170.816,
+      "duration": 3.233,
+      "language": "en"
+    },
+    {
+      "text": "of a nearest neighbor classifier.",
+      "start": 1174.049,
+      "duration": 2.081,
+      "language": "en"
+    },
+    {
+      "text": "So, here our training set\nconsists of these points",
+      "start": 1176.13,
+      "duration": 3.506,
+      "language": "en"
+    },
+    {
+      "text": "in the two dimensional plane,",
+      "start": 1179.636,
+      "duration": 2.385,
+      "language": "en"
+    },
+    {
+      "text": "where the color of the point\nrepresents the category,",
+      "start": 1182.021,
+      "duration": 3.367,
+      "language": "en"
+    },
+    {
+      "text": "or the class label, of that point.",
+      "start": 1185.388,
+      "duration": 2.159,
+      "language": "en"
+    },
+    {
+      "text": "So, here we see we have five classes and some blue ones up in the corner here,",
+      "start": 1187.547,
+      "duration": 3.995999999999867,
+      "language": "en"
+    },
+    {
+      "text": "some purple ones in the\nupper-right hand corner.",
+      "start": 1191.543,
+      "duration": 2.378,
+      "language": "en"
+    },
+    {
+      "text": "And now for each pixel\nin this entire plane,",
+      "start": 1193.921,
+      "duration": 2.57,
+      "language": "en"
+    },
+    {
+      "text": "we've gone and computed\nwhat is the nearest example",
+      "start": 1196.491,
+      "duration": 4.369,
+      "language": "en"
+    },
+    {
+      "text": "in these training data, and then colored the\npoint of the background",
+      "start": 1200.86,
+      "duration": 3.530999999999949,
+      "language": "en"
+    },
+    {
+      "text": "corresponding to what is the class label.",
+      "start": 1204.391,
+      "duration": 2.563,
+      "language": "en"
+    },
+    {
+      "text": "So, you can see that this\nnearest neighbor classifier",
+      "start": 1206.954,
+      "duration": 2.095,
+      "language": "en"
+    },
+    {
+      "text": "is just sort of carving up the space and coloring the space\naccording to the nearby points.",
+      "start": 1209.049,
+      "duration": 5.929999999999836,
+      "language": "en"
+    },
+    {
+      "text": "But this classifier is maybe not so great.",
+      "start": 1214.979,
+      "duration": 3.341,
+      "language": "en"
+    },
+    {
+      "text": "And by looking at this picture we can start to see some of the\nproblems that might come out",
+      "start": 1218.32,
+      "duration": 4.248000000000047,
+      "language": "en"
+    },
+    {
+      "text": "with a nearest neighbor classifier.",
+      "start": 1222.568,
+      "duration": 2.108,
+      "language": "en"
+    },
+    {
+      "text": "For one, this central\nregion actually contains",
+      "start": 1224.676,
+      "duration": 2.811,
+      "language": "en"
+    },
+    {
+      "text": "mostly green points, but one little yellow point in the middle.",
+      "start": 1227.487,
+      "duration": 4.104000000000042,
+      "language": "en"
+    },
+    {
+      "text": "But because we're just looking\nat the nearest neighbor,",
+      "start": 1231.591,
+      "duration": 2.815,
+      "language": "en"
+    },
+    {
+      "text": "this causes a little\nyellow island to appear",
+      "start": 1234.406,
+      "duration": 2.005,
+      "language": "en"
+    },
+    {
+      "text": "in this middle of this green cluster.",
+      "start": 1236.411,
+      "duration": 2.141,
+      "language": "en"
+    },
+    {
+      "text": "And that's, maybe, not so great. Maybe those points actually\nshould have been green.",
+      "start": 1238.552,
+      "duration": 5.528999999999996,
+      "language": "en"
+    },
+    {
+      "text": "And then, similarly we also\nsee these, sort of, fingers,",
+      "start": 1244.081,
+      "duration": 3.909,
+      "language": "en"
+    },
+    {
+      "text": "like the green region\npushing into the blue region,",
+      "start": 1247.99,
+      "duration": 2.235,
+      "language": "en"
+    },
+    {
+      "text": "again, due to the presence of one point,",
+      "start": 1250.225,
+      "duration": 2.225,
+      "language": "en"
+    },
+    {
+      "text": "which may have been noisy or spurious.",
+      "start": 1252.45,
+      "duration": 2.73,
+      "language": "en"
+    },
+    {
+      "text": "So, this kind of motivates\na slight generalization",
+      "start": 1255.18,
+      "duration": 3.025,
+      "language": "en"
+    },
+    {
+      "text": "of this algorithm called\nk-nearest neighbors.",
+      "start": 1258.205,
+      "duration": 3.401,
+      "language": "en"
+    },
+    {
+      "text": "So rather than just looking for\nthe single nearest neighbor,",
+      "start": 1261.606,
+      "duration": 3.464,
+      "language": "en"
+    },
+    {
+      "text": "instead we'll do something\na little bit fancier",
+      "start": 1265.07,
+      "duration": 2.951,
+      "language": "en"
+    },
+    {
+      "text": "and find K of our nearest neighbors,",
+      "start": 1268.021,
+      "duration": 2.606,
+      "language": "en"
+    },
+    {
+      "text": "according to our distance metric, and then take a vote among\neach of our neighbors.",
+      "start": 1270.627,
+      "duration": 4.430000000000064,
+      "language": "en"
+    },
+    {
+      "text": "And then predict the majority vote among our neighbors.",
+      "start": 1275.057,
+      "duration": 3.6760000000001583,
+      "language": "en"
+    },
+    {
+      "text": "You can imagine slightly more\ncomplex ways of doing this.",
+      "start": 1278.733,
+      "duration": 2.299,
+      "language": "en"
+    },
+    {
+      "text": "Maybe you'd vote weighted on the distance, or something like that,",
+      "start": 1281.032,
+      "duration": 3.116000000000213,
+      "language": "en"
+    },
+    {
+      "text": "but the simplest thing that\ntends to work pretty well",
+      "start": 1284.148,
+      "duration": 3.764,
+      "language": "en"
+    },
+    {
+      "text": "is just taking a majority vote. So here we've shown the\nexact same set of points",
+      "start": 1287.912,
+      "duration": 4.897999999999911,
+      "language": "en"
+    },
+    {
+      "text": "using this K=1 nearest\nneighbor classifier,",
+      "start": 1292.81,
+      "duration": 3.089,
+      "language": "en"
+    },
+    {
+      "text": "as well as K=3 and K=5 in\nthe middle and on the right.",
+      "start": 1295.899,
+      "duration": 4.029,
+      "language": "en"
+    },
+    {
+      "text": "And once we move to K=3, you\ncan see that that spurious",
+      "start": 1299.928,
+      "duration": 3.864,
+      "language": "en"
+    },
+    {
+      "text": "yellow point in the middle\nof the green cluster",
+      "start": 1303.792,
+      "duration": 2.394,
+      "language": "en"
+    },
+    {
+      "text": "is no longer causing the\npoints near that region",
+      "start": 1306.186,
+      "duration": 3.183,
+      "language": "en"
+    },
+    {
+      "text": "to be classified as yellow. Now this entire green\nportion in the middle",
+      "start": 1309.369,
+      "duration": 4.315000000000055,
+      "language": "en"
+    },
+    {
+      "text": "is all being classified as green.",
+      "start": 1313.684,
+      "duration": 2.168,
+      "language": "en"
+    },
+    {
+      "text": "You can also see that these fingers of the red and blue regions",
+      "start": 1315.852,
+      "duration": 3.4200000000000728,
+      "language": "en"
+    },
+    {
+      "text": "are starting to get smoothed out due to this majority voting.",
+      "start": 1319.272,
+      "duration": 3.1820000000002437,
+      "language": "en"
+    },
+    {
+      "text": "And then, once we move to the K=5 case,",
+      "start": 1322.454,
+      "duration": 2.927,
+      "language": "en"
+    },
+    {
+      "text": "then these decision boundaries between the blue and red regions",
+      "start": 1325.381,
+      "duration": 3.05600000000004,
+      "language": "en"
+    },
+    {
+      "text": "have become quite smooth and quite nice.",
+      "start": 1328.437,
+      "duration": 3.627,
+      "language": "en"
+    },
+    {
+      "text": "So, generally when you're\nusing nearest neighbors classifiers,",
+      "start": 1332.064,
+      "duration": 2.663000000000011,
+      "language": "en"
+    },
+    {
+      "text": "you almost always want\nto use some value of K,",
+      "start": 1334.727,
+      "duration": 3.991,
+      "language": "en"
+    },
+    {
+      "text": "which is larger than one",
+      "start": 1338.718,
+      "duration": 2.053,
+      "language": "en"
+    },
+    {
+      "text": "because this tends to\nsmooth out your decision",
+      "start": 1340.771,
+      "duration": 2.126,
+      "language": "en"
+    },
+    {
+      "text": "boundaries and lead to better results.",
+      "start": 1342.897,
+      "duration": 3.167,
+      "language": "en"
+    },
+    {
+      "text": "Question? [student asking a question]",
+      "start": 1349.252,
+      "duration": 5.027000000000044,
+      "language": "en"
+    },
+    {
+      "text": "Yes, so the question is, what is the deal with these white regions?",
+      "start": 1354.279,
+      "duration": 3.854000000000042,
+      "language": "en"
+    },
+    {
+      "text": "The white regions are\nwhere there was no majority",
+      "start": 1358.133,
+      "duration": 2.892,
+      "language": "en"
+    },
+    {
+      "text": "among the k-nearest neighbors.",
+      "start": 1361.025,
+      "duration": 2.222,
+      "language": "en"
+    },
+    {
+      "text": "You could imagine maybe doing\nsomething slightly fancier",
+      "start": 1363.247,
+      "duration": 2.274,
+      "language": "en"
+    },
+    {
+      "text": "and maybe taking a guess\nor randomly selecting among",
+      "start": 1365.521,
+      "duration": 3.451,
+      "language": "en"
+    },
+    {
+      "text": "the majority winners, but for this simple example\nwe're just coloring it white",
+      "start": 1368.972,
+      "duration": 3.757000000000062,
+      "language": "en"
+    },
+    {
+      "text": "to indicate there was no nearest neighbor in those points.",
+      "start": 1372.729,
+      "duration": 2.939000000000078,
+      "language": "en"
+    },
+    {
+      "text": "Whenever we're thinking\nabout computer vision",
+      "start": 1380.005,
+      "duration": 2.434,
+      "language": "en"
+    },
+    {
+      "text": "I think it's really useful to kind of flip back and forth between\nseveral different viewpoints.",
+      "start": 1382.439,
+      "duration": 4.176999999999907,
+      "language": "en"
+    },
+    {
+      "text": "One, is this idea of high\ndimensional points in the plane,",
+      "start": 1386.616,
+      "duration": 2.864,
+      "language": "en"
+    },
+    {
+      "text": "and then the other is actually\nlooking at concrete images.",
+      "start": 1389.48,
+      "duration": 3.569,
+      "language": "en"
+    },
+    {
+      "text": "Because the pixels of the image actually",
+      "start": 1393.049,
+      "duration": 2.069,
+      "language": "en"
+    },
+    {
+      "text": "allow us to think of these\nimages as high dimensional",
+      "start": 1395.118,
+      "duration": 3.067,
+      "language": "en"
+    },
+    {
+      "text": "vectors. And it's sort of useful to\nping pong back and forth",
+      "start": 1398.185,
+      "duration": 2.9960000000000946,
+      "language": "en"
+    },
+    {
+      "text": "between these two different viewpoints.",
+      "start": 1401.181,
+      "duration": 2.214,
+      "language": "en"
+    },
+    {
+      "text": "So then, sort of taking\nthis k-nearest neighbor",
+      "start": 1403.395,
+      "duration": 2.798,
+      "language": "en"
+    },
+    {
+      "text": "and going back to the images you can see that it's\nactually not very good.",
+      "start": 1406.193,
+      "duration": 3.25,
+      "language": "en"
+    },
+    {
+      "text": "Here I've colored in red and green which images would actually\nbe classified correctly",
+      "start": 1409.443,
+      "duration": 3.821999999999889,
+      "language": "en"
+    },
+    {
+      "text": "or incorrectly according\nto their nearest neighbor.",
+      "start": 1413.265,
+      "duration": 2.12,
+      "language": "en"
+    },
+    {
+      "text": "And you can see that it's\nreally not very good.",
+      "start": 1415.385,
+      "duration": 2.903,
+      "language": "en"
+    },
+    {
+      "text": "But maybe if we used a larger value of K",
+      "start": 1418.288,
+      "duration": 3.171,
+      "language": "en"
+    },
+    {
+      "text": "then this would involve\nactually voting among",
+      "start": 1421.459,
+      "duration": 2.231,
+      "language": "en"
+    },
+    {
+      "text": "maybe the top three or the top five or maybe even the whole row.",
+      "start": 1423.69,
+      "duration": 3.574000000000069,
+      "language": "en"
+    },
+    {
+      "text": "And you could imagine that\nthat would end up being a lot more robust to some\nof this noise that we see",
+      "start": 1427.264,
+      "duration": 4.894000000000233,
+      "language": "en"
+    },
+    {
+      "text": "when retrieving neighbors in this way.",
+      "start": 1432.158,
+      "duration": 3.167,
+      "language": "en"
+    },
+    {
+      "text": "So another choice we\nhave when we're working",
+      "start": 1437.07,
+      "duration": 2.733,
+      "language": "en"
+    },
+    {
+      "text": "with the k-nearest neighbor algorithm is determining exactly\nhow we should be comparing",
+      "start": 1439.803,
+      "duration": 4.383999999999787,
+      "language": "en"
+    },
+    {
+      "text": "our different points. For the examples so far we've just shown",
+      "start": 1444.187,
+      "duration": 5.4370000000001255,
+      "language": "en"
+    },
+    {
+      "text": "we've talked about this L1 distance",
+      "start": 1449.624,
+      "duration": 2.042,
+      "language": "en"
+    },
+    {
+      "text": "which takes the sum of the absolute values between the pixels.",
+      "start": 1451.666,
+      "duration": 3.4600000000000364,
+      "language": "en"
+    },
+    {
+      "text": "But another common choice is\nthe L2 or Euclidean distance",
+      "start": 1455.126,
+      "duration": 3.173,
+      "language": "en"
+    },
+    {
+      "text": "where you take the square\nroot of the sum of the squares",
+      "start": 1458.299,
+      "duration": 2.967,
+      "language": "en"
+    },
+    {
+      "text": "and take this as your distance.",
+      "start": 1461.266,
+      "duration": 3.225,
+      "language": "en"
+    },
+    {
+      "text": "Choosing different\ndistance metrics actually",
+      "start": 1464.491,
+      "duration": 2.097,
+      "language": "en"
+    },
+    {
+      "text": "is a pretty interesting topic",
+      "start": 1466.588,
+      "duration": 2.139,
+      "language": "en"
+    },
+    {
+      "text": "because different distance metrics make different assumptions\nabout the underlying",
+      "start": 1468.727,
+      "duration": 3.53899999999976,
+      "language": "en"
+    },
+    {
+      "text": "geometry or topology that\nyou'd expect in the space.",
+      "start": 1472.266,
+      "duration": 3.12,
+      "language": "en"
+    },
+    {
+      "text": "So, this L1 distance, underneath\nthis, this is actually",
+      "start": 1475.386,
+      "duration": 3.717,
+      "language": "en"
+    },
+    {
+      "text": "a circle according to the L1 distance",
+      "start": 1479.103,
+      "duration": 2.585,
+      "language": "en"
+    },
+    {
+      "text": "and it forms this square shape thing around the origin.",
+      "start": 1481.688,
+      "duration": 3.33199999999988,
+      "language": "en"
+    },
+    {
+      "text": "Where each of the points\non this, on the square,",
+      "start": 1485.02,
+      "duration": 2.617,
+      "language": "en"
+    },
+    {
+      "text": "is equidistant from the\norigin according to L1,",
+      "start": 1487.637,
+      "duration": 3.38,
+      "language": "en"
+    },
+    {
+      "text": "whereas with the L2 or Euclidean distance",
+      "start": 1491.017,
+      "duration": 2.099,
+      "language": "en"
+    },
+    {
+      "text": "then this circle is a familiar circle,",
+      "start": 1493.116,
+      "duration": 2.174,
+      "language": "en"
+    },
+    {
+      "text": "it looks like what you'd expect. So one interesting thing to\npoint out between these two",
+      "start": 1495.29,
+      "duration": 4.2309999999999945,
+      "language": "en"
+    },
+    {
+      "text": "metrics in particular, is that the L1 distance\ndepends on your choice",
+      "start": 1499.521,
+      "duration": 4.151000000000067,
+      "language": "en"
+    },
+    {
+      "text": "of coordinates system. So if you were to rotate\nthe coordinate frame",
+      "start": 1503.672,
+      "duration": 3.6340000000000146,
+      "language": "en"
+    },
+    {
+      "text": "that would actually change the L1 distance between the points.",
+      "start": 1507.306,
+      "duration": 2.894999999999982,
+      "language": "en"
+    },
+    {
+      "text": "Whereas changing the coordinate\nframe in the L2 distance",
+      "start": 1510.201,
+      "duration": 3.086,
+      "language": "en"
+    },
+    {
+      "text": "doesn't matter, it's the\nsame thing no matter what",
+      "start": 1513.287,
+      "duration": 2.204,
+      "language": "en"
+    },
+    {
+      "text": "your coordinate frame is.",
+      "start": 1515.491,
+      "duration": 2.79,
+      "language": "en"
+    },
+    {
+      "text": "Maybe if your input features,\nif the individual entries",
+      "start": 1518.281,
+      "duration": 3.44,
+      "language": "en"
+    },
+    {
+      "text": "in your vector have some important meaning",
+      "start": 1521.721,
+      "duration": 2.145,
+      "language": "en"
+    },
+    {
+      "text": "for your task, then maybe somehow L1 might\nbe a more natural fit.",
+      "start": 1523.866,
+      "duration": 4.06899999999996,
+      "language": "en"
+    },
+    {
+      "text": "But if it's just a generic\nvector in some space",
+      "start": 1527.935,
+      "duration": 2.598,
+      "language": "en"
+    },
+    {
+      "text": "and you don't know which\nof the different elements, you don't know what they actually mean,",
+      "start": 1530.533,
+      "duration": 3.588000000000193,
+      "language": "en"
+    },
+    {
+      "text": "then maybe L2 is slightly more natural.",
+      "start": 1534.121,
+      "duration": 3.41,
+      "language": "en"
+    },
+    {
+      "text": "And another point here is that",
+      "start": 1537.531,
+      "duration": 2.623,
+      "language": "en"
+    },
+    {
+      "text": "by using different distance metrics we can actually generalize\nthe k-nearest neighbor",
+      "start": 1540.154,
+      "duration": 3.3199999999999363,
+      "language": "en"
+    },
+    {
+      "text": "classifier to many, many\ndifferent types of data,",
+      "start": 1543.474,
+      "duration": 2.869,
+      "language": "en"
+    },
+    {
+      "text": "not just vectors, not just images. So, for example, imagine you\nwanted to classify pieces",
+      "start": 1546.343,
+      "duration": 5.067000000000007,
+      "language": "en"
+    },
+    {
+      "text": "of text, then the only\nthing you need to do",
+      "start": 1551.41,
+      "duration": 2.663,
+      "language": "en"
+    },
+    {
+      "text": "to use k-nearest neighbors is to specify some distance function",
+      "start": 1554.073,
+      "duration": 3.6429999999998017,
+      "language": "en"
+    },
+    {
+      "text": "that can measure distances\nbetween maybe two paragraphs",
+      "start": 1557.716,
+      "duration": 3.976,
+      "language": "en"
+    },
+    {
+      "text": "or two sentences or something like that.",
+      "start": 1561.692,
+      "duration": 2.139,
+      "language": "en"
+    },
+    {
+      "text": "So, simply by specifying\ndifferent distance metrics",
+      "start": 1563.831,
+      "duration": 3.077,
+      "language": "en"
+    },
+    {
+      "text": "we can actually apply this\nalgorithm very generally",
+      "start": 1566.908,
+      "duration": 2.469,
+      "language": "en"
+    },
+    {
+      "text": "to basically any type of data.",
+      "start": 1569.377,
+      "duration": 3.324,
+      "language": "en"
+    },
+    {
+      "text": "Even though it's a kind\nof simple algorithm, in general, it's a very\ngood thing to try first",
+      "start": 1572.701,
+      "duration": 4.499000000000024,
+      "language": "en"
+    },
+    {
+      "text": "when you're looking at a new problem.",
+      "start": 1577.2,
+      "duration": 3.083,
+      "language": "en"
+    },
+    {
+      "text": "So then, it's also kind of\ninteresting to think about",
+      "start": 1581.805,
+      "duration": 2.181,
+      "language": "en"
+    },
+    {
+      "text": "what is actually happening geometrically if we choose different distance metrics.",
+      "start": 1583.986,
+      "duration": 4.454999999999927,
+      "language": "en"
+    },
+    {
+      "text": "So here we see the same\nset of points on the left",
+      "start": 1588.441,
+      "duration": 2.929,
+      "language": "en"
+    },
+    {
+      "text": "using the L1, or Manhattan distance,",
+      "start": 1591.37,
+      "duration": 2.207,
+      "language": "en"
+    },
+    {
+      "text": "and then, on the right,\nusing the familiar L2,",
+      "start": 1593.577,
+      "duration": 3.19,
+      "language": "en"
+    },
+    {
+      "text": "or Euclidean distance. And you can see that the\nshapes of these decision",
+      "start": 1596.767,
+      "duration": 3.530999999999949,
+      "language": "en"
+    },
+    {
+      "text": "boundaries actually change quite a bit",
+      "start": 1600.298,
+      "duration": 2.178,
+      "language": "en"
+    },
+    {
+      "text": "between the two metrics. So when you're looking at\nL1 these decision boundaries",
+      "start": 1602.476,
+      "duration": 4.316000000000031,
+      "language": "en"
+    },
+    {
+      "text": "tend to follow the coordinate axes.",
+      "start": 1606.792,
+      "duration": 2.545,
+      "language": "en"
+    },
+    {
+      "text": "And this is again because\nthe L1 depends on our choice",
+      "start": 1609.337,
+      "duration": 2.831,
+      "language": "en"
+    },
+    {
+      "text": "of coordinate system. Where the L2 sort of doesn't\nreally care about the",
+      "start": 1612.168,
+      "duration": 3.852000000000089,
+      "language": "en"
+    },
+    {
+      "text": "coordinate axis, it\njust puts the boundaries where they should fall naturally.",
+      "start": 1616.02,
+      "duration": 4.274000000000115,
+      "language": "en"
+    },
+    {
+      "text": "My confession is that\neach of these examples",
+      "start": 1624.161,
+      "duration": 2.245,
+      "language": "en"
+    },
+    {
+      "text": "that I've shown you is\nactually from this interactive",
+      "start": 1626.406,
+      "duration": 2.263,
+      "language": "en"
+    },
+    {
+      "text": "web demo that I built, where you can go and play\nwith this k-nearest neighbor",
+      "start": 1628.669,
+      "duration": 4.248999999999796,
+      "language": "en"
+    },
+    {
+      "text": "classifier on your own. And this is really hard to\nwork on a projector screen.",
+      "start": 1632.918,
+      "duration": 5.019999999999982,
+      "language": "en"
+    },
+    {
+      "text": "So maybe we'll do that on your own time.",
+      "start": 1637.938,
+      "duration": 3.333,
+      "language": "en"
+    },
+    {
+      "text": "So, let's just go back to here.",
+      "start": 1646.82,
+      "duration": 2.583,
+      "language": "en"
+    },
+    {
+      "text": "Man, this is kind of embarrassing.",
+      "start": 1652.951,
+      "duration": 2.833,
+      "language": "en"
+    },
+    {
+      "text": "Okay, that was way more\ntrouble than it was worth.",
+      "start": 1687.103,
+      "duration": 2.576,
+      "language": "en"
+    },
+    {
+      "text": "So, let's skip this, but I encourage you",
+      "start": 1689.679,
+      "duration": 2.64,
+      "language": "en"
+    },
+    {
+      "text": "to go play with this in your browser. It's actually pretty fun",
+      "start": 1692.319,
+      "duration": 3.2220000000002074,
+      "language": "en"
+    },
+    {
+      "text": "and kind of nice to build intuition about",
+      "start": 1695.541,
+      "duration": 2.201,
+      "language": "en"
+    },
+    {
+      "text": "how the decision boundary changes as you change the K",
+      "start": 1697.742,
+      "duration": 2.7940000000000964,
+      "language": "en"
+    },
+    {
+      "text": "and change your distance metric",
+      "start": 1700.536,
+      "duration": 2.993,
+      "language": "en"
+    },
+    {
+      "text": "and all those sorts of things.",
+      "start": 1703.529,
+      "duration": 2.5,
+      "language": "en"
+    },
+    {
+      "text": "Okay, so then the question is once you're actually trying\nto use this algorithm",
+      "start": 1710.641,
+      "duration": 3.4309999999998126,
+      "language": "en"
+    },
+    {
+      "text": "in practice, there's several choices",
+      "start": 1714.072,
+      "duration": 2.074,
+      "language": "en"
+    },
+    {
+      "text": "you need to make. We talked about choosing\ndifferent values of K.",
+      "start": 1716.146,
+      "duration": 3.2800000000002,
+      "language": "en"
+    },
+    {
+      "text": "We talked about choosing\ndifferent distance metrics.",
+      "start": 1719.426,
+      "duration": 2.094,
+      "language": "en"
+    },
+    {
+      "text": "And the question becomes how do you actually make\nthese choices for your problem",
+      "start": 1721.52,
+      "duration": 4.064000000000078,
+      "language": "en"
+    },
+    {
+      "text": "and for your data? So, these choices, of things\nlike K and the distance metric,",
+      "start": 1725.584,
+      "duration": 6.152000000000044,
+      "language": "en"
+    },
+    {
+      "text": "we call hyperparameters,",
+      "start": 1731.736,
+      "duration": 2.201,
+      "language": "en"
+    },
+    {
+      "text": "because they are not necessarily\nlearned from the training",
+      "start": 1733.937,
+      "duration": 2.519,
+      "language": "en"
+    },
+    {
+      "text": "data, instead these are choices about\nyour algorithm that you make",
+      "start": 1736.456,
+      "duration": 3.811000000000149,
+      "language": "en"
+    },
+    {
+      "text": "ahead of time and there's no way to learn\nthem directly from the data.",
+      "start": 1740.267,
+      "duration": 5.3559999999999945,
+      "language": "en"
+    },
+    {
+      "text": "So, the question is how\ndo you set these things",
+      "start": 1745.623,
+      "duration": 3.198,
+      "language": "en"
+    },
+    {
+      "text": "in practice? And they turn out to be\nvery problem-dependent.",
+      "start": 1748.821,
+      "duration": 3.456000000000131,
+      "language": "en"
+    },
+    {
+      "text": "And the simple thing that\nmost people do is simply",
+      "start": 1752.277,
+      "duration": 3.032,
+      "language": "en"
+    },
+    {
+      "text": "try different values of\nhyperparameters for your data",
+      "start": 1755.309,
+      "duration": 2.648,
+      "language": "en"
+    },
+    {
+      "text": "and for your problem, and\nfigure out which one works best.",
+      "start": 1757.957,
+      "duration": 2.993,
+      "language": "en"
+    },
+    {
+      "text": "There's a question? [student asking a question]",
+      "start": 1760.95,
+      "duration": 5.120999999999867,
+      "language": "en"
+    },
+    {
+      "text": "So, the question is, where L1\ndistance might be preferable",
+      "start": 1769.589,
+      "duration": 2.778,
+      "language": "en"
+    },
+    {
+      "text": "to using L2 distance?",
+      "start": 1772.367,
+      "duration": 2.08,
+      "language": "en"
+    },
+    {
+      "text": "I think it's mainly problem-dependent,",
+      "start": 1774.447,
+      "duration": 2.353,
+      "language": "en"
+    },
+    {
+      "text": "it's sort of difficult to say in which cases you think\none might be better",
+      "start": 1776.8,
+      "duration": 3.57100000000014,
+      "language": "en"
+    },
+    {
+      "text": "than the other. but I think that because L1\nhas this sort of coordinate",
+      "start": 1780.371,
+      "duration": 4.347999999999956,
+      "language": "en"
+    },
+    {
+      "text": "dependency, it actually depends\non the coordinate system",
+      "start": 1784.719,
+      "duration": 4.158,
+      "language": "en"
+    },
+    {
+      "text": "of your data, if you know that you have a vector,",
+      "start": 1788.877,
+      "duration": 3.9559999999999036,
+      "language": "en"
+    },
+    {
+      "text": "and maybe the individual\nelements of the vector have meaning.",
+      "start": 1792.833,
+      "duration": 2.6799999999998363,
+      "language": "en"
+    },
+    {
+      "text": "Like maybe you're classifying\nemployees for some reason",
+      "start": 1795.513,
+      "duration": 3.07,
+      "language": "en"
+    },
+    {
+      "text": "and then the different elements\nof that vector correspond",
+      "start": 1798.583,
+      "duration": 2.13,
+      "language": "en"
+    },
+    {
+      "text": "to different features or\naspects of an employee.",
+      "start": 1800.713,
+      "duration": 3.263,
+      "language": "en"
+    },
+    {
+      "text": "Like their salary or the\nnumber of years they've been",
+      "start": 1803.976,
+      "duration": 2.456,
+      "language": "en"
+    },
+    {
+      "text": "working at the company\nor something like that.",
+      "start": 1806.432,
+      "duration": 2.346,
+      "language": "en"
+    },
+    {
+      "text": "So I think when your\nindividual elements actually",
+      "start": 1808.778,
+      "duration": 2.171,
+      "language": "en"
+    },
+    {
+      "text": "have some meaning, is where I think maybe using\nL1 might make a little bit",
+      "start": 1810.949,
+      "duration": 3.347999999999729,
+      "language": "en"
+    },
+    {
+      "text": "more sense. But in general, again,\nthis is a hyperparameter",
+      "start": 1814.297,
+      "duration": 3.3259999999997945,
+      "language": "en"
+    },
+    {
+      "text": "and it really depends on\nyour problem and your data",
+      "start": 1817.623,
+      "duration": 2.366,
+      "language": "en"
+    },
+    {
+      "text": "so the best answer is\njust to try them both",
+      "start": 1819.989,
+      "duration": 2.225,
+      "language": "en"
+    },
+    {
+      "text": "and see what works better.",
+      "start": 1822.214,
+      "duration": 2.167,
+      "language": "en"
+    },
+    {
+      "text": "Even this idea of trying\nout different values of hyperparameters and\nseeing what works best,",
+      "start": 1828.381,
+      "duration": 4.031999999999925,
+      "language": "en"
+    },
+    {
+      "text": "there are many different choices here. What exactly does it mean\nto try hyperparameters",
+      "start": 1832.413,
+      "duration": 3.8740000000000236,
+      "language": "en"
+    },
+    {
+      "text": "and see what works best? Well, the first idea you might think of",
+      "start": 1836.287,
+      "duration": 4.104000000000042,
+      "language": "en"
+    },
+    {
+      "text": "is simply choosing the\nhyperparameters that give you",
+      "start": 1840.391,
+      "duration": 2.52,
+      "language": "en"
+    },
+    {
+      "text": "the best accuracy or best performance",
+      "start": 1842.911,
+      "duration": 2.121,
+      "language": "en"
+    },
+    {
+      "text": "on your training data.",
+      "start": 1845.032,
+      "duration": 2.659,
+      "language": "en"
+    },
+    {
+      "text": "This is actually a really terrible idea.",
+      "start": 1847.691,
+      "duration": 2.27,
+      "language": "en"
+    },
+    {
+      "text": "You should never do this.",
+      "start": 1849.961,
+      "duration": 2.176,
+      "language": "en"
+    },
+    {
+      "text": "In the concrete case\nof the nearest neighbor classifier, for example,",
+      "start": 1852.137,
+      "duration": 3.5799999999999272,
+      "language": "en"
+    },
+    {
+      "text": "if we set K=1, we will always\nclassify the training data",
+      "start": 1855.717,
+      "duration": 3.607,
+      "language": "en"
+    },
+    {
+      "text": "perfectly. So if we use this strategy\nwe'll always pick K=1,",
+      "start": 1859.324,
+      "duration": 5.096000000000004,
+      "language": "en"
+    },
+    {
+      "text": "but, as we saw from the examples earlier, in practice it seems that\nsetting K equals to larger values",
+      "start": 1864.42,
+      "duration": 6.026000000000067,
+      "language": "en"
+    },
+    {
+      "text": "might cause us to misclassify\nsome of the training data,",
+      "start": 1870.446,
+      "duration": 2.738,
+      "language": "en"
+    },
+    {
+      "text": "but, in fact, lead to better performance on points that were not\nin the training data.",
+      "start": 1873.184,
+      "duration": 4.7309999999999945,
+      "language": "en"
+    },
+    {
+      "text": "And ultimately in machine learning we don't care about\nfitting the training data,",
+      "start": 1877.915,
+      "duration": 3.519000000000233,
+      "language": "en"
+    },
+    {
+      "text": "we really care about how our classifier, or how our method,",
+      "start": 1881.434,
+      "duration": 3.0289999999999964,
+      "language": "en"
+    },
+    {
+      "text": "will perform on unseen\ndata after training.",
+      "start": 1884.463,
+      "duration": 2.588,
+      "language": "en"
+    },
+    {
+      "text": "So, this is a terrible\nidea, don't do this.",
+      "start": 1887.051,
+      "duration": 3.444,
+      "language": "en"
+    },
+    {
+      "text": "So, another idea that you might think of,",
+      "start": 1890.495,
+      "duration": 2.192,
+      "language": "en"
+    },
+    {
+      "text": "is maybe we'll take our full dataset",
+      "start": 1892.687,
+      "duration": 2.169,
+      "language": "en"
+    },
+    {
+      "text": "and we'll split it into some training data and some test data.",
+      "start": 1894.856,
+      "duration": 3.533999999999878,
+      "language": "en"
+    },
+    {
+      "text": "And now I'll try training\nmy algorithm with different",
+      "start": 1898.39,
+      "duration": 3.904,
+      "language": "en"
+    },
+    {
+      "text": "choices of hyperparameters\non the training data",
+      "start": 1902.294,
+      "duration": 2.115,
+      "language": "en"
+    },
+    {
+      "text": "and then I'll go and apply\nthat trained classifier",
+      "start": 1904.409,
+      "duration": 2.854,
+      "language": "en"
+    },
+    {
+      "text": "on the test data and now I will pick",
+      "start": 1907.263,
+      "duration": 2.321,
+      "language": "en"
+    },
+    {
+      "text": "the set of hyperparameters\nthat cause me to perform best",
+      "start": 1909.584,
+      "duration": 2.715,
+      "language": "en"
+    },
+    {
+      "text": "on the test data. This seems like maybe a\nmore reasonable strategy,",
+      "start": 1912.299,
+      "duration": 5.1150000000002365,
+      "language": "en"
+    },
+    {
+      "text": "but, in fact, this is also a terrible idea",
+      "start": 1917.414,
+      "duration": 2.132,
+      "language": "en"
+    },
+    {
+      "text": "and you should never do this. Because, again, the point\nof machine learning systems",
+      "start": 1919.546,
+      "duration": 4.176999999999907,
+      "language": "en"
+    },
+    {
+      "text": "is that we want to know how\nour algorithm will perform.",
+      "start": 1923.723,
+      "duration": 2.792,
+      "language": "en"
+    },
+    {
+      "text": "So, the point of the test set is to give us some estimate\nof how our method will do",
+      "start": 1926.515,
+      "duration": 4.244999999999891,
+      "language": "en"
+    },
+    {
+      "text": "on unseen data that's\ncoming out from the wild.",
+      "start": 1930.76,
+      "duration": 3.763,
+      "language": "en"
+    },
+    {
+      "text": "And if we use this strategy\nof training many different",
+      "start": 1934.523,
+      "duration": 3.187,
+      "language": "en"
+    },
+    {
+      "text": "algorithms with different hyperparameters,",
+      "start": 1937.71,
+      "duration": 2.039,
+      "language": "en"
+    },
+    {
+      "text": "and then, selecting the\none which does the best",
+      "start": 1939.749,
+      "duration": 2.384,
+      "language": "en"
+    },
+    {
+      "text": "on the test data, then, it's possible, that\nwe may have just picked",
+      "start": 1942.133,
+      "duration": 4.270999999999958,
+      "language": "en"
+    },
+    {
+      "text": "the right set of hyperparameters that caused our algorithm\nto work quite well",
+      "start": 1946.404,
+      "duration": 3.9149999999999636,
+      "language": "en"
+    },
+    {
+      "text": "on this testing set, but now our performance on this test set",
+      "start": 1950.319,
+      "duration": 3.4570000000001073,
+      "language": "en"
+    },
+    {
+      "text": "will no longer be representative of our performance of new, unseen data.",
+      "start": 1953.776,
+      "duration": 4.503999999999905,
+      "language": "en"
+    },
+    {
+      "text": "So, again, you should not\ndo this, this is a bad idea,",
+      "start": 1958.28,
+      "duration": 3.211,
+      "language": "en"
+    },
+    {
+      "text": "you'll get in trouble if you do this.",
+      "start": 1961.491,
+      "duration": 3.181,
+      "language": "en"
+    },
+    {
+      "text": "What is much more common, is\nto actually split your data",
+      "start": 1964.672,
+      "duration": 2.353,
+      "language": "en"
+    },
+    {
+      "text": "into three different sets.",
+      "start": 1967.025,
+      "duration": 2.167,
+      "language": "en"
+    },
+    {
+      "text": "You'll partition most of\nyour data into a training set",
+      "start": 1970.185,
+      "duration": 3.98,
+      "language": "en"
+    },
+    {
+      "text": "and then you'll create a validation set and a test set.",
+      "start": 1974.165,
+      "duration": 3.1400000000001,
+      "language": "en"
+    },
+    {
+      "text": "And now what we typically do\nis go and train our algorithm",
+      "start": 1977.305,
+      "duration": 4.16,
+      "language": "en"
+    },
+    {
+      "text": "with many different\nchoices of hyperparameters",
+      "start": 1981.465,
+      "duration": 2.035,
+      "language": "en"
+    },
+    {
+      "text": "on the training set, evaluate on the validation set,",
+      "start": 1983.5,
+      "duration": 3.727000000000089,
+      "language": "en"
+    },
+    {
+      "text": "and now pick the set of hyperparameters which performs best on the validation set.",
+      "start": 1987.227,
+      "duration": 4.393999999999778,
+      "language": "en"
+    },
+    {
+      "text": "And now, after you've\ndone all your development,",
+      "start": 1991.621,
+      "duration": 2.098,
+      "language": "en"
+    },
+    {
+      "text": "you've done all your debugging, after you've dome everything,",
+      "start": 1993.719,
+      "duration": 2.9079999999999018,
+      "language": "en"
+    },
+    {
+      "text": "then you'd take that best\nperforming classifier",
+      "start": 1996.627,
+      "duration": 3.373,
+      "language": "en"
+    },
+    {
+      "text": "on the validation set and run it once on the test set.",
+      "start": 2000.0,
+      "duration": 3.4010000000000673,
+      "language": "en"
+    },
+    {
+      "text": "And now that's the number\nthat goes into your paper, that's the number that\ngoes into your report,",
+      "start": 2003.401,
+      "duration": 3.7380000000000564,
+      "language": "en"
+    },
+    {
+      "text": "that's the number that\nactually is telling you how",
+      "start": 2007.139,
+      "duration": 2.403,
+      "language": "en"
+    },
+    {
+      "text": "your algorithm is doing on unseen data.",
+      "start": 2009.542,
+      "duration": 2.851,
+      "language": "en"
+    },
+    {
+      "text": "And this is actually\nreally, really important that you keep a very\nstrict separation between",
+      "start": 2012.393,
+      "duration": 4.123000000000047,
+      "language": "en"
+    },
+    {
+      "text": "the validation data and the test data.",
+      "start": 2016.516,
+      "duration": 2.331,
+      "language": "en"
+    },
+    {
+      "text": "So, for example, when we're\nworking on research papers,",
+      "start": 2018.847,
+      "duration": 2.59,
+      "language": "en"
+    },
+    {
+      "text": "we typically only touch the test set at the very last minute.",
+      "start": 2021.437,
+      "duration": 4.216000000000122,
+      "language": "en"
+    },
+    {
+      "text": "So, when I'm writing papers, I tend to only touch the\ntest set for my problem",
+      "start": 2025.653,
+      "duration": 3.81899999999996,
+      "language": "en"
+    },
+    {
+      "text": "in maybe the week before\nthe deadline or so",
+      "start": 2029.472,
+      "duration": 2.337,
+      "language": "en"
+    },
+    {
+      "text": "to really insure that we're not",
+      "start": 2031.809,
+      "duration": 2.35,
+      "language": "en"
+    },
+    {
+      "text": "being dishonest here and\nwe're not reporting a number",
+      "start": 2034.159,
+      "duration": 2.506,
+      "language": "en"
+    },
+    {
+      "text": "which is unfair. So, this is actually super important",
+      "start": 2036.665,
+      "duration": 3.4370000000001255,
+      "language": "en"
+    },
+    {
+      "text": "and you want to make sure\nto keep your test data",
+      "start": 2040.102,
+      "duration": 2.114,
+      "language": "en"
+    },
+    {
+      "text": "quite under control. So another strategy for\nsetting hyperparameters",
+      "start": 2042.216,
+      "duration": 6.505000000000109,
+      "language": "en"
+    },
+    {
+      "text": "is called cross validation.",
+      "start": 2048.721,
+      "duration": 2.119,
+      "language": "en"
+    },
+    {
+      "text": "And this is used a\nlittle bit more commonly",
+      "start": 2050.84,
+      "duration": 3.028,
+      "language": "en"
+    },
+    {
+      "text": "for small data sets, not used\nso much in deep learning.",
+      "start": 2053.868,
+      "duration": 3.449,
+      "language": "en"
+    },
+    {
+      "text": "So here the idea is we're\ngoing to take our test data,",
+      "start": 2057.317,
+      "duration": 2.884,
+      "language": "en"
+    },
+    {
+      "text": "or we're going to take our dataset, as usual, hold out some test\nset to use at the very end,",
+      "start": 2060.201,
+      "duration": 5.333000000000084,
+      "language": "en"
+    },
+    {
+      "text": "and now, for the rest of the data, rather than splitting it\ninto a single training",
+      "start": 2065.534,
+      "duration": 3.6550000000002,
+      "language": "en"
+    },
+    {
+      "text": "and validation partition,",
+      "start": 2069.189,
+      "duration": 2.077,
+      "language": "en"
+    },
+    {
+      "text": "instead, we can split our training data",
+      "start": 2071.266,
+      "duration": 2.586,
+      "language": "en"
+    },
+    {
+      "text": "into many different folds. And now, in this way, we've\ncycled through choosing which",
+      "start": 2073.852,
+      "duration": 5.027000000000044,
+      "language": "en"
+    },
+    {
+      "text": "fold is going to be the validation set.",
+      "start": 2078.879,
+      "duration": 2.536,
+      "language": "en"
+    },
+    {
+      "text": "So now, in this example, we're using five fold cross validation,",
+      "start": 2081.415,
+      "duration": 4.083000000000084,
+      "language": "en"
+    },
+    {
+      "text": "so you would train your\nalgorithm with one set of",
+      "start": 2085.498,
+      "duration": 2.097,
+      "language": "en"
+    },
+    {
+      "text": "hyperparameters on the first four folds,",
+      "start": 2087.595,
+      "duration": 2.39,
+      "language": "en"
+    },
+    {
+      "text": "evaluate the performance on fold four, and now go and retrain\nyour algorithm on folds",
+      "start": 2089.985,
+      "duration": 4.1919999999995525,
+      "language": "en"
+    },
+    {
+      "text": "one, two, three, and five, evaluate on fold four,",
+      "start": 2094.177,
+      "duration": 3.5919999999996435,
+      "language": "en"
+    },
+    {
+      "text": "and cycle through all the different folds.",
+      "start": 2097.769,
+      "duration": 2.524,
+      "language": "en"
+    },
+    {
+      "text": "And, when you do it this way, you get much higher confidence about",
+      "start": 2100.293,
+      "duration": 3.8049999999998363,
+      "language": "en"
+    },
+    {
+      "text": "which hyperparameters are going to perform",
+      "start": 2104.098,
+      "duration": 2.117,
+      "language": "en"
+    },
+    {
+      "text": "more robustly. So this is kind of the\ngold standard to use,",
+      "start": 2106.215,
+      "duration": 3.4989999999997963,
+      "language": "en"
+    },
+    {
+      "text": "but, in practice in deep learning",
+      "start": 2109.714,
+      "duration": 2.035,
+      "language": "en"
+    },
+    {
+      "text": "when we're training large models and training is very\ncomputationally expensive,",
+      "start": 2111.749,
+      "duration": 4.222999999999956,
+      "language": "en"
+    },
+    {
+      "text": "these doesn't get used\ntoo much in practice.",
+      "start": 2115.972,
+      "duration": 2.68,
+      "language": "en"
+    },
+    {
+      "text": "Question? [student asking a question]",
+      "start": 2118.652,
+      "duration": 4.533999999999651,
+      "language": "en"
+    },
+    {
+      "text": "Yeah, so the question is, a little bit more concretely,",
+      "start": 2129.515,
+      "duration": 3.119000000000142,
+      "language": "en"
+    },
+    {
+      "text": "what's the difference\nbetween the training and the validation set?",
+      "start": 2132.634,
+      "duration": 3.094000000000051,
+      "language": "en"
+    },
+    {
+      "text": "So, if you think about the\nk-nearest neighbor classifier",
+      "start": 2135.728,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "then the training set is this\nset of images with labels",
+      "start": 2141.06,
+      "duration": 4.24,
+      "language": "en"
+    },
+    {
+      "text": "where we memorize the labels. And now, to classify an image,",
+      "start": 2145.3,
+      "duration": 3.306999999999789,
+      "language": "en"
+    },
+    {
+      "text": "we're going to take the image\nand compare it to each element",
+      "start": 2148.607,
+      "duration": 2.798,
+      "language": "en"
+    },
+    {
+      "text": "in the training data, and then transfer the label\nfrom the nearest training point.",
+      "start": 2151.405,
+      "duration": 5.212999999999738,
+      "language": "en"
+    },
+    {
+      "text": "So now our algorithm\nwill memorize everything",
+      "start": 2160.052,
+      "duration": 2.05,
+      "language": "en"
+    },
+    {
+      "text": "in the training set, and now we'll take each\nelement of the validation set",
+      "start": 2162.102,
+      "duration": 3.8320000000003347,
+      "language": "en"
+    },
+    {
+      "text": "and compare it to each\nelement in the training data",
+      "start": 2165.934,
+      "duration": 2.128,
+      "language": "en"
+    },
+    {
+      "text": "and then use this to\ndetermine what is the accuracy",
+      "start": 2168.062,
+      "duration": 4.019,
+      "language": "en"
+    },
+    {
+      "text": "of our classifier when it's\napplied on the validation set.",
+      "start": 2172.081,
+      "duration": 4.734,
+      "language": "en"
+    },
+    {
+      "text": "So this is the distinction\nbetween training and validation.",
+      "start": 2176.815,
+      "duration": 3.1039999999998145,
+      "language": "en"
+    },
+    {
+      "text": "Where your algorithm is\nable to see the labels",
+      "start": 2179.919,
+      "duration": 2.445,
+      "language": "en"
+    },
+    {
+      "text": "of the training set, but for the validation set,",
+      "start": 2182.364,
+      "duration": 3.16399999999976,
+      "language": "en"
+    },
+    {
+      "text": "your algorithm doesn't have\ndirect access to the labels.",
+      "start": 2185.528,
+      "duration": 2.945,
+      "language": "en"
+    },
+    {
+      "text": "We only use the labels\nof the validation set",
+      "start": 2188.473,
+      "duration": 2.345,
+      "language": "en"
+    },
+    {
+      "text": "to check how well our algorithm is doing.",
+      "start": 2190.818,
+      "duration": 3.225,
+      "language": "en"
+    },
+    {
+      "text": "A question? [student asking a question]",
+      "start": 2194.043,
+      "duration": 4.530999999999949,
+      "language": "en"
+    },
+    {
+      "text": "The question is, whether the test set,",
+      "start": 2204.373,
+      "duration": 3.363,
+      "language": "en"
+    },
+    {
+      "text": "is it possible that the\ntest set might not be representative of data\nout there in the wild?",
+      "start": 2207.736,
+      "duration": 5.204999999999927,
+      "language": "en"
+    },
+    {
+      "text": "This definitely can be\na problem in practice,",
+      "start": 2212.941,
+      "duration": 3.014,
+      "language": "en"
+    },
+    {
+      "text": "the underlying statistical\nassumption here is that",
+      "start": 2215.955,
+      "duration": 2.297,
+      "language": "en"
+    },
+    {
+      "text": "your data are all independently\nand identically distributed,",
+      "start": 2218.252,
+      "duration": 3.611,
+      "language": "en"
+    },
+    {
+      "text": "so that all of your data points should be",
+      "start": 2221.863,
+      "duration": 3.417,
+      "language": "en"
+    },
+    {
+      "text": "drawn from the same underlying\nprobability distribution.",
+      "start": 2226.631,
+      "duration": 3.494,
+      "language": "en"
+    },
+    {
+      "text": "Of course, in practice, this\nmight not always be the case,",
+      "start": 2230.125,
+      "duration": 2.823,
+      "language": "en"
+    },
+    {
+      "text": "and you definitely can run into cases where the test set might\nnot be super representative",
+      "start": 2232.948,
+      "duration": 5.850000000000364,
+      "language": "en"
+    },
+    {
+      "text": "of what you see in the wild.",
+      "start": 2238.798,
+      "duration": 2.153,
+      "language": "en"
+    },
+    {
+      "text": "So this is kind of a problem\nthat dataset creators and",
+      "start": 2240.951,
+      "duration": 2.875,
+      "language": "en"
+    },
+    {
+      "text": "dataset curators need to think about. But when I'm creating\ndatasets, for example,",
+      "start": 2243.826,
+      "duration": 3.8859999999999673,
+      "language": "en"
+    },
+    {
+      "text": "one thing I do, is I'll go and collect a whole\nbunch of data all at once,",
+      "start": 2247.712,
+      "duration": 3.742000000000189,
+      "language": "en"
+    },
+    {
+      "text": "using the exact same methodology\nfor collecting the data,",
+      "start": 2251.454,
+      "duration": 2.798,
+      "language": "en"
+    },
+    {
+      "text": "and then afterwards you go\nand partition it randomly",
+      "start": 2254.252,
+      "duration": 2.404,
+      "language": "en"
+    },
+    {
+      "text": "between train and test.",
+      "start": 2256.656,
+      "duration": 2.034,
+      "language": "en"
+    },
+    {
+      "text": "One thing that can screw you up here is",
+      "start": 2258.69,
+      "duration": 2.272,
+      "language": "en"
+    },
+    {
+      "text": "maybe if you're collecting data over time",
+      "start": 2260.962,
+      "duration": 2.062,
+      "language": "en"
+    },
+    {
+      "text": "and you make the earlier\ndata, that you collect first,",
+      "start": 2263.024,
+      "duration": 2.465,
+      "language": "en"
+    },
+    {
+      "text": "be the training data, and the later data that you\ncollect be the test data,",
+      "start": 2265.489,
+      "duration": 3.1119999999996253,
+      "language": "en"
+    },
+    {
+      "text": "then you actually might\nrun into this shift that could cause problems.",
+      "start": 2268.601,
+      "duration": 3.012000000000171,
+      "language": "en"
+    },
+    {
+      "text": "But as long as this partition is random",
+      "start": 2271.613,
+      "duration": 2.358,
+      "language": "en"
+    },
+    {
+      "text": "among your entire set of data points, then that's how we try\nto alleviate this problem",
+      "start": 2273.971,
+      "duration": 4.791000000000167,
+      "language": "en"
+    },
+    {
+      "text": "in practice. So then, once you've gone through this",
+      "start": 2278.762,
+      "duration": 7.856999999999971,
+      "language": "en"
+    },
+    {
+      "text": "cross validation procedure, then you end up with graphs\nthat look something like this.",
+      "start": 2286.619,
+      "duration": 4.873999999999796,
+      "language": "en"
+    },
+    {
+      "text": "So here, on the X axis, we\nare showing the value of K",
+      "start": 2291.493,
+      "duration": 3.363,
+      "language": "en"
+    },
+    {
+      "text": "for a k-nearest neighbor\nclassifier on some problem,",
+      "start": 2294.856,
+      "duration": 2.498,
+      "language": "en"
+    },
+    {
+      "text": "and now on the Y axis, we are\nshowing what is the accuracy",
+      "start": 2297.354,
+      "duration": 4.211,
+      "language": "en"
+    },
+    {
+      "text": "of our classifier on some dataset",
+      "start": 2301.565,
+      "duration": 3.537,
+      "language": "en"
+    },
+    {
+      "text": "for different values of K. And you can see that, in this case,",
+      "start": 2305.102,
+      "duration": 3.230000000000018,
+      "language": "en"
+    },
+    {
+      "text": "we've done five fold cross\nvalidation over the data,",
+      "start": 2308.332,
+      "duration": 3.373,
+      "language": "en"
+    },
+    {
+      "text": "so, for each value of K we\nhave five different examples",
+      "start": 2311.705,
+      "duration": 2.934,
+      "language": "en"
+    },
+    {
+      "text": "of how well this algorithm is doing.",
+      "start": 2314.639,
+      "duration": 3.707,
+      "language": "en"
+    },
+    {
+      "text": "And, actually, going back\nto the question about",
+      "start": 2318.346,
+      "duration": 2.704,
+      "language": "en"
+    },
+    {
+      "text": "having some test sets\nthat are better or worse",
+      "start": 2321.05,
+      "duration": 2.115,
+      "language": "en"
+    },
+    {
+      "text": "for your algorithm, using K fold cross validation",
+      "start": 2323.165,
+      "duration": 4.518000000000029,
+      "language": "en"
+    },
+    {
+      "text": "is maybe one way to help\nquantify that a little bit.",
+      "start": 2327.683,
+      "duration": 2.593,
+      "language": "en"
+    },
+    {
+      "text": "And, in that, we can see the\nvariance of how this algorithm",
+      "start": 2330.276,
+      "duration": 4.659,
+      "language": "en"
+    },
+    {
+      "text": "performs on different\nof the validation folds.",
+      "start": 2334.935,
+      "duration": 2.671,
+      "language": "en"
+    },
+    {
+      "text": "And that gives you some sense of, not just what is the best,",
+      "start": 2337.606,
+      "duration": 2.7530000000001564,
+      "language": "en"
+    },
+    {
+      "text": "but, also, what is the\ndistribution of that performance.",
+      "start": 2340.359,
+      "duration": 3.942,
+      "language": "en"
+    },
+    {
+      "text": "So, whenever you're training\nmachine learning models",
+      "start": 2344.301,
+      "duration": 2.141,
+      "language": "en"
+    },
+    {
+      "text": "you end up making plots like this, where they show you what is your accuracy,",
+      "start": 2346.442,
+      "duration": 3.30199999999968,
+      "language": "en"
+    },
+    {
+      "text": "or your performance as a\nfunction of your hyperparameters,",
+      "start": 2349.744,
+      "duration": 2.636,
+      "language": "en"
+    },
+    {
+      "text": "and then you want to\ngo and pick the model,",
+      "start": 2352.38,
+      "duration": 2.477,
+      "language": "en"
+    },
+    {
+      "text": "or the set of hyperparameters, at the end of the day,",
+      "start": 2354.857,
+      "duration": 2.3409999999998945,
+      "language": "en"
+    },
+    {
+      "text": "that performs the best\non the validation set.",
+      "start": 2357.198,
+      "duration": 2.797,
+      "language": "en"
+    },
+    {
+      "text": "So, here we see that maybe\nabout K=7 probably works",
+      "start": 2359.995,
+      "duration": 3.2,
+      "language": "en"
+    },
+    {
+      "text": "about best for this problem.",
+      "start": 2363.195,
+      "duration": 2.333,
+      "language": "en"
+    },
+    {
+      "text": "So, k-nearest neighbor\nclassifiers on images",
+      "start": 2369.713,
+      "duration": 2.294,
+      "language": "en"
+    },
+    {
+      "text": "are actually almost\nnever used in practice.",
+      "start": 2372.007,
+      "duration": 2.451,
+      "language": "en"
+    },
+    {
+      "text": "Because, with all of these\nproblems that we've talked about.",
+      "start": 2374.458,
+      "duration": 3.775,
+      "language": "en"
+    },
+    {
+      "text": "So, one problem is that\nit's very slow at test time,",
+      "start": 2378.233,
+      "duration": 3.16,
+      "language": "en"
+    },
+    {
+      "text": "which is the reverse of what we want, which we talked about earlier.",
+      "start": 2381.393,
+      "duration": 2.893999999999778,
+      "language": "en"
+    },
+    {
+      "text": "Another problem is that these things like Euclidean\ndistance, or L1 distance,",
+      "start": 2384.287,
+      "duration": 4.572000000000116,
+      "language": "en"
+    },
+    {
+      "text": "are really not a very good way",
+      "start": 2388.859,
+      "duration": 2.789,
+      "language": "en"
+    },
+    {
+      "text": "to measure distances between images.",
+      "start": 2391.648,
+      "duration": 2.847,
+      "language": "en"
+    },
+    {
+      "text": "These, sort of, vectorial\ndistance functions",
+      "start": 2394.495,
+      "duration": 2.752,
+      "language": "en"
+    },
+    {
+      "text": "do not correspond very well\nto perceptual similarity",
+      "start": 2397.247,
+      "duration": 2.61,
+      "language": "en"
+    },
+    {
+      "text": "between images. How you perceive\ndifferences between images.",
+      "start": 2399.857,
+      "duration": 4.219000000000051,
+      "language": "en"
+    },
+    {
+      "text": "So, in this example, we've constructed,",
+      "start": 2404.076,
+      "duration": 2.834,
+      "language": "en"
+    },
+    {
+      "text": "there's this image on the left of a girl, and then three different\ndistorted images on the right",
+      "start": 2406.91,
+      "duration": 4.324000000000069,
+      "language": "en"
+    },
+    {
+      "text": "where we've blocked out her mouth, we've actually shifted\ndown by a couple pixels,",
+      "start": 2411.234,
+      "duration": 4.795000000000073,
+      "language": "en"
+    },
+    {
+      "text": "or tinted the entire image blue.",
+      "start": 2416.029,
+      "duration": 2.387,
+      "language": "en"
+    },
+    {
+      "text": "And, actually, if you compute\nthe Euclidean distance",
+      "start": 2418.416,
+      "duration": 2.433,
+      "language": "en"
+    },
+    {
+      "text": "between the original and the boxed, the original and the shuffled,",
+      "start": 2420.849,
+      "duration": 3.2959999999998217,
+      "language": "en"
+    },
+    {
+      "text": "and original in the tinted, they all have the same L2 distance.",
+      "start": 2424.145,
+      "duration": 3.5900000000001455,
+      "language": "en"
+    },
+    {
+      "text": "Which is, maybe, not so good because it sort of\ngives you the sense that",
+      "start": 2427.735,
+      "duration": 4.849999999999909,
+      "language": "en"
+    },
+    {
+      "text": "the L2 distance is really\nnot doing a very good job",
+      "start": 2432.585,
+      "duration": 2.367,
+      "language": "en"
+    },
+    {
+      "text": "at capturing these perceptional\ndistances between images.",
+      "start": 2434.952,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "Another, sort of, problem\nwith the k-nearest neighbor",
+      "start": 2440.642,
+      "duration": 2.176,
+      "language": "en"
+    },
+    {
+      "text": "classifier has to do with\nsomething we call the curse",
+      "start": 2442.818,
+      "duration": 2.52,
+      "language": "en"
+    },
+    {
+      "text": "of dimensionality. So, if you recall back this\nviewpoint we had of the",
+      "start": 2445.338,
+      "duration": 4.405999999999949,
+      "language": "en"
+    },
+    {
+      "text": "k-nearest neighbor classifier, it's sort of dropping paint\naround each of the training",
+      "start": 2449.744,
+      "duration": 4.067000000000007,
+      "language": "en"
+    },
+    {
+      "text": "data points and using that to\nsort of partition the space.",
+      "start": 2453.811,
+      "duration": 3.375,
+      "language": "en"
+    },
+    {
+      "text": "So that means that if we\nexpect the k-nearest neighbor",
+      "start": 2457.186,
+      "duration": 2.331,
+      "language": "en"
+    },
+    {
+      "text": "classifier to work well, we kind of need our training\nexamples to cover the space",
+      "start": 2459.517,
+      "duration": 4.643000000000029,
+      "language": "en"
+    },
+    {
+      "text": "quite densely. Otherwise our nearest neighbors\ncould actually be quite far",
+      "start": 2464.16,
+      "duration": 6.3650000000002365,
+      "language": "en"
+    },
+    {
+      "text": "away and might not actually\nbe very similar to our testing",
+      "start": 2470.525,
+      "duration": 3.646,
+      "language": "en"
+    },
+    {
+      "text": "points. And the problem is,",
+      "start": 2474.171,
+      "duration": 3.400000000000091,
+      "language": "en"
+    },
+    {
+      "text": "that actually densely covering the space, means that we need a number\nof training examples,",
+      "start": 2477.571,
+      "duration": 3.8960000000001855,
+      "language": "en"
+    },
+    {
+      "text": "which is exponential in the\ndimension of the problem.",
+      "start": 2481.467,
+      "duration": 3.199,
+      "language": "en"
+    },
+    {
+      "text": "So this is very bad, exponential\ngrowth is always bad,",
+      "start": 2484.666,
+      "duration": 4.551,
+      "language": "en"
+    },
+    {
+      "text": "basically, you're never\ngoing to get enough images",
+      "start": 2489.217,
+      "duration": 2.093,
+      "language": "en"
+    },
+    {
+      "text": "to densely cover this space of pixels",
+      "start": 2491.31,
+      "duration": 2.112,
+      "language": "en"
+    },
+    {
+      "text": "in this high dimensional space.",
+      "start": 2493.422,
+      "duration": 2.165,
+      "language": "en"
+    },
+    {
+      "text": "So that's maybe another\nthing to keep in mind when you're thinking about\nusing k-nearest neighbor.",
+      "start": 2495.587,
+      "duration": 5.713000000000193,
+      "language": "en"
+    },
+    {
+      "text": "So, kind of the summary\nis that we're using k-nearest neighbor to introduce this idea",
+      "start": 2501.3,
+      "duration": 3.1599999999993997,
+      "language": "en"
+    },
+    {
+      "text": "of image classification. We have a training set\nof images and labels",
+      "start": 2504.46,
+      "duration": 3.173999999999978,
+      "language": "en"
+    },
+    {
+      "text": "and then we use that to predict these labels on the test set.",
+      "start": 2507.634,
+      "duration": 3.8109999999996944,
+      "language": "en"
+    },
+    {
+      "text": "Question? [student asking a question]",
+      "start": 2511.445,
+      "duration": 3.0739999999996144,
+      "language": "en"
+    },
+    {
+      "text": "Oh, sorry, the question is, what was going on with this picture?",
+      "start": 2514.519,
+      "duration": 2.7519999999999527,
+      "language": "en"
+    },
+    {
+      "text": "What are the green and the blue dots? So here, we have some training samples",
+      "start": 2517.271,
+      "duration": 5.063999999999851,
+      "language": "en"
+    },
+    {
+      "text": "which are represented by points,",
+      "start": 2523.463,
+      "duration": 2.133,
+      "language": "en"
+    },
+    {
+      "text": "and the color of the dot\nmaybe represents the category",
+      "start": 2525.596,
+      "duration": 2.532,
+      "language": "en"
+    },
+    {
+      "text": "of the point, of this training sample.",
+      "start": 2528.128,
+      "duration": 2.876,
+      "language": "en"
+    },
+    {
+      "text": "So, if we're in one dimension, then you maybe only need\nfour training samples",
+      "start": 2531.004,
+      "duration": 4.157000000000153,
+      "language": "en"
+    },
+    {
+      "text": "to densely cover the space,",
+      "start": 2535.161,
+      "duration": 2.364,
+      "language": "en"
+    },
+    {
+      "text": "but if we move to two dimensions, then, we now need, four times\nfour is 16 training examples",
+      "start": 2537.525,
+      "duration": 5.175999999999931,
+      "language": "en"
+    },
+    {
+      "text": "to densely cover this space.",
+      "start": 2542.701,
+      "duration": 2.828,
+      "language": "en"
+    },
+    {
+      "text": "And if we move to three, four,\nfive, many more dimensions,",
+      "start": 2545.529,
+      "duration": 3.238,
+      "language": "en"
+    },
+    {
+      "text": "the number of training\nexamples that we need to densely cover the space,",
+      "start": 2548.767,
+      "duration": 3.5770000000002256,
+      "language": "en"
+    },
+    {
+      "text": "grows exponentially with the dimension.",
+      "start": 2552.344,
+      "duration": 2.856,
+      "language": "en"
+    },
+    {
+      "text": "So, this is kind of giving you the sense, that maybe in two dimensions",
+      "start": 2555.2,
+      "duration": 2.4010000000002947,
+      "language": "en"
+    },
+    {
+      "text": "we might have this kind\nof funny curved shape,",
+      "start": 2557.601,
+      "duration": 2.9,
+      "language": "en"
+    },
+    {
+      "text": "or you might have sort of\narbitrary manifolds of labels",
+      "start": 2560.501,
+      "duration": 4.347,
+      "language": "en"
+    },
+    {
+      "text": "in different dimensional spaces.",
+      "start": 2564.848,
+      "duration": 2.793,
+      "language": "en"
+    },
+    {
+      "text": "Because the k-nearest neighbor algorithm doesn't really make any\nassumptions about these",
+      "start": 2567.641,
+      "duration": 4.062999999999647,
+      "language": "en"
+    },
+    {
+      "text": "underlying manifolds, the only way it can perform properly",
+      "start": 2571.704,
+      "duration": 2.8609999999998763,
+      "language": "en"
+    },
+    {
+      "text": "is if it has quite a dense\nsample of training points",
+      "start": 2574.565,
+      "duration": 3.148,
+      "language": "en"
+    },
+    {
+      "text": "to work with. So, this is kind of the\noverview of k-nearest neighbors",
+      "start": 2577.713,
+      "duration": 7.201999999999771,
+      "language": "en"
+    },
+    {
+      "text": "and you'll get a chance\nto actually implement this",
+      "start": 2584.915,
+      "duration": 2.1,
+      "language": "en"
+    },
+    {
+      "text": "and try it out on images\nin the first assignment.",
+      "start": 2587.015,
+      "duration": 4.199,
+      "language": "en"
+    },
+    {
+      "text": "So, if there's any last minute\nquestions about K and N, I'm going to move on to the next topic.",
+      "start": 2591.214,
+      "duration": 4.845000000000255,
+      "language": "en"
+    },
+    {
+      "text": "Question? [student is asking a question]",
+      "start": 2596.059,
+      "duration": 4.9549999999994725,
+      "language": "en"
+    },
+    {
+      "text": "Sorry, say that again. [student is asking a question]",
+      "start": 2601.014,
+      "duration": 4.936999999999898,
+      "language": "en"
+    },
+    {
+      "text": "Yeah, so the question is, why do these images have\nthe same L2 distance?",
+      "start": 2608.437,
+      "duration": 3.5960000000000036,
+      "language": "en"
+    },
+    {
+      "text": "And the answer is that, I\ncarefully constructed them",
+      "start": 2612.033,
+      "duration": 2.003,
+      "language": "en"
+    },
+    {
+      "text": "to have the same L2 distance. [laughing]",
+      "start": 2614.036,
+      "duration": 4.679999999999836,
+      "language": "en"
+    },
+    {
+      "text": "But it's just giving you the\nsense that the L2 distance",
+      "start": 2618.716,
+      "duration": 3.096,
+      "language": "en"
+    },
+    {
+      "text": "is not a very good measure\nof similarity between images.",
+      "start": 2621.812,
+      "duration": 3.284,
+      "language": "en"
+    },
+    {
+      "text": "And these images are\nactually all different from",
+      "start": 2625.096,
+      "duration": 2.21,
+      "language": "en"
+    },
+    {
+      "text": "each other in quite disparate ways.",
+      "start": 2627.306,
+      "duration": 2.917,
+      "language": "en"
+    },
+    {
+      "text": "If you're using K and N,",
+      "start": 2632.47,
+      "duration": 2.028,
+      "language": "en"
+    },
+    {
+      "text": "then the only thing you\nhave to measure distance",
+      "start": 2634.498,
+      "duration": 2.156,
+      "language": "en"
+    },
+    {
+      "text": "between images, is this single distance metric.",
+      "start": 2636.654,
+      "duration": 3.58199999999988,
+      "language": "en"
+    },
+    {
+      "text": "And this kind of gives\nyou an example where",
+      "start": 2640.236,
+      "duration": 2.964,
+      "language": "en"
+    },
+    {
+      "text": "that distance metric is\nactually not capturing",
+      "start": 2643.2,
+      "duration": 2.029,
+      "language": "en"
+    },
+    {
+      "text": "the full description of\ndistance or difference",
+      "start": 2645.229,
+      "duration": 2.102,
+      "language": "en"
+    },
+    {
+      "text": "between images. So, if this case, I just sort\nof carefully constructed these",
+      "start": 2647.331,
+      "duration": 4.710999999999785,
+      "language": "en"
+    },
+    {
+      "text": "translations and these\noffsets to match exactly.",
+      "start": 2652.042,
+      "duration": 3.342,
+      "language": "en"
+    },
+    {
+      "text": "Question? [student asking a question]",
+      "start": 2655.384,
+      "duration": 4.5,
+      "language": "en"
+    },
+    {
+      "text": "So, the question is, maybe this is actually good,",
+      "start": 2668.672,
+      "duration": 2.5770000000002256,
+      "language": "en"
+    },
+    {
+      "text": "because all of these things are actually having the\nsame distance to the image.",
+      "start": 2671.249,
+      "duration": 5.36600000000044,
+      "language": "en"
+    },
+    {
+      "text": "That's maybe true for this example, but I think you could also\nconstruct examples where",
+      "start": 2676.615,
+      "duration": 3.775000000000091,
+      "language": "en"
+    },
+    {
+      "text": "maybe we have two original images and then by putting the\nboxes in the right places",
+      "start": 2680.39,
+      "duration": 2.961999999999989,
+      "language": "en"
+    },
+    {
+      "text": "or tinting them, we could cause it to be\nnearer to pretty much",
+      "start": 2683.352,
+      "duration": 3.300000000000182,
+      "language": "en"
+    },
+    {
+      "text": "anything that you want, right? Because in this example, we\ncan kind of like do arbitrary",
+      "start": 2686.652,
+      "duration": 4.197999999999865,
+      "language": "en"
+    },
+    {
+      "text": "shifting and tinting to kind of change these\ndistances nearly arbitrarily",
+      "start": 2690.85,
+      "duration": 3.762000000000171,
+      "language": "en"
+    },
+    {
+      "text": "without changing the perceptional\nnature of these images.",
+      "start": 2694.612,
+      "duration": 2.857,
+      "language": "en"
+    },
+    {
+      "text": "So, I think that this\ncan actually screw you up if you have many\ndifferent original images.",
+      "start": 2697.469,
+      "duration": 5.7029999999999745,
+      "language": "en"
+    },
+    {
+      "text": "Question? [student is asking a question]",
+      "start": 2703.172,
+      "duration": 4.7840000000001055,
+      "language": "en"
+    },
+    {
+      "text": "The question is, whether or not it's\ncommon in real-world cases",
+      "start": 2715.207,
+      "duration": 2.132000000000062,
+      "language": "en"
+    },
+    {
+      "text": "to go back and retrain the entire dataset",
+      "start": 2717.339,
+      "duration": 3.325,
+      "language": "en"
+    },
+    {
+      "text": "once you've found those\nbest hyperparameters?",
+      "start": 2720.664,
+      "duration": 3.434,
+      "language": "en"
+    },
+    {
+      "text": "So, people do sometimes\ndo this in practice,",
+      "start": 2724.098,
+      "duration": 3.667,
+      "language": "en"
+    },
+    {
+      "text": "but it's somewhat a matter of taste.",
+      "start": 2728.787,
+      "duration": 2.195,
+      "language": "en"
+    },
+    {
+      "text": "If you're really rushing for that deadline and you've really got to\nget this model out the door",
+      "start": 2730.982,
+      "duration": 3.44800000000032,
+      "language": "en"
+    },
+    {
+      "text": "then, if it takes a long\ntime to retrain the model",
+      "start": 2734.43,
+      "duration": 2.351,
+      "language": "en"
+    },
+    {
+      "text": "on the whole dataset, then maybe you won't do it.",
+      "start": 2736.781,
+      "duration": 3.094000000000051,
+      "language": "en"
+    },
+    {
+      "text": "But if you have a little\nbit more time to spare and a little bit more compute to spare,",
+      "start": 2739.875,
+      "duration": 3.556999999999789,
+      "language": "en"
+    },
+    {
+      "text": "and you want to squeeze out\nthat maybe that extra 1%",
+      "start": 2743.432,
+      "duration": 2.497,
+      "language": "en"
+    },
+    {
+      "text": "of performance, then that\nis a trick you can use.",
+      "start": 2745.929,
+      "duration": 4.083,
+      "language": "en"
+    },
+    {
+      "text": "So we kind of saw that\nthe k-nearest neighbor has a lot of the nice properties",
+      "start": 2753.288,
+      "duration": 3.4700000000002547,
+      "language": "en"
+    },
+    {
+      "text": "of machine learning algorithms, but in practice it's not so great,",
+      "start": 2756.758,
+      "duration": 3.7320000000004256,
+      "language": "en"
+    },
+    {
+      "text": "and really not used very much in images.",
+      "start": 2760.49,
+      "duration": 3.333,
+      "language": "en"
+    },
+    {
+      "text": "So the next thing I'd\nlike to talk about is linear classification.",
+      "start": 2765.258,
+      "duration": 3.637000000000171,
+      "language": "en"
+    },
+    {
+      "text": "And linear classification is,\nagain, quite a simple learning",
+      "start": 2768.895,
+      "duration": 2.858,
+      "language": "en"
+    },
+    {
+      "text": "algorithm, but this will\nbecome super important",
+      "start": 2771.753,
+      "duration": 3.228,
+      "language": "en"
+    },
+    {
+      "text": "and help us build up to\nwhole neural networks",
+      "start": 2774.981,
+      "duration": 2.276,
+      "language": "en"
+    },
+    {
+      "text": "and whole convolutional networks.",
+      "start": 2777.257,
+      "duration": 2.588,
+      "language": "en"
+    },
+    {
+      "text": "So, one analogy people often talk about when working with neural networks",
+      "start": 2779.845,
+      "duration": 3.625,
+      "language": "en"
+    },
+    {
+      "text": "is we think of them as being\nkind of like Lego blocks.",
+      "start": 2783.47,
+      "duration": 2.772,
+      "language": "en"
+    },
+    {
+      "text": "That you can have different\nkinds of components of neural networks and you\ncan stick these components",
+      "start": 2786.242,
+      "duration": 4.102999999999611,
+      "language": "en"
+    },
+    {
+      "text": "together to build these\nlarge different towers of",
+      "start": 2790.345,
+      "duration": 3.469,
+      "language": "en"
+    },
+    {
+      "text": "convolutional networks.",
+      "start": 2793.814,
+      "duration": 2.564,
+      "language": "en"
+    },
+    {
+      "text": "One of the most basic\nbuilding blocks that we'll see",
+      "start": 2796.378,
+      "duration": 2.026,
+      "language": "en"
+    },
+    {
+      "text": "in different types of\ndeep learning applications",
+      "start": 2798.404,
+      "duration": 3.109,
+      "language": "en"
+    },
+    {
+      "text": "is this linear classifier. So, I think it's actually\nreally important to",
+      "start": 2801.513,
+      "duration": 3.4830000000001746,
+      "language": "en"
+    },
+    {
+      "text": "have a good understanding\nof what's happening with linear classification.",
+      "start": 2804.996,
+      "duration": 3.2739999999998872,
+      "language": "en"
+    },
+    {
+      "text": "Because these will end up\ngeneralizing quite nicely to whole neural networks.",
+      "start": 2808.27,
+      "duration": 4.442000000000007,
+      "language": "en"
+    },
+    {
+      "text": "So another example of kind\nof this modular nature",
+      "start": 2812.712,
+      "duration": 2.531,
+      "language": "en"
+    },
+    {
+      "text": "of neural networks comes from some research in our\nown lab on image captioning,",
+      "start": 2815.243,
+      "duration": 3.4850000000001273,
+      "language": "en"
+    },
+    {
+      "text": "just as a little bit of a preview. So here the setup is that\nwe want to input an image",
+      "start": 2818.728,
+      "duration": 4.118999999999687,
+      "language": "en"
+    },
+    {
+      "text": "and then output a descriptive sentence describing the image.",
+      "start": 2822.847,
+      "duration": 3.3789999999999054,
+      "language": "en"
+    },
+    {
+      "text": "And the way this kind of works is that we have one convolutional\nneural network that's looking",
+      "start": 2826.226,
+      "duration": 4.483999999999469,
+      "language": "en"
+    },
+    {
+      "text": "at the image, and a recurrent neural network that knows",
+      "start": 2830.71,
+      "duration": 2.7339999999999236,
+      "language": "en"
+    },
+    {
+      "text": "about language. And we can kind of just stick\nthese two pieces together",
+      "start": 2833.444,
+      "duration": 3.2200000000002547,
+      "language": "en"
+    },
+    {
+      "text": "like Lego blocks and train\nthe whole thing together",
+      "start": 2836.664,
+      "duration": 2.112,
+      "language": "en"
+    },
+    {
+      "text": "and end up with a pretty cool system",
+      "start": 2838.776,
+      "duration": 2.143,
+      "language": "en"
+    },
+    {
+      "text": "that can do some non-trivial things. And we'll work through the\ndetails of this model as we go",
+      "start": 2840.919,
+      "duration": 4.157999999999902,
+      "language": "en"
+    },
+    {
+      "text": "forward in the class, but this just gives you the sense that,",
+      "start": 2845.077,
+      "duration": 2.63399999999956,
+      "language": "en"
+    },
+    {
+      "text": "these deep neural networks\nare kind of like Legos",
+      "start": 2847.711,
+      "duration": 2.498,
+      "language": "en"
+    },
+    {
+      "text": "and this linear classifier is kind of like the most\nbasic building blocks",
+      "start": 2850.209,
+      "duration": 3.8730000000000473,
+      "language": "en"
+    },
+    {
+      "text": "of these giant networks.",
+      "start": 2854.082,
+      "duration": 2.0,
+      "language": "en"
+    },
+    {
+      "text": "But that's a little bit too\nexciting for lecture two,",
+      "start": 2857.096,
+      "duration": 2.093,
+      "language": "en"
+    },
+    {
+      "text": "so we have to go back to\nCIFAR-10 for the moment.",
+      "start": 2859.189,
+      "duration": 2.068,
+      "language": "en"
+    },
+    {
+      "text": "[laughing] So, recall that CIFAR-10 has\nthese 50,000 training examples,",
+      "start": 2861.257,
+      "duration": 4.3840000000000146,
+      "language": "en"
+    },
+    {
+      "text": "each image is 32 by 32 pixels\nand three color channels.",
+      "start": 2865.641,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "In linear classification,\nwe're going to take a bit of a different approach\nfrom k-nearest neighbor.",
+      "start": 2872.068,
+      "duration": 4.628000000000156,
+      "language": "en"
+    },
+    {
+      "text": "So, the linear classifier is\none of the simplest examples",
+      "start": 2876.696,
+      "duration": 4.95,
+      "language": "en"
+    },
+    {
+      "text": "of what we call a parametric model.",
+      "start": 2881.646,
+      "duration": 3.088,
+      "language": "en"
+    },
+    {
+      "text": "So now, our parametric model\nactually has two different",
+      "start": 2884.734,
+      "duration": 2.814,
+      "language": "en"
+    },
+    {
+      "text": "components. It's going to take in this image,\nmaybe, of a cat on the left,",
+      "start": 2887.548,
+      "duration": 4.653000000000247,
+      "language": "en"
+    },
+    {
+      "text": "and this, that we usually write\nas X for our input data,",
+      "start": 2892.201,
+      "duration": 5.182999999999993,
+      "language": "en"
+    },
+    {
+      "text": "and also a set of parameters, or weights,",
+      "start": 2897.384,
+      "duration": 2.836,
+      "language": "en"
+    },
+    {
+      "text": "which is usually called\nW, also sometimes theta,",
+      "start": 2900.22,
+      "duration": 3.255,
+      "language": "en"
+    },
+    {
+      "text": "depending on the literature. And now we're going to\nwrite down some function",
+      "start": 2903.475,
+      "duration": 3.4989999999997963,
+      "language": "en"
+    },
+    {
+      "text": "which takes in both the data,\nX, and the parameters, W,",
+      "start": 2906.974,
+      "duration": 3.806,
+      "language": "en"
+    },
+    {
+      "text": "and this'll spit out now\n10 numbers describing",
+      "start": 2910.78,
+      "duration": 3.4,
+      "language": "en"
+    },
+    {
+      "text": "what are the scores\ncorresponding to each of those 10",
+      "start": 2914.18,
+      "duration": 3.77,
+      "language": "en"
+    },
+    {
+      "text": "categories in CIFAR-10.",
+      "start": 2917.95,
+      "duration": 2.041,
+      "language": "en"
+    },
+    {
+      "text": "With the interpretation that,\nlike the larger score for cat,",
+      "start": 2919.991,
+      "duration": 4.241,
+      "language": "en"
+    },
+    {
+      "text": "indicates a larger probability\nof that input X being cat.",
+      "start": 2924.232,
+      "duration": 4.351,
+      "language": "en"
+    },
+    {
+      "text": "And now, a question? [student asking a question]",
+      "start": 2928.583,
+      "duration": 4.911000000000058,
+      "language": "en"
+    },
+    {
+      "text": "Sorry, can you repeat that? [student asking a question]",
+      "start": 2935.38,
+      "duration": 3.4830000000001746,
+      "language": "en"
+    },
+    {
+      "text": "Oh, so the question is what is the three?",
+      "start": 2938.863,
+      "duration": 2.661,
+      "language": "en"
+    },
+    {
+      "text": "The three, in this example,\ncorresponds to the three color",
+      "start": 2941.524,
+      "duration": 3.462,
+      "language": "en"
+    },
+    {
+      "text": "channels, red, green, and blue. Because we typically work on color images,",
+      "start": 2944.986,
+      "duration": 3.4830000000001746,
+      "language": "en"
+    },
+    {
+      "text": "that's nice information that\nyou don't want to throw away.",
+      "start": 2948.469,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "So, in the k-nearest neighbor setup there was no parameters, instead,",
+      "start": 2955.323,
+      "duration": 3.675999999999931,
+      "language": "en"
+    },
+    {
+      "text": "we just kind of keep around\nthe whole training data,",
+      "start": 2958.999,
+      "duration": 2.687,
+      "language": "en"
+    },
+    {
+      "text": "the whole training set, and use that at test time.",
+      "start": 2961.686,
+      "duration": 2.405999999999949,
+      "language": "en"
+    },
+    {
+      "text": "But now, in a parametric approach, we're going to summarize our\nknowledge of the training data",
+      "start": 2964.092,
+      "duration": 4.1039999999998145,
+      "language": "en"
+    },
+    {
+      "text": "and stick all that knowledge\ninto these parameters, W.",
+      "start": 2968.196,
+      "duration": 2.909,
+      "language": "en"
+    },
+    {
+      "text": "And now, at test time, we\nno longer need the actual",
+      "start": 2971.105,
+      "duration": 2.502,
+      "language": "en"
+    },
+    {
+      "text": "training data, we can throw it away. We only need these\nparameters, W, at test time.",
+      "start": 2973.607,
+      "duration": 4.331000000000131,
+      "language": "en"
+    },
+    {
+      "text": "So this allows our models\nto now be more efficient",
+      "start": 2977.938,
+      "duration": 2.623,
+      "language": "en"
+    },
+    {
+      "text": "and actually run on maybe\nsmall devices like phones.",
+      "start": 2980.561,
+      "duration": 4.123,
+      "language": "en"
+    },
+    {
+      "text": "So, kind of, the whole\nstory in deep learning",
+      "start": 2984.684,
+      "duration": 2.593,
+      "language": "en"
+    },
+    {
+      "text": "is coming up with the\nright structure for this",
+      "start": 2987.277,
+      "duration": 2.127,
+      "language": "en"
+    },
+    {
+      "text": "function, F. You can imagine writing down\ndifferent functional forms",
+      "start": 2989.404,
+      "duration": 4.0470000000000255,
+      "language": "en"
+    },
+    {
+      "text": "for how to combine weights\nand data in different complex ways, and these\ncould correspond to different",
+      "start": 2993.451,
+      "duration": 5.157000000000153,
+      "language": "en"
+    },
+    {
+      "text": "network architectures.",
+      "start": 2998.608,
+      "duration": 2.561,
+      "language": "en"
+    },
+    {
+      "text": "But the simplest possible example of combining these two things",
+      "start": 3001.169,
+      "duration": 2.963000000000193,
+      "language": "en"
+    },
+    {
+      "text": "is just, maybe, to multiply them. And this is a linear classifier.",
+      "start": 3004.132,
+      "duration": 4.700999999999567,
+      "language": "en"
+    },
+    {
+      "text": "So here our F of X, W is\njust equal to the W times X.",
+      "start": 3008.833,
+      "duration": 4.348,
+      "language": "en"
+    },
+    {
+      "text": "Probably the simplest\nequation you can imagine.",
+      "start": 3013.181,
+      "duration": 2.589,
+      "language": "en"
+    },
+    {
+      "text": "So here, if you kind of unpack the\ndimensions of these things,",
+      "start": 3015.77,
+      "duration": 3.1510000000002947,
+      "language": "en"
+    },
+    {
+      "text": "we recall that our image was\nmaybe 32 by 32 by 3 values.",
+      "start": 3018.921,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "So then, we're going to take\nthose values and then stretch",
+      "start": 3024.871,
+      "duration": 3.336,
+      "language": "en"
+    },
+    {
+      "text": "them out into a long column vector",
+      "start": 3028.207,
+      "duration": 3.217,
+      "language": "en"
+    },
+    {
+      "text": "that has 3,072 by one entries.",
+      "start": 3031.424,
+      "duration": 3.291,
+      "language": "en"
+    },
+    {
+      "text": "And now we want to end\nup with 10 class scores.",
+      "start": 3034.715,
+      "duration": 3.917,
+      "language": "en"
+    },
+    {
+      "text": "We want to end up with\n10 numbers for this image giving us the scores for\neach of the 10 categories.",
+      "start": 3039.746,
+      "duration": 4.4900000000002365,
+      "language": "en"
+    },
+    {
+      "text": "Which means that now our matrix, W,",
+      "start": 3044.236,
+      "duration": 2.043,
+      "language": "en"
+    },
+    {
+      "text": "needs to be ten by 3072.",
+      "start": 3046.279,
+      "duration": 2.753,
+      "language": "en"
+    },
+    {
+      "text": "So that once we multiply\nthese two things out",
+      "start": 3049.032,
+      "duration": 2.267,
+      "language": "en"
+    },
+    {
+      "text": "then we'll end up with\na single column vector 10 by one, giving us our 10 class scores.",
+      "start": 3051.299,
+      "duration": 5.786999999999807,
+      "language": "en"
+    },
+    {
+      "text": "Also sometimes, you'll typically see this,",
+      "start": 3057.086,
+      "duration": 3.231,
+      "language": "en"
+    },
+    {
+      "text": "we'll often add a bias term which will be a constant\nvector of 10 elements",
+      "start": 3060.317,
+      "duration": 4.406999999999698,
+      "language": "en"
+    },
+    {
+      "text": "that does not interact\nwith the training data, and instead just gives us\nsome sort of data independent",
+      "start": 3064.724,
+      "duration": 4.931999999999789,
+      "language": "en"
+    },
+    {
+      "text": "preferences for some classes over another.",
+      "start": 3069.656,
+      "duration": 2.579,
+      "language": "en"
+    },
+    {
+      "text": "So you might imagine that\nif you're dataset was unbalanced and had many\nmore cats than dogs,",
+      "start": 3072.235,
+      "duration": 4.065000000000055,
+      "language": "en"
+    },
+    {
+      "text": "for example, then the bias\nelements corresponding",
+      "start": 3076.3,
+      "duration": 2.959,
+      "language": "en"
+    },
+    {
+      "text": "to cat would be higher\nthan the other ones.",
+      "start": 3079.259,
+      "duration": 4.294,
+      "language": "en"
+    },
+    {
+      "text": "So if you kind of think about pictorially what this function is doing,",
+      "start": 3083.553,
+      "duration": 4.225000000000364,
+      "language": "en"
+    },
+    {
+      "text": "in this figure we have\nan example on the left",
+      "start": 3088.93,
+      "duration": 2.553,
+      "language": "en"
+    },
+    {
+      "text": "of a simple image with\njust a two by two image,",
+      "start": 3091.483,
+      "duration": 4.246,
+      "language": "en"
+    },
+    {
+      "text": "so it has four pixels total. So the way that the\nlinear classifier works",
+      "start": 3095.729,
+      "duration": 4.10300000000052,
+      "language": "en"
+    },
+    {
+      "text": "is that we take this two by two image,",
+      "start": 3099.832,
+      "duration": 2.441,
+      "language": "en"
+    },
+    {
+      "text": "we stretch it out into a column vector",
+      "start": 3102.273,
+      "duration": 2.929,
+      "language": "en"
+    },
+    {
+      "text": "with four elements, and now, in this example,\nwe are just restricting to",
+      "start": 3105.202,
+      "duration": 4.09900000000016,
+      "language": "en"
+    },
+    {
+      "text": "three classes, cat, dog, and ship,",
+      "start": 3109.301,
+      "duration": 2.464,
+      "language": "en"
+    },
+    {
+      "text": "because you can't fit 10 on a slide,",
+      "start": 3111.765,
+      "duration": 2.265,
+      "language": "en"
+    },
+    {
+      "text": "and now our weight matrix is\ngoing to be four by three,",
+      "start": 3114.03,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "so we have four pixels and three classes.",
+      "start": 3119.89,
+      "duration": 2.346,
+      "language": "en"
+    },
+    {
+      "text": "And now, again, we have a\nthree element bias vector",
+      "start": 3122.236,
+      "duration": 3.331,
+      "language": "en"
+    },
+    {
+      "text": "that gives us data independent bias terms",
+      "start": 3125.567,
+      "duration": 3.291,
+      "language": "en"
+    },
+    {
+      "text": "for each category.",
+      "start": 3128.858,
+      "duration": 2.267,
+      "language": "en"
+    },
+    {
+      "text": "Now we see that the cat score\nis going to be the enter",
+      "start": 3131.125,
+      "duration": 2.342,
+      "language": "en"
+    },
+    {
+      "text": "product between the pixels of our image",
+      "start": 3133.467,
+      "duration": 3.25,
+      "language": "en"
+    },
+    {
+      "text": "and this row in the weight matrix",
+      "start": 3138.436,
+      "duration": 2.214,
+      "language": "en"
+    },
+    {
+      "text": "added together with this bias term.",
+      "start": 3140.65,
+      "duration": 2.164,
+      "language": "en"
+    },
+    {
+      "text": "So, when you look at it this way",
+      "start": 3142.814,
+      "duration": 2.32,
+      "language": "en"
+    },
+    {
+      "text": "you can kind of understand\nlinear classification",
+      "start": 3145.134,
+      "duration": 3.012,
+      "language": "en"
+    },
+    {
+      "text": "as almost a template matching approach.",
+      "start": 3148.146,
+      "duration": 2.011,
+      "language": "en"
+    },
+    {
+      "text": "Where each of the rows in this matrix",
+      "start": 3150.157,
+      "duration": 2.287,
+      "language": "en"
+    },
+    {
+      "text": "correspond to some template of the image.",
+      "start": 3152.444,
+      "duration": 3.208,
+      "language": "en"
+    },
+    {
+      "text": "And now the enter product or dot product",
+      "start": 3155.652,
+      "duration": 2.461,
+      "language": "en"
+    },
+    {
+      "text": "between the row of the\nmatrix and the column",
+      "start": 3158.113,
+      "duration": 2.986,
+      "language": "en"
+    },
+    {
+      "text": "giving the pixels of the image,",
+      "start": 3161.099,
+      "duration": 2.084,
+      "language": "en"
+    },
+    {
+      "text": "computing this dot\nproduct kind of gives us a similarity between this\ntemplate for the class",
+      "start": 3163.183,
+      "duration": 4.6909999999998035,
+      "language": "en"
+    },
+    {
+      "text": "and the pixels of our image.",
+      "start": 3167.874,
+      "duration": 2.584,
+      "language": "en"
+    },
+    {
+      "text": "And then bias just,\nagain, gives you this data",
+      "start": 3170.458,
+      "duration": 2.448,
+      "language": "en"
+    },
+    {
+      "text": "independence scaling offset\nto each of the classes.",
+      "start": 3172.906,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "If we think about linear classification from this viewpoint of template matching",
+      "start": 3180.837,
+      "duration": 3.867999999999938,
+      "language": "en"
+    },
+    {
+      "text": "we can actually take the\nrows of that weight matrix",
+      "start": 3184.705,
+      "duration": 2.827,
+      "language": "en"
+    },
+    {
+      "text": "and unravel them back into images",
+      "start": 3187.532,
+      "duration": 2.433,
+      "language": "en"
+    },
+    {
+      "text": "and actually visualize\nthose templates as images.",
+      "start": 3189.965,
+      "duration": 2.834,
+      "language": "en"
+    },
+    {
+      "text": "And this gives us some\nsense of what a linear classifier might actually be doing",
+      "start": 3192.799,
+      "duration": 3.9699999999998,
+      "language": "en"
+    },
+    {
+      "text": "to try to understand our data.",
+      "start": 3196.769,
+      "duration": 2.139,
+      "language": "en"
+    },
+    {
+      "text": "So, in this example, we've\ngone ahead and trained",
+      "start": 3198.908,
+      "duration": 2.149,
+      "language": "en"
+    },
+    {
+      "text": "a linear classifier on our images.",
+      "start": 3201.057,
+      "duration": 2.151,
+      "language": "en"
+    },
+    {
+      "text": "And now on the bottom we're visualizing",
+      "start": 3203.208,
+      "duration": 2.147,
+      "language": "en"
+    },
+    {
+      "text": "what are those rows in\nthat learned weight matrix",
+      "start": 3205.355,
+      "duration": 3.619,
+      "language": "en"
+    },
+    {
+      "text": "corresponding to each of the 10 categories in CIFAR-10.",
+      "start": 3208.974,
+      "duration": 3.299999999999727,
+      "language": "en"
+    },
+    {
+      "text": "And in this way we kind\nof get a sense for what's going on in these images.",
+      "start": 3212.274,
+      "duration": 3.412000000000262,
+      "language": "en"
+    },
+    {
+      "text": "So, for example, in the\nleft, on the bottom left,",
+      "start": 3215.686,
+      "duration": 3.155,
+      "language": "en"
+    },
+    {
+      "text": "we see the template for the plane class,",
+      "start": 3218.841,
+      "duration": 2.137,
+      "language": "en"
+    },
+    {
+      "text": "kind of consists of this like blue blob, this kind of blobby thing in the middle",
+      "start": 3220.978,
+      "duration": 3.8779999999997017,
+      "language": "en"
+    },
+    {
+      "text": "and maybe blue in the background, which gives you the sense\nthat this linear classifier",
+      "start": 3224.856,
+      "duration": 4.355999999999767,
+      "language": "en"
+    },
+    {
+      "text": "for plane is maybe looking for blue stuff",
+      "start": 3229.212,
+      "duration": 2.362,
+      "language": "en"
+    },
+    {
+      "text": "and blobby stuff, and those\nfeatures are going to cause",
+      "start": 3231.574,
+      "duration": 3.011,
+      "language": "en"
+    },
+    {
+      "text": "the classifier to like planes more.",
+      "start": 3234.585,
+      "duration": 3.021,
+      "language": "en"
+    },
+    {
+      "text": "Or if we look at this car example, we kind of see that\nthere's a red blobby thing",
+      "start": 3237.606,
+      "duration": 4.834999999999582,
+      "language": "en"
+    },
+    {
+      "text": "through the middle and a\nblue blobby thing at the top",
+      "start": 3242.441,
+      "duration": 2.36,
+      "language": "en"
+    },
+    {
+      "text": "that maybe is kind of a blurry windshield.",
+      "start": 3244.801,
+      "duration": 3.92,
+      "language": "en"
+    },
+    {
+      "text": "But this is a little bit weird, this doesn't really look like a car.",
+      "start": 3248.721,
+      "duration": 2.550000000000182,
+      "language": "en"
+    },
+    {
+      "text": "No individual car\nactually looks like this.",
+      "start": 3251.271,
+      "duration": 2.445,
+      "language": "en"
+    },
+    {
+      "text": "So the problem is that\nthe linear classifier is only learning one\ntemplate for each class.",
+      "start": 3253.716,
+      "duration": 4.601000000000113,
+      "language": "en"
+    },
+    {
+      "text": "So if there's sort of\nvariations in how that class",
+      "start": 3258.317,
+      "duration": 2.506,
+      "language": "en"
+    },
+    {
+      "text": "might appear, it's trying to average out all\nthose different variations,",
+      "start": 3260.823,
+      "duration": 3.51700000000028,
+      "language": "en"
+    },
+    {
+      "text": "all those different appearances, and use just one single template",
+      "start": 3264.34,
+      "duration": 3.12099999999964,
+      "language": "en"
+    },
+    {
+      "text": "to recognize each of those categories.",
+      "start": 3267.461,
+      "duration": 2.214,
+      "language": "en"
+    },
+    {
+      "text": "We can also see this pretty\nexplicitly in the horse",
+      "start": 3269.675,
+      "duration": 2.286,
+      "language": "en"
+    },
+    {
+      "text": "classifier. So in the horse classifier we\nsee green stuff on the bottom",
+      "start": 3271.961,
+      "duration": 3.8150000000005093,
+      "language": "en"
+    },
+    {
+      "text": "because horses are usually on grass. And then, if you look\ncarefully, the horse actually",
+      "start": 3275.776,
+      "duration": 3.5130000000003747,
+      "language": "en"
+    },
+    {
+      "text": "seems to have maybe two\nheads, one head on each side.",
+      "start": 3279.289,
+      "duration": 3.836,
+      "language": "en"
+    },
+    {
+      "text": "And I've never seen a\nhorse with two heads.",
+      "start": 3283.125,
+      "duration": 2.73,
+      "language": "en"
+    },
+    {
+      "text": "But the linear classifier\nis just doing the best",
+      "start": 3285.855,
+      "duration": 2.208,
+      "language": "en"
+    },
+    {
+      "text": "that it can, because it's\nonly allowed to learn",
+      "start": 3288.063,
+      "duration": 2.45,
+      "language": "en"
+    },
+    {
+      "text": "one template per category.",
+      "start": 3290.513,
+      "duration": 2.275,
+      "language": "en"
+    },
+    {
+      "text": "And as we move forward\ninto neural networks",
+      "start": 3292.788,
+      "duration": 2.297,
+      "language": "en"
+    },
+    {
+      "text": "and more complex models, we'll be able to achieve\nmuch better accuracy",
+      "start": 3295.085,
+      "duration": 4.375,
+      "language": "en"
+    },
+    {
+      "text": "because they no longer\nhave this restriction of just learning a single\ntemplate per category.",
+      "start": 3299.46,
+      "duration": 5.769999999999982,
+      "language": "en"
+    },
+    {
+      "text": "Another viewpoint of the linear classifier",
+      "start": 3309.03,
+      "duration": 2.193,
+      "language": "en"
+    },
+    {
+      "text": "is to go back to this idea of images",
+      "start": 3311.223,
+      "duration": 2.3,
+      "language": "en"
+    },
+    {
+      "text": "as points and high dimensional space.",
+      "start": 3313.523,
+      "duration": 2.126,
+      "language": "en"
+    },
+    {
+      "text": "And you can imagine\nthat each of our images",
+      "start": 3315.649,
+      "duration": 3.583,
+      "language": "en"
+    },
+    {
+      "text": "is something like a point in\nthis high dimensional space.",
+      "start": 3320.191,
+      "duration": 3.137,
+      "language": "en"
+    },
+    {
+      "text": "And now the linear classifier\nis putting in these",
+      "start": 3323.328,
+      "duration": 3.013,
+      "language": "en"
+    },
+    {
+      "text": "linear decision boundaries\nto try to draw linear",
+      "start": 3326.341,
+      "duration": 2.964,
+      "language": "en"
+    },
+    {
+      "text": "separation between one category",
+      "start": 3329.305,
+      "duration": 2.097,
+      "language": "en"
+    },
+    {
+      "text": "and the rest of the categories. So maybe up on the upper-left hand side",
+      "start": 3331.402,
+      "duration": 4.436000000000149,
+      "language": "en"
+    },
+    {
+      "text": "we see these training\nexamples of airplanes",
+      "start": 3335.838,
+      "duration": 3.059,
+      "language": "en"
+    },
+    {
+      "text": "and throughout the process of training",
+      "start": 3338.897,
+      "duration": 2.549,
+      "language": "en"
+    },
+    {
+      "text": "the linear classier will\ngo and try to draw this",
+      "start": 3341.446,
+      "duration": 2.399,
+      "language": "en"
+    },
+    {
+      "text": "blue line to separate\nout with a single line",
+      "start": 3343.845,
+      "duration": 2.847,
+      "language": "en"
+    },
+    {
+      "text": "the airplane class from all\nthe rest of the classes.",
+      "start": 3346.692,
+      "duration": 2.801,
+      "language": "en"
+    },
+    {
+      "text": "And it's actually kind of\nfun if you watch during the training process these\nlines will start out randomly",
+      "start": 3349.493,
+      "duration": 4.4090000000001055,
+      "language": "en"
+    },
+    {
+      "text": "and then go and snap into\nplace to try to separate the data properly.",
+      "start": 3353.902,
+      "duration": 3.4160000000001673,
+      "language": "en"
+    },
+    {
+      "text": "But when you think about\nlinear classification",
+      "start": 3358.709,
+      "duration": 2.212,
+      "language": "en"
+    },
+    {
+      "text": "in this way, from this high\ndimensional point of view,",
+      "start": 3360.921,
+      "duration": 3.079,
+      "language": "en"
+    },
+    {
+      "text": "you can start to see again\nwhat are some of the problems",
+      "start": 3364.0,
+      "duration": 2.768,
+      "language": "en"
+    },
+    {
+      "text": "that might come up with\nlinear classification.",
+      "start": 3366.768,
+      "duration": 2.99,
+      "language": "en"
+    },
+    {
+      "text": "And it's not too hard\nto construct examples of datasets where a linear\nclassifier will totally fail.",
+      "start": 3369.758,
+      "duration": 5.47400000000016,
+      "language": "en"
+    },
+    {
+      "text": "So, one example, on the left here, is that, suppose we have a\ndataset of two categories,",
+      "start": 3375.232,
+      "duration": 5.092000000000098,
+      "language": "en"
+    },
+    {
+      "text": "and these are all maybe\nsomewhat artificial, but maybe our dataset has two categories,",
+      "start": 3380.324,
+      "duration": 4.665999999999713,
+      "language": "en"
+    },
+    {
+      "text": "blue and red. And the blue categories\nare the number of pixels",
+      "start": 3384.99,
+      "duration": 5.423999999999978,
+      "language": "en"
+    },
+    {
+      "text": "in the image, which are\ngreater than zero, is odd.",
+      "start": 3390.414,
+      "duration": 2.708,
+      "language": "en"
+    },
+    {
+      "text": "And anything where the\nnumber of pixels greater than zero is even, we want to\nclassify as the red category.",
+      "start": 3393.122,
+      "duration": 5.592000000000098,
+      "language": "en"
+    },
+    {
+      "text": "So if you actually go and\ndraw what these different",
+      "start": 3398.714,
+      "duration": 4.167,
+      "language": "en"
+    },
+    {
+      "text": "decisions regions look like in the plane,",
+      "start": 3403.991,
+      "duration": 2.268,
+      "language": "en"
+    },
+    {
+      "text": "you can see that our blue class\nwith an odd number of pixels",
+      "start": 3406.259,
+      "duration": 3.648,
+      "language": "en"
+    },
+    {
+      "text": "is going to be these two\nquadrants in the plane,",
+      "start": 3409.907,
+      "duration": 3.519,
+      "language": "en"
+    },
+    {
+      "text": "and even will be the\nopposite two quadrants.",
+      "start": 3413.426,
+      "duration": 2.637,
+      "language": "en"
+    },
+    {
+      "text": "So now, there's no way that we\ncan draw a single linear line",
+      "start": 3416.063,
+      "duration": 3.546,
+      "language": "en"
+    },
+    {
+      "text": "to separate the blue from the red. So this would be an example\nwhere a linear classifier",
+      "start": 3419.609,
+      "duration": 3.8029999999998836,
+      "language": "en"
+    },
+    {
+      "text": "would really struggle. And this is maybe not such an\nartificial thing after all.",
+      "start": 3423.412,
+      "duration": 6.123000000000502,
+      "language": "en"
+    },
+    {
+      "text": "Instead of counting pixels, maybe we're actually trying\nto count whether the number",
+      "start": 3429.535,
+      "duration": 3.507000000000062,
+      "language": "en"
+    },
+    {
+      "text": "of animals or people in\nan image is odd or even.",
+      "start": 3433.042,
+      "duration": 3.382,
+      "language": "en"
+    },
+    {
+      "text": "So this kind of a parity problem",
+      "start": 3436.424,
+      "duration": 2.58,
+      "language": "en"
+    },
+    {
+      "text": "of separating odds from evens",
+      "start": 3439.004,
+      "duration": 2.141,
+      "language": "en"
+    },
+    {
+      "text": "is something that linear classification really struggles with traditionally.",
+      "start": 3441.145,
+      "duration": 4.579999999999927,
+      "language": "en"
+    },
+    {
+      "text": "Other situations where a linear\nclassifier really struggles",
+      "start": 3448.376,
+      "duration": 3.062,
+      "language": "en"
+    },
+    {
+      "text": "are multimodal situations.",
+      "start": 3451.438,
+      "duration": 2.536,
+      "language": "en"
+    },
+    {
+      "text": "So here on the right, maybe our blue category has\nthese three different islands",
+      "start": 3453.974,
+      "duration": 5.567000000000007,
+      "language": "en"
+    },
+    {
+      "text": "of where the blue category lives,",
+      "start": 3459.541,
+      "duration": 2.374,
+      "language": "en"
+    },
+    {
+      "text": "and then everything else\nis some other category.",
+      "start": 3461.915,
+      "duration": 2.876,
+      "language": "en"
+    },
+    {
+      "text": "So, for something like horses, we saw on the previous example,",
+      "start": 3464.791,
+      "duration": 3.169999999999618,
+      "language": "en"
+    },
+    {
+      "text": "is something where this\nactually might be happening",
+      "start": 3467.961,
+      "duration": 2.145,
+      "language": "en"
+    },
+    {
+      "text": "in practice. Where there's maybe one\nisland in the pixel space of",
+      "start": 3470.106,
+      "duration": 3.4539999999997235,
+      "language": "en"
+    },
+    {
+      "text": "horses looking to the left, and another island of\nhorses looking to the right.",
+      "start": 3473.56,
+      "duration": 3.7080000000000837,
+      "language": "en"
+    },
+    {
+      "text": "And now there's no good\nway to draw a single linear",
+      "start": 3477.268,
+      "duration": 3.092,
+      "language": "en"
+    },
+    {
+      "text": "boundary between these two\nisolated islands of data.",
+      "start": 3480.36,
+      "duration": 3.397,
+      "language": "en"
+    },
+    {
+      "text": "So anytime where you have multimodal data,",
+      "start": 3483.757,
+      "duration": 3.5,
+      "language": "en"
+    },
+    {
+      "text": "like one class that can appear in\ndifferent regions of space,",
+      "start": 3488.098,
+      "duration": 2.755999999999858,
+      "language": "en"
+    },
+    {
+      "text": "is another place where linear\nclassifiers might struggle.",
+      "start": 3490.854,
+      "duration": 3.109,
+      "language": "en"
+    },
+    {
+      "text": "So there's kind of a lot of problems with linear classifiers, but it\nis a super simple algorithm,",
+      "start": 3493.963,
+      "duration": 4.611999999999625,
+      "language": "en"
+    },
+    {
+      "text": "super nice and easy to interpret\nand easy to understand.",
+      "start": 3498.575,
+      "duration": 3.684,
+      "language": "en"
+    },
+    {
+      "text": "So you'll actually be\nimplementing these things",
+      "start": 3502.259,
+      "duration": 2.153,
+      "language": "en"
+    },
+    {
+      "text": "on your first homework assignment.",
+      "start": 3504.412,
+      "duration": 2.833,
+      "language": "en"
+    },
+    {
+      "text": "At this point, we kind of talked about",
+      "start": 3508.852,
+      "duration": 2.1280000000001564,
+      "language": "en"
+    },
+    {
+      "text": "what is the functional\nform corresponding to a",
+      "start": 3510.98,
+      "duration": 2.333,
+      "language": "en"
+    },
+    {
+      "text": "linear classifier. And we've seen that this functional form",
+      "start": 3513.313,
+      "duration": 3.3980000000001382,
+      "language": "en"
+    },
+    {
+      "text": "of matrix vector multiply",
+      "start": 3516.711,
+      "duration": 2.474,
+      "language": "en"
+    },
+    {
+      "text": "corresponds this idea of template matching",
+      "start": 3519.185,
+      "duration": 2.356,
+      "language": "en"
+    },
+    {
+      "text": "and learning a single\ntemplate for each category in your data.",
+      "start": 3521.541,
+      "duration": 3.380999999999858,
+      "language": "en"
+    },
+    {
+      "text": "And then once we have this trained matrix",
+      "start": 3524.922,
+      "duration": 3.417,
+      "language": "en"
+    },
+    {
+      "text": "you can use it to actually\ngo and get your scores",
+      "start": 3529.485,
+      "duration": 3.014,
+      "language": "en"
+    },
+    {
+      "text": "for any new training example.",
+      "start": 3532.499,
+      "duration": 3.239,
+      "language": "en"
+    },
+    {
+      "text": "But what we have not told you is",
+      "start": 3535.738,
+      "duration": 2.366,
+      "language": "en"
+    },
+    {
+      "text": "how do you actually go\nabout choosing the right W",
+      "start": 3538.104,
+      "duration": 2.493,
+      "language": "en"
+    },
+    {
+      "text": "for your dataset. We've just talked about\nwhat is the functional form",
+      "start": 3540.597,
+      "duration": 3.3109999999996944,
+      "language": "en"
+    },
+    {
+      "text": "and what is going on with this thing.",
+      "start": 3543.908,
+      "duration": 2.999,
+      "language": "en"
+    },
+    {
+      "text": "So that's something we'll\nreally focus on next time.",
+      "start": 3546.907,
+      "duration": 4.179,
+      "language": "en"
+    },
+    {
+      "text": "And next lecture we'll talk about what are the strategies and algorithms",
+      "start": 3551.086,
+      "duration": 3.5820000000003347,
+      "language": "en"
+    },
+    {
+      "text": "for choosing the right W. And this will lead us to questions",
+      "start": 3554.668,
+      "duration": 3.0399999999999636,
+      "language": "en"
+    },
+    {
+      "text": "of loss functions and optimization and eventually ConvNets.",
+      "start": 3557.708,
+      "duration": 3.613999999999578,
+      "language": "en"
+    },
+    {
+      "text": "So, that's a bit of the\npreview for next week.",
+      "start": 3561.322,
+      "duration": 3.722,
+      "language": "en"
+    },
+    {
+      "text": "And that's all we have for today.",
+      "start": 3565.044,
+      "duration": 2.75,
+      "language": "en"
+    }
+  ]
+}

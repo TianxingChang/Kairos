@@ -22,6 +22,11 @@ def create_app() -> FastAPI:
     # Add v1 router
     app.include_router(v1_router)
 
+    # Add root health check for Docker
+    @app.get("/health")
+    async def root_health():
+        return {"status": "healthy", "service": "steep-ai-backend"}
+
     # Add static file serving for demo pages
     static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
     if os.path.exists(static_dir):
