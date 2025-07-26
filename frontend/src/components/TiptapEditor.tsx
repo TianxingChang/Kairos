@@ -8,7 +8,6 @@ import Image from "@tiptap/extension-image";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
 import Dropcursor from "@tiptap/extension-dropcursor";
-import Highlight from "@tiptap/extension-highlight";
 import { createLowlight, common } from "lowlight";
 import { Button } from "@/components/ui/button";
 import { TimestampExtension } from "@/extensions/TimestampExtension";
@@ -53,7 +52,6 @@ export function TiptapEditor({
   const { currentVideoTime } = useAppStore();
   const [showAIQuery, setShowAIQuery] = useState(false);
   const [aiQuerySelectedText, setAiQuerySelectedText] = useState<string>("");
-  const [savedSelection, setSavedSelection] = useState<{ from: number; to: number } | null>(null);
   const [selectionMenu, setSelectionMenu] = useState({
     isVisible: false,
     position: { x: 0, y: 0 },
@@ -67,7 +65,6 @@ export function TiptapEditor({
   const handleCloseAIQuery = useCallback(() => {
     setShowAIQuery(false);
     setAiQuerySelectedText(""); // 清空选中文本
-    setSavedSelection(null); // 清空保存的选择信息，这会触发useEffect移除高亮
     setSelectionMenu((prev) => ({ ...prev, isVisible: false })); // 隐藏选择菜单
   }, []);
 
@@ -105,9 +102,6 @@ export function TiptapEditor({
         width: 3,
       }),
       TimestampExtension,
-      Highlight.configure({
-        multicolor: true,
-      }),
       SlashCommand(onScreenshot, currentVideoTime, handleShowAIQuery),
     ],
     content,
@@ -445,28 +439,11 @@ export function TiptapEditor({
   }, [editor]);
 
   // 处理选择菜单的操作
-  const handleSelectionAskAI = useCallback(
-    (selectedText: string) => {
-      if (!editor) return;
-
-      // 保存当前选中的位置信息
-      const { from, to } = editor.state.selection;
-      setSavedSelection({ from, to });
-
-      // 给选中的文本添加临时高亮标记
-      editor
-        .chain()
-        .focus()
-        .setTextSelection({ from, to })
-        .setMark("highlight", { backgroundColor: "rgba(59, 130, 246, 0.3)" })
-        .run();
-
-      // 保存选中的文本并打开AI查询面板
-      setAiQuerySelectedText(selectedText);
-      setShowAIQuery(true);
-    },
-    [editor]
-  );
+  const handleSelectionAskAI = useCallback((selectedText: string) => {
+    // 保存选中的文本并打开AI查询面板
+    setAiQuerySelectedText(selectedText);
+    setShowAIQuery(true);
+  }, []);
 
   const handleSelectionMenuClose = useCallback(() => {
     setSelectionMenu((prev) => ({ ...prev, isVisible: false }));
@@ -483,19 +460,6 @@ export function TiptapEditor({
       window.removeEventListener("feynman-notes-trigger", handleFeynmanEvent);
     };
   }, [handleFeynmanNotes]);
-
-  // 处理移除临时高亮标记
-  useEffect(() => {
-    if (!showAIQuery && editor && savedSelection) {
-      // AI面板关闭时移除高亮
-      editor
-        .chain()
-        .focus()
-        .setTextSelection({ from: savedSelection.from, to: savedSelection.to })
-        .unsetMark("highlight")
-        .run();
-    }
-  }, [showAIQuery, editor, savedSelection]);
 
   if (!editor) {
     return null;
@@ -627,28 +591,6 @@ export function TiptapEditor({
 
         .tiptap-content .ProseMirror p:last-child {
           margin-bottom: 0;
-        }
-
-        /* AI查询时的高亮样式 */
-        .tiptap-content .ProseMirror mark[data-color] {
-          border-radius: 3px;
-          padding: 2px 4px;
-          color: inherit;
-          position: relative;
-        }
-
-        .tiptap-content .ProseMirror mark[style*="rgba(59, 130, 246"] {
-          animation: ai-highlight-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes ai-highlight-pulse {
-          0%,
-          100% {
-            background-color: rgba(59, 130, 246, 0.3) !important;
-          }
-          50% {
-            background-color: rgba(59, 130, 246, 0.5) !important;
-          }
         }
 
         .tiptap-content .ProseMirror h1,
