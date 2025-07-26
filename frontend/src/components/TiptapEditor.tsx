@@ -126,8 +126,8 @@ export function TiptapEditor({
           let centerX = coordsStart.left + (coordsEnd.right - coordsStart.left) / 2;
 
           // 菜单尺寸
-          const menuWidth = 180; // 菜单宽度（稍微比min-width大一些）
-          const menuHeight = 120;
+          const menuWidth = 150; // 菜单宽度（调整为更紧凑的尺寸）
+          const menuHeight = 50; // 只有一个按钮，高度更小
           const halfMenuWidth = menuWidth / 2;
 
           // 确保菜单不超出编辑器的左右边界
@@ -444,27 +444,6 @@ export function TiptapEditor({
     });
     window.dispatchEvent(event);
   }, []);
-
-  const handleSelectionCopy = useCallback(() => {
-    if (selectionMenu.selectedText) {
-      navigator.clipboard
-        .writeText(selectionMenu.selectedText)
-        .then(() => {
-          // 可以添加一个toast提示复制成功
-          console.log("文本已复制到剪贴板");
-        })
-        .catch((err) => {
-          console.error("复制失败:", err);
-        });
-    }
-  }, [selectionMenu.selectedText]);
-
-  const handleSelectionDelete = useCallback(() => {
-    if (editor && !editor.state.selection.empty) {
-      editor.chain().focus().deleteSelection().run();
-    }
-    setSelectionMenu((prev) => ({ ...prev, isVisible: false }));
-  }, [editor]);
 
   const handleSelectionMenuClose = useCallback(() => {
     setSelectionMenu((prev) => ({ ...prev, isVisible: false }));
@@ -950,8 +929,6 @@ export function TiptapEditor({
         position={selectionMenu.position}
         selectedText={selectionMenu.selectedText}
         onAskAI={handleSelectionAskAI}
-        onCopy={handleSelectionCopy}
-        onDelete={handleSelectionDelete}
         onClose={handleSelectionMenuClose}
       />
     </div>
