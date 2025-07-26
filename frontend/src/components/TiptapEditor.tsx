@@ -118,19 +118,46 @@ export function TiptapEditor({
           const coordsStart = editor.view.coordsAtPos(from);
           const coordsEnd = editor.view.coordsAtPos(to);
 
-          // 计算选中区域的中心点
-          const centerX = coordsStart.left + (coordsEnd.right - coordsStart.left) / 2;
+          // 获取编辑器容器的边界
+          const editorElement = editor.view.dom;
+          const editorRect = editorElement.getBoundingClientRect();
 
-          // 菜单高度约为120px，检查上方是否有足够空间
+          // 计算选中区域的中心点
+          let centerX = coordsStart.left + (coordsEnd.right - coordsStart.left) / 2;
+
+          // 菜单尺寸
+          const menuWidth = 180; // 菜单宽度（稍微比min-width大一些）
           const menuHeight = 120;
-          const spaceAbove = coordsStart.top;
-          const spaceBelow = window.innerHeight - coordsEnd.bottom;
+          const halfMenuWidth = menuWidth / 2;
+
+          // 确保菜单不超出编辑器的左右边界
+          const editorLeft = editorRect.left;
+          const editorRight = editorRect.right;
+
+          if (centerX - halfMenuWidth < editorLeft) {
+            // 菜单左侧会超出编辑器，调整到编辑器左边界
+            centerX = editorLeft + halfMenuWidth + 10;
+          } else if (centerX + halfMenuWidth > editorRight) {
+            // 菜单右侧会超出编辑器，调整到编辑器右边界
+            centerX = editorRight - halfMenuWidth - 10;
+          }
+
+          // 检查上下空间（相对于编辑器容器）
+          const spaceAbove = coordsStart.top - editorRect.top;
+          const spaceBelow = editorRect.bottom - coordsEnd.bottom;
 
           // 智能选择菜单位置：优先在上方，空间不足时放在下方
           const showAbove = spaceAbove >= menuHeight + 10;
-          const positionY = showAbove
+          let positionY = showAbove
             ? coordsStart.top - menuHeight - 10 // 上方显示
             : coordsEnd.bottom + 10; // 下方显示
+
+          // 确保菜单不超出编辑器的上下边界
+          if (positionY < editorRect.top) {
+            positionY = editorRect.top + 10;
+          } else if (positionY + menuHeight > editorRect.bottom) {
+            positionY = editorRect.bottom - menuHeight - 10;
+          }
 
           setSelectionMenu({
             isVisible: true,

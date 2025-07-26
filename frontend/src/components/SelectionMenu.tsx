@@ -54,11 +54,12 @@ export function SelectionMenu({
   return (
     <div
       ref={menuRef}
-      className="fixed z-50 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[160px] max-w-[200px]"
+      className="fixed z-50 bg-white border border-gray-200 rounded-lg shadow-xl py-1 min-w-[160px] max-w-[200px] backdrop-blur-sm"
       style={{
         left: position.x,
         top: position.y,
         transform: "translateX(-50%)",
+        boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
       }}
     >
       {/* Ask AI 按钮 */}
