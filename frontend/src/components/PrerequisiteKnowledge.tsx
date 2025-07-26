@@ -2,23 +2,32 @@
 
 import { Card } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAppStore } from "@/store/appStore";
+import { useAppStore } from "@/store";
 import { ChevronDown, ChevronRight, Clock, Play } from "lucide-react";
-import type { KnowledgePoint } from "@/store/appStore";
+import type { KnowledgePoint } from "@/types";
 
 function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 }
 
 function KnowledgePointItem({ point }: { point: KnowledgePoint }) {
+  const handleJumpToTime = () => {
+    // 使用全局播放器控制方法跳转到指定时间
+    if (typeof window !== 'undefined' && window.videoPlayer) {
+      window.videoPlayer.seekTo(point.timestamp);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -10 }}
       className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer group"
+      onClick={handleJumpToTime}
+      title={`点击跳转到 ${formatTime(point.timestamp)}`}
     >
       <div className="flex-shrink-0 mt-1">
         <Play className="w-4 h-4 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
@@ -27,9 +36,7 @@ function KnowledgePointItem({ point }: { point: KnowledgePoint }) {
         <h4 className="font-medium text-sm mb-1 group-hover:text-primary transition-colors">
           {point.title}
         </h4>
-        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
-          {point.description}
-        </p>
+        <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{point.description}</p>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <Clock className="w-3 h-3" />
           <span>{formatTime(point.timestamp)}</span>
@@ -60,7 +67,7 @@ export function PrerequisiteKnowledge() {
       className="mt-6 space-y-4"
     >
       <h3 className="text-lg font-semibold mb-4">前置知识模块</h3>
-      
+
       <div className="space-y-3">
         {currentVideo.prerequisites.map((module) => (
           <Card key={module.id} className="overflow-hidden">
@@ -78,16 +85,14 @@ export function PrerequisiteKnowledge() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-base mb-1">{module.title}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {module.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{module.description}</p>
                   <div className="mt-2 text-xs text-muted-foreground">
                     {module.knowledgePoints.length} 个知识点
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <AnimatePresence>
               {module.isExpanded && (
                 <motion.div

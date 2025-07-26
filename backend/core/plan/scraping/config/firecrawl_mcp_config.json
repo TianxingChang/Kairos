@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "firecrawl": {
+      "command": "uvx",
+      "args": [
+        "firecrawl-mcp-server@latest"
+      ],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}",
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "scrape",
+        "search",
+        "crawl"
+      ]
+    }
+  }
+}

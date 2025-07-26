@@ -1,0 +1,1 @@
+"""Data models specific to web scraping operations."""

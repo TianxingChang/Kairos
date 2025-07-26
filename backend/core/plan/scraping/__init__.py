@@ -1,0 +1,1 @@
+"""Web scraping module for learning resource discovery and extraction."""

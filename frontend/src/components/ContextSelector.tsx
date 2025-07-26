@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useAppStore, type ContextItem } from "@/store/appStore";
+import { useAppStore } from "@/store";
+import type { ContextItem } from "@/types";
 import { X, Clock, FileText, Video, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -15,13 +16,8 @@ interface ContextSelectorProps {
 export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const {
-    selectedContexts,
-    currentVideo,
-    currentVideoTime,
-    addContext,
-    removeContext,
-  } = useAppStore();
+  const { selectedContexts, currentVideo, currentVideoTime, addContext, removeContext } =
+    useAppStore();
 
   // 点击外部关闭菜单 & ESC 键关闭菜单
   useEffect(() => {
@@ -73,7 +69,7 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
     {
       id: "current-video-time",
       type: "video",
-      title: `视频时间点 ${formatTime(currentVideoTime)}`,
+      title: `视频时间点提问`,
       description: currentVideo.title,
       timestamp: currentVideoTime,
     },
@@ -107,39 +103,65 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
     setIsOpen(false);
   };
 
+  const handleJumpToTime = (timestamp: number) => {
+    // 使用全局播放器控制方法跳转到指定时间
+    if (typeof window !== 'undefined' && window.videoPlayer) {
+      window.videoPlayer.seekTo(timestamp);
+    }
+  };
+
   return (
-    <div className="relative">
+    <div className="relative flex items-center min-h-[28px]">
       {/* Context 显示区域 */}
       {selectedContexts.length > 0 && (
-        <div className="mb-3 space-y-2">
+        <div className="flex flex-wrap gap-2">
           <AnimatePresence>
-            {selectedContexts.map((context) => (
-              <motion.div
-                key={context.id}
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg text-sm"
-              >
-                {getContextIcon(context.type)}
-                <span className="font-medium">{context.title}</span>
-                {context.timestamp !== undefined && (
-                  <span className="text-muted-foreground flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {formatTime(context.timestamp)}
-                  </span>
-                )}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-5 w-5 ml-auto"
-                  onClick={() => removeContext(context.id)}
+            {selectedContexts.map((context) => {
+              // 为"当前视频时间点"动态更新显示内容
+              const isCurrentVideoTime = context.id === "current-video-time";
+              const displayTitle = isCurrentVideoTime 
+                ? `视频时间点提问`
+                : context.title;
+              const displayTimestamp = isCurrentVideoTime 
+                ? currentVideoTime 
+                : context.timestamp;
+              
+
+              return (
+                <motion.div
+                  key={context.id}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-center gap-2 px-2 py-1 bg-muted rounded-md text-xs"
                 >
-                  <X className="w-3 h-3" />
-                </Button>
-              </motion.div>
-            ))}
+                  {getContextIcon(context.type)}
+                  <span className="font-medium">{displayTitle}</span>
+                  {displayTimestamp !== undefined && (
+                    <span 
+                      className="text-muted-foreground flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleJumpToTime(displayTimestamp);
+                      }}
+                      title="点击跳转到此时间点"
+                    >
+                      <Clock className="w-3 h-3" />
+                      {formatTime(displayTimestamp)}
+                    </span>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-4 w-4 ml-auto"
+                    onClick={() => removeContext(context.id)}
+                  >
+                    <X className="w-2.5 h-2.5" />
+                  </Button>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
       )}
@@ -159,9 +181,7 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
               <h3 className="font-semibold mb-3">选择上下文</h3>
               <div className="space-y-2">
                 {availableContexts.map((context) => {
-                  const isSelected = selectedContexts.find(
-                    (ctx) => ctx.id === context.id
-                  );
+                  const isSelected = selectedContexts.find((ctx) => ctx.id === context.id);
                   return (
                     <Button
                       key={context.id}
@@ -181,7 +201,14 @@ export function ContextSelector({ isOpen, setIsOpen }: ContextSelectorProps) {
                           )}
                         </div>
                         {context.timestamp !== undefined && (
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <span 
+                            className="text-xs text-muted-foreground flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleJumpToTime(context.timestamp!);
+                            }}
+                            title="点击跳转到此时间点"
+                          >
                             <Clock className="w-3 h-3" />
                             {formatTime(context.timestamp)}
                           </span>

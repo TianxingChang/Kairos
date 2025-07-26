@@ -1,4 +1,4 @@
-FROM agnohq/python:3.12
+FROM python:3.12-slim
 
 ARG USER=app
 ARG APP_DIR=/app
@@ -13,7 +13,8 @@ WORKDIR ${APP_DIR}
 # Copy requirements.txt
 COPY requirements.txt ./
 
-# Install requirements
+# Install uv and requirements
+RUN pip install uv
 RUN uv pip sync requirements.txt --system
 
 # Copy project files

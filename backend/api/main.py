@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
+import os
 
 from api.routes.v1_router import v1_router
 from api.settings import api_settings
@@ -19,6 +21,11 @@ def create_app() -> FastAPI:
 
     # Add v1 router
     app.include_router(v1_router)
+
+    # Add static file serving for demo pages
+    static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
+    if os.path.exists(static_dir):
+        app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
     # Add Middlewares
     app.add_middleware(
