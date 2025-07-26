@@ -65,7 +65,7 @@ export function ChatMessage({ message, mounted = true }: ChatMessageProps) {
         }`}
       >
         {/* 消息内容 */}
-        <div className="text-sm break-words leading-relaxed">
+        <div className="text-[13px] break-words leading-relaxed">
           {isUser ? (
             // 用户消息：纯文本
             <p className="whitespace-pre-wrap">{message.content}</p>
@@ -117,7 +117,7 @@ export function ChatMessage({ message, mounted = true }: ChatMessageProps) {
                   <ol className="list-decimal ml-4 mb-3 last:mb-0 space-y-1">{children}</ol>
                 ),
                 li: ({ children }) => (
-                  <li className="text-sm leading-relaxed pl-1">{children}</li>
+                  <li className="text-[13px] leading-relaxed pl-1">{children}</li>
                 ),
                 // 标题样式 - 优化层级和间距
                 h1: ({ children }) => (
@@ -126,13 +126,13 @@ export function ChatMessage({ message, mounted = true }: ChatMessageProps) {
                   </h1>
                 ),
                 h2: ({ children }) => (
-                  <h2 className="text-sm font-bold mb-2 mt-3 first:mt-0">{children}</h2>
+                  <h2 className="text-[14px] font-bold mb-2 mt-3 first:mt-0">{children}</h2>
                 ),
                 h3: ({ children }) => (
-                  <h3 className="text-sm font-semibold mb-2 mt-2 first:mt-0">{children}</h3>
+                  <h3 className="text-[13px] font-semibold mb-2 mt-2 first:mt-0">{children}</h3>
                 ),
                 h4: ({ children }) => (
-                  <h4 className="text-sm font-medium mb-1 mt-2 first:mt-0">{children}</h4>
+                  <h4 className="text-[13px] font-medium mb-1 mt-2 first:mt-0">{children}</h4>
                 ),
                 // 引用样式 - 改进视觉效果
                 blockquote: ({ children }) => (
@@ -167,12 +167,12 @@ export function ChatMessage({ message, mounted = true }: ChatMessageProps) {
                   <thead className="bg-muted/30">{children}</thead>
                 ),
                 th: ({ children }) => (
-                  <th className="border border-muted/50 px-3 py-2 font-semibold text-xs text-left">
+                  <th className="border border-muted/50 px-3 py-2 font-semibold text-[12px] text-left">
                     {children}
                   </th>
                 ),
                 td: ({ children }) => (
-                  <td className="border border-muted/50 px-3 py-2 text-xs">{children}</td>
+                  <td className="border border-muted/50 px-3 py-2 text-[12px]">{children}</td>
                 ),
                 // 强调样式
                 strong: ({ children }) => (
