@@ -11,6 +11,7 @@ import Dropcursor from "@tiptap/extension-dropcursor";
 import { createLowlight, common } from "lowlight";
 import { Button } from "@/components/ui/button";
 import { TimestampExtension } from "@/extensions/TimestampExtension";
+import SlashCommand from "@/extensions/SlashCommand";
 import {
   Bold,
   Italic,
@@ -85,6 +86,7 @@ export function TiptapEditor({
         width: 3,
       }),
       TimestampExtension,
+      SlashCommand(onScreenshot, currentVideoTime),
     ],
     content,
     immediatelyRender: false, // 修复SSR水合问题

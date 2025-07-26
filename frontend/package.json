@@ -11,6 +11,7 @@
   "dependencies": {
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
+    "@tiptap/core": "^3.0.7",
     "@tiptap/extension-code-block-lowlight": "^3.0.7",
     "@tiptap/extension-dropcursor": "^3.0.7",
     "@tiptap/extension-image": "^3.0.7",
@@ -20,6 +21,8 @@
     "@tiptap/extension-typography": "^3.0.7",
     "@tiptap/react": "^3.0.7",
     "@tiptap/starter-kit": "^3.0.7",
+    "@tiptap/suggestion": "^3.0.7",
+    "@types/tippy.js": "^6.3.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.7",
@@ -36,6 +39,7 @@
     "react-syntax-highlighter": "^15.6.1",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.3.1",
+    "tippy.js": "^6.3.7",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
