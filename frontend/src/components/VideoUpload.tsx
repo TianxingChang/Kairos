@@ -6,14 +6,20 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import { Upload, Link, Play, FileVideo } from "lucide-react";
+import { Upload, Link, Play, FileVideo, AlertCircle, CheckCircle } from "lucide-react";
 import { useAppStore } from "@/store";
+import { videoQAService } from "@/services/videoQAService";
 
 export function VideoUpload() {
   const [uploadType, setUploadType] = useState<"url" | "file">("url");
   const [videoUrl, setVideoUrl] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<{
+    status: 'idle' | 'uploading' | 'processing' | 'ready' | 'error';
+    message: string;
+    videoId?: string;
+  }>({ status: 'idle', message: '' });
 
   const router = useRouter();
   const { setCurrentVideo } = useAppStore();
@@ -57,45 +63,111 @@ export function VideoUpload() {
     if (!videoUrl.trim()) return;
 
     setIsLoading(true);
+    setUploadStatus({ status: 'idle', message: '' });
 
     try {
       let finalUrl = videoUrl;
       let finalTitle = "视频学习";
       let finalDescription = "开始学习这个视频内容";
+      let videoId: string | null = null;
 
-      // 如果是 YouTube URL，转换为标准格式并获取视频信息
+      // 如果是 YouTube URL，上传到后端处理transcript
       if (validateYouTubeUrl(videoUrl)) {
-        const videoId = extractVideoId(videoUrl);
+        videoId = extractVideoId(videoUrl);
         if (videoId) {
           finalUrl = `https://www.youtube.com/watch?v=${videoId}`;
-          // 自动获取 YouTube 视频信息
+          
+          // 先获取YouTube视频信息用于显示
           const youtubeInfo = await extractYouTubeInfo(videoId);
           finalTitle = youtubeInfo.title;
           finalDescription = youtubeInfo.description;
+
+          // 🔥 关键修复：调用后端上传API来触发transcript下载
+          setUploadStatus({ status: 'uploading', message: '正在上传视频到后端处理...' });
+          
+          const uploadResponse = await videoQAService.uploadYouTubeVideo({
+            url: finalUrl,
+            user_id: 'frontend_user',
+          });
+
+          if (!uploadResponse.success) {
+            throw new Error(uploadResponse.error || '后端处理失败');
+          }
+
+          if (uploadResponse.status === 'ready') {
+            setUploadStatus({
+              status: 'ready',
+              message: `视频已准备就绪！Transcript已下载完成。`,
+              videoId: uploadResponse.video_id,
+            });
+          } else if (uploadResponse.status === 'processing') {
+            setUploadStatus({
+              status: 'processing',
+              message: '正在后台处理transcript，请稍候...',
+              videoId: uploadResponse.video_id,
+            });
+            
+            // 开始轮询状态
+            await pollVideoStatus(uploadResponse.video_id);
+          }
         }
       } else {
-        // 非 YouTube 链接，使用通用标题
+        // 非 YouTube 链接，直接使用（无需transcript处理）
         finalTitle = "在线视频学习";
         finalDescription = "学习在线视频内容";
+        setUploadStatus({
+          status: 'ready',
+          message: '非YouTube视频，直接进入学习模式',
+        });
       }
 
-      // 更新视频信息到 store
+      // 更新视频信息到 store，包含videoId用于后续问答
       setCurrentVideo({
         url: finalUrl,
         title: finalTitle,
         description: finalDescription,
-        prerequisites: [], // 新上传的视频暂时没有预设的先决条件
+        prerequisites: [],
+        videoId: videoId || undefined, // 添加videoId到store
       });
 
-      // 跳转到学习页面
-      console.log("Video uploaded successfully, navigating to /learn");
-      // 使用window.location确保跳转成功
-      window.location.href = "/learn";
+      // 短暂延迟后跳转，让用户看到成功状态
+      setTimeout(() => {
+        console.log("Video uploaded successfully, navigating to /learn");
+        window.location.href = "/learn";
+      }, 1500);
+
     } catch (error) {
       console.error("Failed to load video:", error);
-      alert("视频加载失败，请检查链接是否正确");
+      setUploadStatus({
+        status: 'error',
+        message: `处理失败: ${error instanceof Error ? error.message : '未知错误'}`,
+      });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const pollVideoStatus = async (videoId: string) => {
+    try {
+      const status = await videoQAService.pollVideoStatus(videoId, 20, 10000);
+      
+      if (status.status === 'ready') {
+        setUploadStatus({
+          status: 'ready',
+          message: `视频处理完成！Transcript已准备就绪，即将进入学习模式...`,
+          videoId,
+        });
+      } else {
+        setUploadStatus({
+          status: 'error',
+          message: '视频处理失败或超时，但您仍可以观看视频',
+        });
+      }
+    } catch (error) {
+      setUploadStatus({
+        status: 'error',
+        message: '状态检查失败，但您仍可以观看视频',
+      });
     }
   };
 
@@ -255,6 +327,28 @@ export function VideoUpload() {
                 </>
               )}
             </Button>
+
+            {/* 上传状态显示 */}
+            {uploadStatus.message && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mt-4 flex items-center gap-2 p-3 rounded-lg text-sm ${
+                  uploadStatus.status === 'error' ? 'bg-red-50 text-red-700 border border-red-200' :
+                  uploadStatus.status === 'ready' ? 'bg-green-50 text-green-700 border border-green-200' :
+                  'bg-blue-50 text-blue-700 border border-blue-200'
+                }`}
+              >
+                {uploadStatus.status === 'uploading' || uploadStatus.status === 'processing' ? (
+                  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                ) : uploadStatus.status === 'ready' ? (
+                  <CheckCircle className="w-4 h-4" />
+                ) : uploadStatus.status === 'error' ? (
+                  <AlertCircle className="w-4 h-4" />
+                ) : null}
+                <span>{uploadStatus.message}</span>
+              </motion.div>
+            )}
           </motion.div>
         </Card>
       </motion.div>

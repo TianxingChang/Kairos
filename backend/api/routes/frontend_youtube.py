@@ -130,53 +130,85 @@ async def get_youtube_status(video_id: str):
     获取YouTube视频的详细处理状态
     
     提供比通用状态检查更详细的YouTube特定信息
+    优先使用文件存储，数据库作为补充信息
     """
     try:
         from db.session import SessionLocal
         from db.youtube_service import get_video_info, get_video_transcript_from_file
+        from core.file_storage import transcript_storage
         
-        db = SessionLocal()
+        # 首先直接检查文件存储（更可靠）
+        file_exists = transcript_storage.file_exists(video_id)
+        transcript = None
+        file_info = None
+        
+        if file_exists:
+            try:
+                file_data = transcript_storage.load_transcript(video_id)
+                if file_data and 'transcript' in file_data:
+                    transcript = file_data['transcript']
+                    file_info = {
+                        "segment_count": len(transcript),
+                        "language": file_data.get('metadata', {}).get('language', 'en'),
+                        "file_size": transcript_storage.get_file_info(video_id).get('size_bytes', 0),
+                        "created_at": file_data.get('created_at')
+                    }
+            except Exception as e:
+                print(f"文件加载失败: {e}")
+        
+        has_transcript = transcript is not None and len(transcript) > 0
+        
+        # 尝试获取数据库信息作为补充
+        video_info = None
         try:
-            video_info = get_video_info(db, video_id)
-            transcript = get_video_transcript_from_file(db, video_id)
-            
-            has_transcript = transcript is not None and len(transcript) > 0
-            
-            # 判断状态
-            if has_transcript:
-                status = "ready"
-                message = "视频转录已准备就绪，可以进行问答"
-            elif video_info:
-                status = "processing"
-                message = "视频信息已获取，转录文本处理中"
-            else:
-                status = "not_found"
-                message = "视频未找到，可能需要重新上传处理"
-            
-            return {
-                "success": True,
-                "video_id": video_id,
-                "status": status,
-                "message": message,
-                "ready_for_qa": has_transcript,
-                "video_info": {
-                    "title": video_info.title if video_info else None,
-                    "duration": video_info.duration if video_info else None,
-                    "channel": video_info.channel_name if video_info else None,
-                    "upload_date": video_info.upload_date.isoformat() if video_info and video_info.upload_date else None,
-                    "created_at": video_info.created_at.isoformat() if video_info and video_info.created_at else None
-                } if video_info else None,
-                "transcript_info": {
-                    "segment_count": len(transcript) if transcript else 0,
-                    "language": video_info.transcript_language if video_info else None,
-                    "file_path": video_info.transcript_file_path if video_info else None,
-                    "file_size": video_info.transcript_file_size if video_info else None,
-                    "created_at": video_info.transcript_created_at.isoformat() if video_info and video_info.transcript_created_at else None
-                } if has_transcript else None
-            }
-            
-        finally:
-            db.close()
+            db = SessionLocal()
+            try:
+                video_info = get_video_info(db, video_id)
+                # 如果文件存在但数据库中没有transcript信息，也尝试从数据库获取
+                if not transcript:
+                    transcript = get_video_transcript_from_file(db, video_id)
+                    has_transcript = transcript is not None and len(transcript) > 0
+            finally:
+                db.close()
+        except Exception as db_error:
+            print(f"数据库查询失败，使用文件存储结果: {db_error}")
+        
+        # 判断状态（优先基于文件存储）
+        if has_transcript:
+            status = "ready"
+            message = "视频转录已准备就绪，可以进行问答"
+        elif video_info:
+            status = "processing"
+            message = "视频信息已获取，转录文本处理中"
+        elif file_exists:
+            # 文件存在但无法加载，可能是损坏
+            status = "error"
+            message = "转录文件存在但无法加载，可能已损坏"
+        else:
+            status = "not_found"
+            message = "视频未找到，可能需要重新上传处理"
+        
+        return {
+            "success": True,
+            "video_id": video_id,
+            "status": status,
+            "message": message,
+            "ready_for_qa": has_transcript,
+            "video_info": {
+                "title": video_info.title if video_info else None,
+                "duration": video_info.duration if video_info else None,
+                "channel": video_info.channel_name if video_info else None,
+                "upload_date": video_info.upload_date.isoformat() if video_info and video_info.upload_date else None,
+                "created_at": video_info.created_at.isoformat() if video_info and video_info.created_at else None
+            } if video_info else None,
+            "transcript_info": file_info if has_transcript and file_info else {
+                "segment_count": len(transcript) if transcript else 0,
+                "language": video_info.transcript_language if video_info else None,
+                "file_path": video_info.transcript_file_path if video_info else None,
+                "file_size": video_info.transcript_file_size if video_info else None,
+                "created_at": video_info.transcript_created_at.isoformat() if video_info and video_info.transcript_created_at else None
+            } if has_transcript else None
+        }
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"检查状态失败: {str(e)}")

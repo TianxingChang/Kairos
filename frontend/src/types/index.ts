@@ -39,6 +39,7 @@ export interface Video {
   title: string;
   description: string;
   prerequisites: PrerequisiteModule[];
+  videoId?: string; // YouTube视频ID，用于后端问答
 }
 
 // API 相关类型

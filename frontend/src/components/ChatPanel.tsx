@@ -30,23 +30,31 @@ export function ChatPanel() {
     setContextMenuOpen,
     toggleContextMenu,
     currentVideo,
+    currentVideoTime,
     selectedContexts,
     addContext,
+    addMessage,
   } = useAppStore();
 
   // 使用hooks
   const { isSending, sendToWebAgent } = useChat();
+  
+  // 本地状态管理
+  const [isVideoQASending, setIsVideoQASending] = useState(false);
+  
+  // 统一的发送状态
+  const isAnySending = isSending || isVideoQASending;
 
   // 记录加载开始时间
   useEffect(() => {
-    if (isSending && !loadingStartTimeRef.current) {
+    if (isAnySending && !loadingStartTimeRef.current) {
       loadingStartTimeRef.current = new Date();
-    } else if (!isSending) {
+    } else if (!isAnySending) {
       loadingStartTimeRef.current = null;
     }
-  }, [isSending]);
+  }, [isAnySending]);
   const messagesEndRef = useScrollToBottom<HTMLDivElement>({
-    dependencies: [messages, isSending, mounted],
+    dependencies: [messages, isAnySending, mounted],
   });
   useAutoResize(textareaRef, chatInput);
 
@@ -71,17 +79,89 @@ export function ChatPanel() {
   }, [mounted, hasInitialized, selectedContexts.length, currentVideo.title, addContext]);
 
   const handleSendMessage = async () => {
-    if (!chatInput.trim() || isSending) return;
+    if (!chatInput.trim() || isAnySending) return;
 
     const userMessage = chatInput.trim();
     setChatInput("");
 
     try {
-      // 默认使用 web search agent
-      await sendToWebAgent(userMessage);
+      // 检查是否有视频时间点上下文
+      const videoTimeContext = selectedContexts.find(ctx => 
+        ctx.type === 'video' && ctx.timestamp !== undefined
+      );
+
+      if (videoTimeContext && currentVideo.videoId) {
+        // 使用视频QA功能
+        await handleVideoQA(userMessage, videoTimeContext);
+      } else {
+        // 默认使用 web search agent
+        await sendToWebAgent(userMessage);
+      }
     } catch (error) {
       console.error("Error sending message:", error);
     }
+  };
+
+  const handleVideoQA = async (question: string, context: any) => {
+    // 使用一个本地状态来管理video QA的loading，但这里我们直接使用useChat的isSending
+    // 因为我们需要修改useChat来支持自定义的发送逻辑
+    
+    // 方案1: 创建一个包装函数来统一处理状态
+    return await sendVideoQAMessage(question, context);
+  };
+
+  // 使用useChat模式的video QA发送函数
+  const sendVideoQAMessage = useCallback(async (question: string, context: any) => {
+    if (isAnySending) return;
+
+    setIsVideoQASending(true);
+
+    try {
+      const { videoQAService } = await import('@/services/videoQAService');
+      
+      const timestamp = context.timestamp || currentVideoTime || 0;
+      
+      // 添加用户消息
+      addMessage({
+        content: `@视频时间点(${formatTime(timestamp)}) ${question}`,
+        isUser: true,
+      });
+
+      const response = await videoQAService.askQuestion({
+        video_id: currentVideo.videoId,
+        timestamp: timestamp,
+        question: question,
+        user_id: 'frontend_user',
+        context_before: 20,
+        context_after: 5,
+      });
+
+      if (response.success) {
+        // 添加AI回复
+        addMessage({
+          content: response.answer,
+          isUser: false,
+        });
+      } else {
+        throw new Error(response.error || '视频问答失败');
+      }
+    } catch (error) {
+      console.error('Video QA failed:', error);
+      
+      // 添加错误消息
+      addMessage({
+        content: '抱歉，视频问答失败。请稍后再试。',
+        isUser: false,
+      });
+    } finally {
+      setIsVideoQASending(false);
+    }
+  }, [isAnySending, addMessage, currentVideoTime, currentVideo.videoId]);
+
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -117,7 +197,7 @@ export function ChatPanel() {
               ))}
 
               {/* 加载消息 */}
-              {isSending && (
+              {isAnySending && (
                 <motion.div
                   key="loading"
                   initial={{ opacity: 0, y: 20 }}
@@ -198,26 +278,26 @@ export function ChatPanel() {
                 {/* 发送按钮 */}
                 <motion.div
                   className="flex-shrink-0"
-                  whileHover={!isSending ? { scale: 1.02 } : {}}
-                  whileTap={!isSending ? { scale: 0.98 } : {}}
+                  whileHover={!isAnySending ? { scale: 1.02 } : {}}
+                  whileTap={!isAnySending ? { scale: 0.98 } : {}}
                   transition={{ duration: 0.15, ease: "easeOut" }}
                 >
                   <Button
                     onClick={handleSendMessage}
-                    disabled={!chatInput.trim() || isSending}
+                    disabled={!chatInput.trim() || isAnySending}
                     size="sm"
                     className={`h-7 w-7 p-0 rounded-md border-0 transition-all duration-150 ${
-                      chatInput.trim() && !isSending
+                      chatInput.trim() && !isAnySending
                         ? "bg-[#5B9BD5] hover:bg-[#4A8BC2] shadow-sm"
                         : "bg-gray-300 hover:bg-gray-400"
                     } disabled:cursor-not-allowed`}
                   >
-                    {isSending ? (
+                    {isAnySending ? (
                       <LoadingDots size="sm" className="text-white" />
                     ) : (
                       <ArrowUp
                         className={`w-4 h-4 ${
-                          chatInput.trim() && !isSending ? "text-white" : "text-gray-500"
+                          chatInput.trim() && !isAnySending ? "text-white" : "text-gray-500"
                         }`}
                       />
                     )}

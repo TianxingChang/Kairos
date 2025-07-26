@@ -280,5 +280,6 @@ class TranscriptFileStorage:
 # 全局实例 - 使用本地开发路径
 import os
 current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-local_data_path = os.path.join(current_dir, "data", "transcripts")
+# 修正路径：文件实际存储在 db/data/transcripts
+local_data_path = os.path.join(current_dir, "db", "data", "transcripts")
 transcript_storage = TranscriptFileStorage(base_path=local_data_path)

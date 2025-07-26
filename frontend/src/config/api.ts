@@ -14,6 +14,31 @@ export const API_ENDPOINTS = {
   },
   HEALTH: '/health',
   PLAYGROUND: '/playground',
+  // YouTube 相关接口
+  YOUTUBE: {
+    PROCESS: '/youtube/process',
+    QUICK_PROCESS: '/youtube/quick-process',
+    STATUS: '/youtube/status',
+    TRANSCRIPT: '/youtube/transcript',
+    INFO: '/youtube/info',
+  },
+  // 前端专用接口
+  FRONTEND: {
+    VIDEO_QA: {
+      ASK: '/frontend/video-qa/ask',
+      ASK_FULL: '/frontend/video-qa/ask-full',
+      ASK_FULL_AGENT: '/frontend/video-qa/ask-full-agent',
+      CONTEXT: '/frontend/video-qa/context',
+      PARSE_TIMESTAMP: '/frontend/video-qa/parse-timestamp',
+      VIDEO_STATUS: '/frontend/video-qa/video-status',
+    },
+    YOUTUBE: {
+      UPLOAD: '/frontend/youtube/upload',
+      STATUS: '/frontend/youtube/status',
+      SEARCH: '/frontend/youtube/search',
+      DELETE: '/frontend/youtube/delete',
+    },
+  },
 } as const;
 
 // 默认请求配置
@@ -27,6 +52,7 @@ export const DEFAULT_REQUEST_CONFIG = {
 export const buildApiUrl = (endpoint: string): string => {
   const { BASE_URL, VERSION } = API_CONFIG;
   const baseUrl = BASE_URL || window.location.origin;
+  // 在开发环境中，使用 /api 前缀触发 Next.js 代理
   return `${baseUrl}/api/${VERSION}${endpoint}`;
 };
 
