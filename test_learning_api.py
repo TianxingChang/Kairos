@@ -71,6 +71,12 @@ class LearningAPITester:
         print(f"置信度: {result.get('confidence_score', 0)}/100")
         print(f"分析模型: {result.get('analysis_model', 'N/A')}")
         
+        # 打印原始JSON响应
+        print(f"\n📄 原始JSON响应:")
+        print("=" * 80)
+        print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
+        print("=" * 80)
+        
         video_info = result.get('video_info', {})
         if video_info:
             print(f"\n📹 视频信息:")
