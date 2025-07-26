@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { TimestampExtension } from "@/extensions/TimestampExtension";
 import SlashCommand from "@/extensions/SlashCommand";
 import { AIQueryPanel } from "@/components/AIQueryPanel";
+import { aiService } from "@/services/aiService";
 import {
   Code2,
   Quote,
@@ -24,8 +25,9 @@ import {
   Redo,
   Clock,
   Bot,
+  GraduationCap,
 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useAppStore } from "@/store";
 
 // 创建lowlight实例并注册常用语言
@@ -241,6 +243,135 @@ export function TiptapEditor({
     [editor]
   );
 
+  const handleFeynmanNotes = useCallback(async () => {
+    if (!editor) return;
+
+    try {
+      // 在编辑器最下方插入费曼笔记标题
+      editor.chain().focus().setTextSelection(editor.state.doc.content.size).run();
+      editor.chain().focus().insertContent("<p></p>").run();
+      editor.chain().focus().insertContent("<h2>🎓 费曼笔记法</h2>").run();
+      editor
+        .chain()
+        .focus()
+        .insertContent("<p><em>基于视频内容生成的学习框架，请尝试用自己的话解释每个概念：</em></p>")
+        .run();
+
+      // 显示加载状态
+      editor.chain().focus().insertContent("<p><strong>AI 正在生成学习框架...</strong></p>").run();
+
+      // 调用AI服务生成费曼笔记框架
+      const { currentVideo, currentVideoTime } = useAppStore.getState();
+      const response = await aiService.generateFeynmanFramework({
+        videoTitle: currentVideo.title,
+        videoDescription: currentVideo.description,
+        currentTime: currentVideoTime,
+        existingNotes: editor.getHTML(),
+      });
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      // 移除加载状态
+      const docSize = editor.state.doc.content.size;
+      editor.chain().focus().setTextSelection(docSize).deleteSelection().run();
+
+      // 插入生成的框架内容
+      const frameworkContent = response.framework;
+      const lines = frameworkContent.split("\n");
+
+      lines.forEach((line: string) => {
+        const trimmedLine = line.trim();
+
+        if (!trimmedLine) {
+          // 空行，插入段落间隔
+          editor.chain().focus().insertContent("<p></p>").run();
+          return;
+        }
+
+        // 处理标题
+        if (trimmedLine.startsWith("### ")) {
+          const title = trimmedLine.replace(/^### /, "");
+          const processedTitle = title
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")
+            .replace(/`(.*?)`/g, "<code>$1</code>");
+          editor.chain().focus().insertContent(`<h3>${processedTitle}</h3>`).run();
+          return;
+        }
+
+        if (trimmedLine.startsWith("## ")) {
+          const title = trimmedLine.replace(/^## /, "");
+          const processedTitle = title
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")
+            .replace(/`(.*?)`/g, "<code>$1</code>");
+          editor.chain().focus().insertContent(`<h2>${processedTitle}</h2>`).run();
+          return;
+        }
+
+        // 处理水平分割线
+        if (trimmedLine === "---") {
+          editor.chain().focus().insertContent("<hr>").run();
+          return;
+        }
+
+        // 处理列表项
+        if (trimmedLine.startsWith("- ")) {
+          const listContent = trimmedLine.replace(/^- /, "");
+          const processedContent = listContent
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")
+            .replace(/`(.*?)`/g, "<code>$1</code>");
+          // 使用简单的HTML，让Tiptap正确处理
+          editor.chain().focus().insertContent(`<p>• ${processedContent}</p>`).run();
+          return;
+        }
+
+        // 处理普通段落
+        const processedLine = trimmedLine
+          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+          .replace(/\*(.*?)\*/g, "<em>$1</em>")
+          .replace(/`(.*?)`/g, "<code>$1</code>");
+        editor.chain().focus().insertContent(`<p>${processedLine}</p>`).run();
+      });
+
+      // 添加检查提示
+      editor.chain().focus().insertContent("<p></p>").run();
+      editor
+        .chain()
+        .focus()
+        .insertContent("<p><em>💡 完成记录后，可以使用AI写作助手检查你的理解是否正确</em></p>")
+        .run();
+      editor.chain().focus().insertContent("<p></p>").run();
+    } catch (error) {
+      console.error("生成费曼笔记失败:", error);
+
+      // 移除加载状态并显示错误
+      const docSize = editor.state.doc.content.size;
+      editor.chain().focus().setTextSelection(docSize).deleteSelection().run();
+
+      editor
+        .chain()
+        .focus()
+        .insertContent("<p><strong>生成费曼笔记框架失败，请稍后重试</strong></p>")
+        .run();
+    }
+  }, [editor]);
+
+  // 监听斜杠命令触发的费曼笔记事件
+  useEffect(() => {
+    const handleFeynmanEvent = () => {
+      handleFeynmanNotes();
+    };
+
+    window.addEventListener("feynman-notes-trigger", handleFeynmanEvent);
+    return () => {
+      window.removeEventListener("feynman-notes-trigger", handleFeynmanEvent);
+    };
+  }, [handleFeynmanNotes]);
+
   if (!editor) {
     return null;
   }
@@ -296,6 +427,17 @@ export function TiptapEditor({
             title="AI 写作"
           >
             <Bot className="h-4 w-4" />
+          </Button>
+
+          {/* 费曼笔记 */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={handleFeynmanNotes}
+            title="费曼笔记法"
+          >
+            <GraduationCap className="h-4 w-4" />
           </Button>
         </div>
       </div>

@@ -151,6 +151,17 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
         }
       },
     },
+    {
+      title: '费曼笔记',
+      description: '生成学习框架',
+      icon: '🎓',
+      command: ({ editor, range }: any) => {
+        editor.chain().focus().deleteRange(range).run()
+        // 通过全局事件触发费曼笔记功能
+        const event = new CustomEvent('feynman-notes-trigger')
+        window.dispatchEvent(event)
+      },
+    },
   ]
 
   // 如果有截图功能，添加截图命令

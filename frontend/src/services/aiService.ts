@@ -21,6 +21,18 @@ export interface AIQueryResponse {
   error?: string;
 }
 
+export interface FeynmanFrameworkRequest {
+  videoTitle: string;
+  videoDescription: string;
+  currentTime?: number;
+  existingNotes: string;
+}
+
+export interface FeynmanFrameworkResponse {
+  framework: string;
+  error?: string;
+}
+
 export class AIService {
   private static instance: AIService;
   private apiEndpoint: string;
@@ -62,6 +74,66 @@ export class AIService {
         error: error instanceof Error ? error.message : '未知错误',
       };
     }
+  }
+
+  async generateFeynmanFramework(request: FeynmanFrameworkRequest): Promise<FeynmanFrameworkResponse> {
+    try {
+      // 暂时使用模拟响应，后续可以替换为真实的 AI API 调用
+      return await this.mockFeynmanFramework(request);
+    } catch (error) {
+      console.error('Feynman framework generation error:', error);
+      return {
+        framework: '',
+        error: error instanceof Error ? error.message : '未知错误',
+      };
+    }
+  }
+
+  private async mockFeynmanFramework(request: FeynmanFrameworkRequest): Promise<FeynmanFrameworkResponse> {
+    // 模拟网络延迟
+    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1500));
+
+    const { videoTitle, videoDescription } = request;
+    
+    // 生成费曼笔记框架的模拟内容
+    const framework = `## 📋 核心概念梳理
+
+**请尝试用自己的话解释以下概念，就像在教给一个朋友一样：**
+
+### 1. 主要概念
+- **${videoTitle}的核心思想是什么？**
+  *(请用简单易懂的语言描述)*
+
+### 2. 关键要点
+- **有哪些重要的细节或步骤？**
+  *(列出2-3个最重要的点)*
+
+### 3. 实际应用
+- **这个知识可以用在哪里？**
+  *(想想具体的例子或场景)*
+
+### 4. 类比理解
+- **你能用什么类比来解释这个概念？**
+  *(比如像什么日常生活中的事物)*
+
+### 5. 潜在困惑
+- **哪些地方容易混淆或理解错误？**
+  *(诚实记录你的疑问)*
+
+### 6. 个人总结
+- **用一句话总结这个内容**
+  *(检验你是否真正理解)*
+
+---
+
+**💡 记录提示：**
+- 用自己的话写，不要复制原文
+- 如果某个部分解释不清楚，说明需要重新学习
+- 完成后可以使用AI检查你的理解是否准确`;
+
+    return {
+      framework,
+    };
   }
 
   private async mockQuery(request: AIQueryRequest): Promise<AIQueryResponse> {
