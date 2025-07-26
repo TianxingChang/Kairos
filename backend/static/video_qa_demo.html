@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频时间点问答演示</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .error {
+            border-left-color: #dc3545 !important;
+            background-color: #f8d7da;
+        }
+        
+        .success {
+            border-left-color: #28a745 !important;
+            background-color: #d4edda;
+        }
+        
+        .context-transcript {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .timestamp-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .info-card {
+            padding: 12px;
+            background-color: white;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .info-card h4 {
+            margin: 0 0 8px 0;
+            color: #495057;
+            font-size: 14px;
+        }
+        
+        .info-card p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #007bff;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .example-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e7f3ff;
+            border-radius: 8px;
+        }
+        
+        .example-section h3 {
+            margin-top: 0;
+            color: #0056b3;
+        }
+        
+        .example-item {
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .example-item:hover {
+            background-color: #cce7ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 视频时间点问答系统</h1>
+        
+        <!-- YouTube 视频上传区域 -->
+        <div class="form-group" style="border: 2px dashed #007bff; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+            <h3 style="margin-top: 0; color: #007bff;">📤 第一步：上传 YouTube 视频</h3>
+            <div style="display: flex; gap: 10px; align-items: end;">
+                <div style="flex: 1;">
+                    <label for="youtubeUrl">YouTube 视频链接</label>
+                    <input type="text" id="youtubeUrl" placeholder="例如: https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                </div>
+                <button type="button" class="btn-primary" onclick="uploadYouTubeVideo()" style="height: 48px;">🚀 处理视频</button>
+            </div>
+            <div id="uploadStatus" style="margin-top: 10px;"></div>
+        </div>
+        
+        <form id="videoQAForm">
+            <h3 style="color: #007bff;">🤔 第二步：提问关于视频时间点</h3>
+            <div class="form-group">
+                <label for="videoId">YouTube 视频 ID</label>
+                <input type="text" id="videoId" placeholder="例如: dQw4w9WgXcQ" required>
+                <small style="color: #6c757d;">从上方处理的视频自动填入，或手动输入</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="timestamp">时间点</label>
+                <input type="text" id="timestamp" placeholder="例如: 1:23 或 83" required>
+                <small style="color: #6c757d;">支持格式: MM:SS 或秒数</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="question">你的问题</label>
+                <textarea id="question" placeholder="请输入你想了解的关于这个时间点的问题..." required></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" class="btn-primary">🤖 智能问答</button>
+                <button type="button" class="btn-secondary" onclick="getContext()">📝 仅获取上下文</button>
+                <button type="button" class="btn-secondary" onclick="checkVideoStatus()">🔍 检查视频状态</button>
+            </div>
+        </form>
+        
+        <div class="example-section">
+            <h3>📚 示例用法</h3>
+            <div class="example-item" onclick="fillExample('dQw4w9WgXcQ', '0:30', '这段开头说了什么？')">
+                <strong>示例 1:</strong> 询问视频开头内容
+            </div>
+            <div class="example-item" onclick="fillExample('dQw4w9WgXcQ', '1:45', '这里的背景音乐是什么风格？')">
+                <strong>示例 2:</strong> 询问音乐风格
+            </div>
+            <div class="example-item" onclick="fillExample('dQw4w9WgXcQ', '90', '说话的人在表达什么情感？')">
+                <strong>示例 3:</strong> 询问情感表达
+            </div>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/v1';
+        
+        document.getElementById('videoQAForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            askQuestion();
+        });
+        
+        function fillExample(videoId, timestamp, question) {
+            document.getElementById('videoId').value = videoId;
+            document.getElementById('timestamp').value = timestamp;
+            document.getElementById('question').value = question;
+        }
+        
+        async function uploadYouTubeVideo() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            
+            if (!url) {
+                showUploadStatus('请输入 YouTube 视频链接', 'error');
+                return;
+            }
+            
+            showUploadStatus('🚀 正在处理视频...', 'loading');
+            
+            try {
+                const response = await fetch(`${API_BASE}/frontend/youtube/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        url: url,
+                        user_id: 'frontend_demo'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // 自动填入视频ID
+                    document.getElementById('videoId').value = data.video_id;
+                    
+                    if (data.status === 'ready') {
+                        showUploadStatus(`✅ ${data.message}`, 'success');
+                        if (data.video_info) {
+                            showUploadStatus(`✅ 视频已准备就绪: ${data.video_info.title}`, 'success');
+                        }
+                    } else if (data.status === 'processing') {
+                        showUploadStatus(`⏳ ${data.message}`, 'loading');
+                        // 开始轮询状态
+                        pollVideoStatus(data.video_id);
+                    }
+                } else {
+                    showUploadStatus(`❌ ${data.error}`, 'error');
+                }
+                
+            } catch (error) {
+                showUploadStatus(`❌ 上传失败: ${error.message}`, 'error');
+            }
+        }
+        
+        async function pollVideoStatus(videoId) {
+            let attempts = 0;
+            const maxAttempts = 30; // 最多轮询5分钟
+            
+            const poll = async () => {
+                try {
+                    const response = await fetch(`${API_BASE}/frontend/youtube/status/${videoId}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        if (data.status === 'ready') {
+                            showUploadStatus(`✅ ${data.message}: ${data.video_info?.title || videoId}`, 'success');
+                            return;
+                        } else if (data.status === 'processing') {
+                            attempts++;
+                            if (attempts < maxAttempts) {
+                                showUploadStatus(`⏳ 处理中... (${attempts}/${maxAttempts})`, 'loading');
+                                setTimeout(poll, 10000); // 10秒后再次检查
+                            } else {
+                                showUploadStatus('⚠️ 处理时间较长，请稍后手动检查状态', 'error');
+                            }
+                        } else {
+                            showUploadStatus(`❌ ${data.message}`, 'error');
+                        }
+                    }
+                } catch (error) {
+                    showUploadStatus(`❌ 状态检查失败: ${error.message}`, 'error');
+                }
+            };
+            
+            poll();
+        }
+        
+        function showUploadStatus(message, type = '') {
+            const statusDiv = document.getElementById('uploadStatus');
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'loading';
+            statusDiv.innerHTML = `<div class="result-section ${className}" style="margin: 10px 0; padding: 10px; font-size: 14px;">${message}</div>`;
+        }
+        
+        async function askQuestion() {
+            const videoId = document.getElementById('videoId').value.trim();
+            const timestamp = document.getElementById('timestamp').value.trim();
+            const question = document.getElementById('question').value.trim();
+            
+            if (!videoId || !timestamp || !question) {
+                showResult('请填写所有必需字段', 'error');
+                return;
+            }
+            
+            showResult('🤖 AI正在分析视频内容和你的问题...', 'loading');
+            
+            try {
+                // 先解析时间戳
+                const timestampResponse = await fetch(`${API_BASE}/frontend/parse-timestamp?timestamp=${encodeURIComponent(timestamp)}`);
+                const timestampData = await timestampResponse.json();
+                
+                if (!timestampResponse.ok) {
+                    throw new Error(timestampData.detail || '时间戳格式错误');
+                }
+                
+                // 发送问答请求
+                const response = await fetch(`${API_BASE}/frontend/ask`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        video_id: videoId,
+                        timestamp: timestampData.seconds,
+                        question: question,
+                        user_id: 'frontend_demo'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showSuccessResult(data);
+                } else {
+                    showResult(`❌ ${data.error}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`❌ 请求失败: ${error.message}`, 'error');
+            }
+        }
+        
+        async function getContext() {
+            const videoId = document.getElementById('videoId').value.trim();
+            const timestamp = document.getElementById('timestamp').value.trim();
+            
+            if (!videoId || !timestamp) {
+                showResult('请填写视频ID和时间点', 'error');
+                return;
+            }
+            
+            showResult('📝 获取上下文转录中...', 'loading');
+            
+            try {
+                const response = await fetch(`${API_BASE}/frontend/context/${videoId}?timestamp=${encodeURIComponent(timestamp)}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showContextResult(data);
+                } else {
+                    showResult(`❌ ${data.detail}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`❌ 请求失败: ${error.message}`, 'error');
+            }
+        }
+        
+        async function checkVideoStatus() {
+            const videoId = document.getElementById('videoId').value.trim();
+            
+            if (!videoId) {
+                showResult('请填写视频ID', 'error');
+                return;
+            }
+            
+            showResult('🔍 检查视频状态中...', 'loading');
+            
+            try {
+                const response = await fetch(`${API_BASE}/frontend/video-status/${videoId}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showVideoStatus(data);
+                } else {
+                    showResult(`❌ ${data.detail}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`❌ 请求失败: ${error.message}`, 'error');
+            }
+        }
+        
+        function showResult(message, type = '') {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `<div class="result-section ${type}">${message}</div>`;
+        }
+        
+        function showSuccessResult(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="result-section success">
+                    <h3>🎯 AI 回答</h3>
+                    <p><strong>${data.answer}</strong></p>
+                    
+                    <h4>📊 时间点信息</h4>
+                    <div class="timestamp-info">
+                        <div class="info-card">
+                            <h4>目标时间</h4>
+                            <p>${data.timestamp_info.target_formatted}</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>上下文范围</h4>
+                            <p>${data.timestamp_info.context_duration.toFixed(1)}秒</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>视频标题</h4>
+                            <p>${data.video_info.title}</p>
+                        </div>
+                    </div>
+                    
+                    <h4>📝 相关转录文本</h4>
+                    <div class="context-transcript">${data.context_transcript}</div>
+                </div>
+            `;
+        }
+        
+        function showContextResult(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="result-section success">
+                    <h3>📝 转录文本上下文</h3>
+                    
+                    <div class="timestamp-info">
+                        <div class="info-card">
+                            <h4>目标时间</h4>
+                            <p>${data.timestamp_info.target_formatted}</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>前向上下文</h4>
+                            <p>${data.timestamp_info.before_seconds}秒</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>后向上下文</h4>
+                            <p>${data.timestamp_info.after_seconds}秒</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>片段数量</h4>
+                            <p>${data.segments.length}个</p>
+                        </div>
+                    </div>
+                    
+                    <div class="context-transcript">${data.context_transcript}</div>
+                </div>
+            `;
+        }
+        
+        function showVideoStatus(data) {
+            const resultsDiv = document.getElementById('results');
+            const statusClass = data.ready_for_qa ? 'success' : 'error';
+            const statusIcon = data.ready_for_qa ? '✅' : '❌';
+            
+            resultsDiv.innerHTML = `
+                <div class="result-section ${statusClass}">
+                    <h3>${statusIcon} 视频状态检查</h3>
+                    
+                    <div class="timestamp-info">
+                        <div class="info-card">
+                            <h4>视频信息</h4>
+                            <p>${data.has_video_info ? '✅ 已获取' : '❌ 缺失'}</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>转录文本</h4>
+                            <p>${data.has_transcript ? '✅ 已处理' : '❌ 未处理'}</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>问答就绪</h4>
+                            <p>${data.ready_for_qa ? '✅ 可用' : '❌ 不可用'}</p>
+                        </div>
+                        ${data.transcript_info ? `
+                        <div class="info-card">
+                            <h4>转录片段</h4>
+                            <p>${data.transcript_info.segment_count}个</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${data.video_info ? `
+                    <h4>📹 视频详情</h4>
+                    <p><strong>标题:</strong> ${data.video_info.title || '未知'}</p>
+                    <p><strong>频道:</strong> ${data.video_info.channel || '未知'}</p>
+                    <p><strong>时长:</strong> ${data.video_info.duration ? Math.round(data.video_info.duration) + '秒' : '未知'}</p>
+                    ` : ''}
+                    
+                    ${!data.ready_for_qa ? `
+                    <p style="margin-top: 15px; color: #dc3545;">
+                        <strong>提示:</strong> 请先使用 YouTube 处理接口上传并处理此视频的转录文本。
+                    </p>
+                    ` : ''}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
