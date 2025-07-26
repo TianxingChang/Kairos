@@ -12,26 +12,20 @@ import { createLowlight, common } from "lowlight";
 import { Button } from "@/components/ui/button";
 import { TimestampExtension } from "@/extensions/TimestampExtension";
 import SlashCommand from "@/extensions/SlashCommand";
+import { AIQueryPanel } from "@/components/AIQueryPanel";
 import {
-  Bold,
-  Italic,
-  Strikethrough,
-  Code,
   Code2,
   Quote,
-  List,
-  ListOrdered,
   Heading1,
   Heading2,
   Heading3,
-  Link as LinkIcon,
   Image as ImageIcon,
-  Camera,
   Undo,
   Redo,
   Clock,
+  Bot,
 } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useAppStore } from "@/store";
 
 // 创建lowlight实例并注册常用语言
@@ -48,11 +42,21 @@ interface TiptapEditorProps {
 export function TiptapEditor({
   content,
   onChange,
-  placeholder = "开始记录你的笔记...",
+  placeholder = "开始写作，按空格键使用AI，按 / 键使用命令",
   className = "",
   onScreenshot,
 }: TiptapEditorProps) {
   const { currentVideoTime } = useAppStore();
+  const [showAIQuery, setShowAIQuery] = useState(false);
+
+  const handleShowAIQuery = useCallback(() => {
+    setShowAIQuery(true);
+  }, []);
+
+  const handleCloseAIQuery = useCallback(() => {
+    setShowAIQuery(false);
+  }, []);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -87,7 +91,7 @@ export function TiptapEditor({
         width: 3,
       }),
       TimestampExtension,
-      SlashCommand(onScreenshot, currentVideoTime),
+      SlashCommand(onScreenshot, currentVideoTime, handleShowAIQuery),
     ],
     content,
     immediatelyRender: false, // 修复SSR水合问题
@@ -132,6 +136,15 @@ export function TiptapEditor({
 
         return false;
       },
+      handleKeyDown: (view, event) => {
+        // 检测空格键，且编辑器为空时触发AI写作助手
+        if (event.key === " " && view.state.doc.textContent.trim() === "") {
+          event.preventDefault();
+          handleShowAIQuery();
+          return true;
+        }
+        return false;
+      },
     },
   });
 
@@ -155,22 +168,6 @@ export function TiptapEditor({
     },
     [editor]
   );
-
-  const addLink = useCallback(() => {
-    const previousUrl = editor?.getAttributes("link").href;
-    const url = window.prompt("URL", previousUrl);
-
-    if (url === null) {
-      return;
-    }
-
-    if (url === "") {
-      editor?.chain().focus().extendMarkRange("link").unsetLink().run();
-      return;
-    }
-
-    editor?.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
-  }, [editor]);
 
   const addImage = useCallback(() => {
     const input = document.createElement("input");
@@ -197,21 +194,6 @@ export function TiptapEditor({
     }
   }, [editor]);
 
-  const takeScreenshot = useCallback(async () => {
-    if (!onScreenshot) {
-      console.error("截图功能暂不可用，请检查视频播放器状态");
-      return;
-    }
-
-    try {
-      const base64Image = await onScreenshot();
-      // 直接插入截图，不显示任何提示
-      editor?.chain().focus().setImage({ src: base64Image }).run();
-    } catch (error) {
-      console.error("截图失败:", error);
-    }
-  }, [editor, onScreenshot]);
-
   const insertTimestamp = useCallback(() => {
     if (editor) {
       editor
@@ -225,45 +207,56 @@ export function TiptapEditor({
     }
   }, [editor, currentVideoTime]);
 
+  const handleInsertAIResponse = useCallback(
+    (response: string) => {
+      if (editor) {
+        // 逐步插入内容，正确处理段落和格式
+        const insertFormattedContent = () => {
+          // 首先插入标题
+          editor.chain().focus().insertContent("<p></p>").run();
+          editor.chain().focus().insertContent("<p><strong>AI 写作：</strong></p>").run();
+
+          // 处理回答内容，按段落分割
+          const paragraphs = response.split(/\n\s*\n/).filter((p) => p.trim());
+
+          paragraphs.forEach((paragraph) => {
+            const processedParagraph = paragraph
+              .trim()
+              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // **粗体**
+              .replace(/\*(.*?)\*/g, "<em>$1</em>") // *斜体*
+              .replace(/`(.*?)`/g, "<code>$1</code>") // `代码`
+              .replace(/\n/g, "<br>"); // 单独的换行转为 br
+
+            editor.chain().focus().insertContent(`<p>${processedParagraph}</p>`).run();
+          });
+
+          // 最后添加空段落作为间隔
+          editor.chain().focus().insertContent("<p></p>").run();
+        };
+
+        insertFormattedContent();
+      }
+      setShowAIQuery(false);
+    },
+    [editor]
+  );
+
   if (!editor) {
     return null;
   }
 
   return (
-    <div className="h-full flex flex-col border-0">
+    <div className="h-full flex flex-col border-0 max-h-full overflow-hidden">
       {/* 工具栏 */}
       <div className="flex-shrink-0 border-b border-border p-2 bg-background/50">
         <div className="flex gap-1">
           {/* 基础格式 */}
           <Button
-            variant={editor.isActive("bold") ? "default" : "ghost"}
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={() => editor.chain().focus().toggleBold().run()}
-          >
-            <Bold className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={editor.isActive("italic") ? "default" : "ghost"}
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={() => editor.chain().focus().toggleItalic().run()}
-          >
-            <Italic className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={editor.isActive("code") ? "default" : "ghost"}
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={() => editor.chain().focus().toggleCode().run()}
-          >
-            <Code className="h-4 w-4" />
-          </Button>
-          <Button
             variant={editor.isActive("codeBlock") ? "default" : "ghost"}
             size="sm"
             className="h-8 w-8 p-0"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            title="代码块"
           >
             <Code2 className="h-4 w-4" />
           </Button>
@@ -271,37 +264,7 @@ export function TiptapEditor({
           {/* 分割线 */}
           <div className="w-px h-6 bg-border mx-2" />
 
-          {/* 列表 */}
-          <Button
-            variant={editor.isActive("bulletList") ? "default" : "ghost"}
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-          >
-            <List className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={editor.isActive("orderedList") ? "default" : "ghost"}
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          >
-            <ListOrdered className="h-4 w-4" />
-          </Button>
-
-          {/* 分割线 */}
-          <div className="w-px h-6 bg-border mx-2" />
-
-          {/* 链接和媒体 */}
-          <Button
-            variant={editor.isActive("link") ? "default" : "ghost"}
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={addLink}
-            title="插入链接"
-          >
-            <LinkIcon className="h-4 w-4" />
-          </Button>
+          {/* 媒体 */}
           <Button
             variant="ghost"
             size="sm"
@@ -311,17 +274,6 @@ export function TiptapEditor({
           >
             <ImageIcon className="h-4 w-4" />
           </Button>
-          {onScreenshot && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-8 w-8 p-0"
-              onClick={takeScreenshot}
-              title="截取视频画面"
-            >
-              <Camera className="h-4 w-4" />
-            </Button>
-          )}
           <Button
             variant="ghost"
             size="sm"
@@ -331,11 +283,25 @@ export function TiptapEditor({
           >
             <Clock className="h-4 w-4" />
           </Button>
+
+          {/* 分割线 */}
+          <div className="w-px h-6 bg-border mx-2" />
+
+          {/* AI 功能 */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={handleShowAIQuery}
+            title="AI 写作"
+          >
+            <Bot className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 
       {/* 编辑器内容区域 */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-hidden relative">
         <EditorContent
           editor={editor}
           className="h-full focus-within:outline-none tiptap-content"
@@ -343,8 +309,15 @@ export function TiptapEditor({
       </div>
 
       <style jsx global>{`
+        .tiptap-content {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+        }
+
         .tiptap-content .ProseMirror {
-          min-height: 100%;
+          flex: 1;
+          min-height: 0;
           padding: 1rem;
           font-size: 14px;
           line-height: 1.6;
@@ -352,6 +325,28 @@ export function TiptapEditor({
           background: transparent;
           border: none;
           outline: none;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          overflow-y: auto;
+          max-height: 100%;
+        }
+
+        /* 自定义滚动条样式 */
+        .tiptap-content .ProseMirror::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .tiptap-content .ProseMirror::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .tiptap-content .ProseMirror::-webkit-scrollbar-thumb {
+          background-color: hsl(var(--border));
+          border-radius: 3px;
+        }
+
+        .tiptap-content .ProseMirror::-webkit-scrollbar-thumb:hover {
+          background-color: hsl(var(--muted-foreground));
         }
 
         .tiptap-content .ProseMirror p {
@@ -685,6 +680,17 @@ export function TiptapEditor({
           font-style: italic;
         }
       `}</style>
+
+      {/* AI 写作面板 */}
+      {showAIQuery && (
+        <div className="mt-4 relative">
+          <AIQueryPanel
+            onClose={handleCloseAIQuery}
+            onInsertResponse={handleInsertAIResponse}
+            currentVideoTime={currentVideoTime}
+          />
+        </div>
+      )}
     </div>
   );
 }

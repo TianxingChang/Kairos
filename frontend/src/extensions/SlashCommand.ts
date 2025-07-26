@@ -10,7 +10,7 @@ export interface SlashCommandItem {
 }
 
 // 创建命令列表
-export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<string>, currentVideoTime?: number): SlashCommandItem[] => {
+export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<string>, currentVideoTime?: number, onShowAIQuery?: () => void): SlashCommandItem[] => {
   const commands: SlashCommandItem[] = [
     {
       title: 'Heading 1',
@@ -140,6 +140,17 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
         input.click()
       },
     },
+    {
+      title: 'AI 写作',
+      description: 'AI 帮你写作',
+      icon: 'AI',
+      command: ({ editor, range }: any) => {
+        editor.chain().focus().deleteRange(range).run()
+        if (onShowAIQuery) {
+          onShowAIQuery()
+        }
+      },
+    },
   ]
 
   // 如果有截图功能，添加截图命令
@@ -255,7 +266,7 @@ const renderCommands = (container: HTMLElement, items: SlashCommandItem[], comma
   })
 }
 
-export const SlashCommand = (onScreenshot?: () => Promise<string>, currentVideoTime?: number) =>
+export const SlashCommand = (onScreenshot?: () => Promise<string>, currentVideoTime?: number, onShowAIQuery?: () => void) =>
   Extension.create({
     name: 'slashCommand',
 
@@ -270,7 +281,7 @@ export const SlashCommand = (onScreenshot?: () => Promise<string>, currentVideoT
             props.command({ editor, range })
           },
           items: ({ query }) => {
-            const commands = createSlashCommands(this.editor, onScreenshot, currentVideoTime)
+            const commands = createSlashCommands(this.editor, onScreenshot, currentVideoTime, onShowAIQuery)
             return commands.filter((item: SlashCommandItem) =>
               item.title.toLowerCase().includes(query.toLowerCase()) ||
               item.description.toLowerCase().includes(query.toLowerCase())

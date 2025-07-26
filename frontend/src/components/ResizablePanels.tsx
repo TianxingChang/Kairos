@@ -84,7 +84,7 @@ export function ResizablePanels() {
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   return (
-    <div className="h-screen w-full flex flex-col">
+    <div className="h-full w-full flex flex-col overflow-hidden">
       {/* Top Bar */}
       <div className="h-16 border-b bg-background/95 backdrop-blur-sm flex items-center justify-between px-4 flex-shrink-0">
         <div className="flex items-center">
@@ -209,7 +209,7 @@ export function ResizablePanels() {
                   {/* 扩大拖拽区域 */}
                   <div className="absolute inset-y-0 -left-1 -right-1 w-3" />
                 </div>
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 h-full">
                   <ChatPanel />
                 </div>
               </>

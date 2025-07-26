@@ -19,24 +19,29 @@ export function VideoUpload() {
   const { setCurrentVideo } = useAppStore();
 
   const validateYouTubeUrl = (url: string) => {
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
+    const youtubeRegex =
+      /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
     return youtubeRegex.test(url);
   };
 
   const extractVideoId = (url: string) => {
-    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+    const match = url.match(
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/
+    );
     return match ? match[1] : null;
   };
 
   const extractYouTubeInfo = async (videoId: string) => {
     try {
       // 使用 YouTube oEmbed API 获取视频信息
-      const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+      const response = await fetch(
+        `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
+      );
       if (response.ok) {
         const data = await response.json();
         return {
           title: data.title || "YouTube 视频",
-          description: `来自 ${data.author_name || "YouTube"} 的视频`
+          description: `来自 ${data.author_name || "YouTube"} 的视频`,
         };
       }
     } catch (error) {
@@ -44,20 +49,20 @@ export function VideoUpload() {
     }
     return {
       title: "YouTube 视频",
-      description: "YouTube 视频学习"
+      description: "YouTube 视频学习",
     };
   };
 
   const handleUrlSubmit = async () => {
     if (!videoUrl.trim()) return;
-    
+
     setIsLoading(true);
-    
+
     try {
       let finalUrl = videoUrl;
       let finalTitle = "视频学习";
       let finalDescription = "开始学习这个视频内容";
-      
+
       // 如果是 YouTube URL，转换为标准格式并获取视频信息
       if (validateYouTubeUrl(videoUrl)) {
         const videoId = extractVideoId(videoUrl);
@@ -85,7 +90,7 @@ export function VideoUpload() {
       // 跳转到学习页面
       console.log("Video uploaded successfully, navigating to /learn");
       // 使用window.location确保跳转成功
-      window.location.href = '/learn';
+      window.location.href = "/learn";
     } catch (error) {
       console.error("Failed to load video:", error);
       alert("视频加载失败，请检查链接是否正确");
@@ -96,18 +101,18 @@ export function VideoUpload() {
 
   const handleFileSubmit = async () => {
     if (!selectedFile) return;
-    
+
     setIsLoading(true);
-    
+
     try {
       // 创建本地 URL
       const fileUrl = URL.createObjectURL(selectedFile);
-      
+
       // 自动从文件名提取标题（移除扩展名）
       const fileName = selectedFile.name.replace(/\.[^/.]+$/, "");
       const fileTitle = fileName || "本地视频";
       const fileDescription = `学习本地视频文件: ${selectedFile.name}`;
-      
+
       // 更新视频信息到 store
       setCurrentVideo({
         url: fileUrl,
@@ -119,7 +124,7 @@ export function VideoUpload() {
       // 跳转到学习页面
       console.log("Video uploaded successfully, navigating to /learn");
       // 使用window.location确保跳转成功
-      window.location.href = '/learn';
+      window.location.href = "/learn";
     } catch (error) {
       console.error("Failed to load file:", error);
       alert("文件加载失败，请重试");
@@ -132,17 +137,17 @@ export function VideoUpload() {
     const file = e.target.files?.[0];
     if (file) {
       // 检查文件类型
-      if (!file.type.startsWith('video/')) {
-        alert('请选择视频文件');
+      if (!file.type.startsWith("video/")) {
+        alert("请选择视频文件");
         return;
       }
-      
+
       setSelectedFile(file);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="h-full bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -193,9 +198,7 @@ export function VideoUpload() {
             {uploadType === "url" ? (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    视频链接 *
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">视频链接 *</label>
                   <Input
                     type="url"
                     placeholder="https://www.youtube.com/watch?v=... 或其他视频链接"
@@ -227,22 +230,16 @@ export function VideoUpload() {
                       <p className="text-gray-600">
                         {selectedFile ? selectedFile.name : "点击选择视频文件或拖拽到此处"}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        支持 MP4, MOV, AVI 等格式
-                      </p>
+                      <p className="text-xs text-gray-500 mt-1">支持 MP4, MOV, AVI 等格式</p>
                     </label>
                   </div>
                 </div>
               </>
             )}
 
-
             <Button
               onClick={uploadType === "url" ? handleUrlSubmit : handleFileSubmit}
-              disabled={
-                isLoading ||
-                (uploadType === "url" ? !videoUrl.trim() : !selectedFile)
-              }
+              disabled={isLoading || (uploadType === "url" ? !videoUrl.trim() : !selectedFile)}
               className="w-full"
               size="lg"
             >

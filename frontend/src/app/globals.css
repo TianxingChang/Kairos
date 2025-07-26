@@ -116,7 +116,26 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html,
   body {
     @apply bg-background text-foreground;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
+  #__next,
+  main {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* 确保任何滚动都在指定的容器内 */
+  .app-container {
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
   }
 }

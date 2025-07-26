@@ -3,5 +3,9 @@
 import { VideoUpload } from "@/components/VideoUpload";
 
 export default function Home() {
-  return <VideoUpload />;
+  return (
+    <div className="app-container">
+      <VideoUpload />
+    </div>
+  );
 }
