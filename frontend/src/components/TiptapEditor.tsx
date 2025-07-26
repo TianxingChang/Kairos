@@ -65,6 +65,7 @@ export function TiptapEditor({
   const handleCloseAIQuery = useCallback(() => {
     setShowAIQuery(false);
     setAiQuerySelectedText(""); // 清空选中文本
+    setSelectionMenu((prev) => ({ ...prev, isVisible: false })); // 隐藏选择菜单
   }, []);
 
   const editor = useEditor({
@@ -171,8 +172,10 @@ export function TiptapEditor({
           });
         }
       } else {
-        // 没有选中文本，隐藏菜单
-        setSelectionMenu((prev) => ({ ...prev, isVisible: false }));
+        // 没有选中文本，但如果AI查询面板打开着，不要隐藏菜单
+        if (!showAIQuery) {
+          setSelectionMenu((prev) => ({ ...prev, isVisible: false }));
+        }
       }
     },
     editorProps: {
