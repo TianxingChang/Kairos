@@ -51,6 +51,7 @@ export function TiptapEditor({
 }: TiptapEditorProps) {
   const { currentVideoTime } = useAppStore();
   const [showAIQuery, setShowAIQuery] = useState(false);
+  const [aiQuerySelectedText, setAiQuerySelectedText] = useState<string>("");
   const [selectionMenu, setSelectionMenu] = useState({
     isVisible: false,
     position: { x: 0, y: 0 },
@@ -63,6 +64,7 @@ export function TiptapEditor({
 
   const handleCloseAIQuery = useCallback(() => {
     setShowAIQuery(false);
+    setAiQuerySelectedText(""); // 清空选中文本
   }, []);
 
   const editor = useEditor({
@@ -435,14 +437,9 @@ export function TiptapEditor({
 
   // 处理选择菜单的操作
   const handleSelectionAskAI = useCallback((selectedText: string) => {
-    // 将选中的文本作为上下文自动添加到AI查询中
+    // 保存选中的文本并打开AI查询面板
+    setAiQuerySelectedText(selectedText);
     setShowAIQuery(true);
-
-    // 使用全局事件来传递选中文本作为上下文
-    const event = new CustomEvent("add-selection-context", {
-      detail: { selectedText },
-    });
-    window.dispatchEvent(event);
   }, []);
 
   const handleSelectionMenuClose = useCallback(() => {
@@ -919,6 +916,7 @@ export function TiptapEditor({
             onClose={handleCloseAIQuery}
             onInsertResponse={handleInsertAIResponse}
             currentVideoTime={currentVideoTime}
+            selectedText={aiQuerySelectedText}
           />
         </div>
       )}
