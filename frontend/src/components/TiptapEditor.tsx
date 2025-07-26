@@ -7,8 +7,10 @@ import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
+import Dropcursor from "@tiptap/extension-dropcursor";
 import { createLowlight, common } from "lowlight";
 import { Button } from "@/components/ui/button";
+import { TimestampExtension } from "@/extensions/TimestampExtension";
 import {
   Bold,
   Italic,
@@ -23,10 +25,13 @@ import {
   Heading3,
   Link as LinkIcon,
   Image as ImageIcon,
+  Camera,
   Undo,
   Redo,
+  Clock,
 } from "lucide-react";
 import { useCallback } from "react";
+import { useAppStore } from "@/store";
 
 // 创建lowlight实例并注册常用语言
 const lowlight = createLowlight(common);
@@ -36,6 +41,7 @@ interface TiptapEditorProps {
   onChange: (content: string) => void;
   placeholder?: string;
   className?: string;
+  onScreenshot?: () => Promise<string>; // 返回base64图片数据
 }
 
 export function TiptapEditor({
@@ -43,7 +49,9 @@ export function TiptapEditor({
   onChange,
   placeholder = "开始记录你的笔记...",
   className = "",
+  onScreenshot,
 }: TiptapEditorProps) {
+  const { currentVideoTime } = useAppStore();
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -56,7 +64,8 @@ export function TiptapEditor({
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-primary underline decoration-1 underline-offset-2 hover:decoration-2 transition-all",
+          class:
+            "text-primary underline decoration-1 underline-offset-2 hover:decoration-2 transition-all",
         },
       }),
       Image.configure({
@@ -71,6 +80,11 @@ export function TiptapEditor({
           class: "code-block-custom",
         },
       }),
+      Dropcursor.configure({
+        color: "#3b82f6",
+        width: 3,
+      }),
+      TimestampExtension,
     ],
     content,
     immediatelyRender: false, // 修复SSR水合问题
@@ -81,8 +95,63 @@ export function TiptapEditor({
       attributes: {
         class: `prose prose-sm max-w-none focus:outline-none min-h-full ${className}`,
       },
+      handlePaste: (view, event, slice) => {
+        const { clipboardData } = event;
+
+        if (clipboardData && clipboardData.files.length > 0) {
+          event.preventDefault();
+
+          Array.from(clipboardData.files).forEach((file) => {
+            if (file.type.startsWith("image/")) {
+              handleImageFile(file);
+            }
+          });
+
+          return true;
+        }
+
+        return false;
+      },
+      handleDrop: (view, event, slice, moved) => {
+        const { dataTransfer } = event;
+
+        if (dataTransfer && dataTransfer.files.length > 0) {
+          event.preventDefault();
+
+          Array.from(dataTransfer.files).forEach((file) => {
+            if (file.type.startsWith("image/")) {
+              handleImageFile(file);
+            }
+          });
+
+          return true;
+        }
+
+        return false;
+      },
     },
   });
+
+  // 处理图片文件的函数
+  const handleImageFile = useCallback(
+    (file: File) => {
+      if (!editor) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        // 直接插入图片，不显示任何提示
+        editor.chain().focus().setImage({ src: base64 }).run();
+      };
+
+      reader.onerror = () => {
+        console.error("图片读取失败");
+      };
+
+      reader.readAsDataURL(file);
+    },
+    [editor]
+  );
 
   const addLink = useCallback(() => {
     const previousUrl = editor?.getAttributes("link").href;
@@ -101,11 +170,57 @@ export function TiptapEditor({
   }, [editor]);
 
   const addImage = useCallback(() => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64 = reader.result as string;
+          editor?.chain().focus().setImage({ src: base64 }).run();
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  }, [editor]);
+
+  const addImageFromUrl = useCallback(() => {
     const url = window.prompt("图片URL");
     if (url) {
       editor?.chain().focus().setImage({ src: url }).run();
     }
   }, [editor]);
+
+  const takeScreenshot = useCallback(async () => {
+    if (!onScreenshot) {
+      console.error("截图功能暂不可用，请检查视频播放器状态");
+      return;
+    }
+
+    try {
+      const base64Image = await onScreenshot();
+      // 直接插入截图，不显示任何提示
+      editor?.chain().focus().setImage({ src: base64Image }).run();
+    } catch (error) {
+      console.error("截图失败:", error);
+    }
+  }, [editor, onScreenshot]);
+
+  const insertTimestamp = useCallback(() => {
+    if (editor) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "timestamp",
+          attrs: { timestamp: currentVideoTime },
+        })
+        .run();
+    }
+  }, [editor, currentVideoTime]);
 
   if (!editor) {
     return null;
@@ -174,14 +289,44 @@ export function TiptapEditor({
           {/* 分割线 */}
           <div className="w-px h-6 bg-border mx-2" />
 
-          {/* 链接 */}
+          {/* 链接和媒体 */}
           <Button
             variant={editor.isActive("link") ? "default" : "ghost"}
             size="sm"
             className="h-8 w-8 p-0"
             onClick={addLink}
+            title="插入链接"
           >
             <LinkIcon className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={addImage}
+            title="插入图片"
+          >
+            <ImageIcon className="h-4 w-4" />
+          </Button>
+          {onScreenshot && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0"
+              onClick={takeScreenshot}
+              title="截取视频画面"
+            >
+              <Camera className="h-4 w-4" />
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={insertTimestamp}
+            title="插入当前时间戳"
+          >
+            <Clock className="h-4 w-4" />
           </Button>
         </div>
       </div>
@@ -278,7 +423,8 @@ export function TiptapEditor({
           padding: 0.125rem 0.25rem;
           border-radius: 0.25rem;
           font-size: 0.875rem;
-          font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+          font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
+            monospace;
         }
 
         .tiptap-content .ProseMirror .code-block-custom {
@@ -299,7 +445,8 @@ export function TiptapEditor({
           overflow-x: auto;
           font-size: 0.875rem;
           line-height: 1.5;
-          font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+          font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
+            monospace;
         }
 
         .tiptap-content .ProseMirror .code-block-custom code {
@@ -317,7 +464,7 @@ export function TiptapEditor({
             background: #1e1e1e;
             border-color: #3e3e3e;
           }
-          
+
           .tiptap-content .ProseMirror .code-block-custom pre {
             background: #1e1e1e !important;
           }
@@ -380,6 +527,19 @@ export function TiptapEditor({
           height: auto;
           border-radius: 0.5rem;
           margin: 1rem 0;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          border: 1px solid hsl(var(--border));
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        }
+
+        .tiptap-content .ProseMirror img:hover {
+          transform: scale(1.02);
+        }
+
+        .tiptap-content .ProseMirror img[src^="data:"] {
+          /* 特殊样式用于截图图片 */
+          border: 2px solid hsl(var(--primary));
         }
 
         .tiptap-content .ProseMirror p.is-editor-empty:first-child::before {

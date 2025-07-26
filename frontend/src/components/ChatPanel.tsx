@@ -11,6 +11,7 @@ import { ContextSelector } from "./ContextSelector";
 import { LoadingDots } from "./ui/loading-dots";
 import { ChatMessage } from "./ChatMessage";
 import { TiptapEditor } from "./TiptapEditor";
+import { useCallback } from "react";
 
 export function ChatPanel() {
   const [chatInput, setChatInput] = useState("");
@@ -89,6 +90,20 @@ export function ChatPanel() {
       handleSendMessage();
     }
   };
+
+  // 截图功能
+  const handleScreenshot = useCallback(async (): Promise<string> => {
+    if (typeof window !== 'undefined' && window.videoPlayer) {
+      try {
+        return await window.videoPlayer.captureFrame();
+      } catch (error) {
+        console.error('截图失败:', error);
+        throw error;
+      }
+    } else {
+      throw new Error('视频播放器未准备就绪');
+    }
+  }, []);
 
   return (
     <div className="h-full flex flex-col bg-background border-l">
@@ -224,6 +239,7 @@ export function ChatPanel() {
               onChange={setNotes}
               placeholder="开始记录你的笔记..."
               className="h-full"
+              onScreenshot={handleScreenshot}
             />
           </div>
         )}

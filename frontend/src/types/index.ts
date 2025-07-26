@@ -79,6 +79,7 @@ export interface VideoPlayerControl {
   getCurrentTime: () => number;
   play: () => void;
   pause: () => void;
+  captureFrame: () => Promise<string>; // 返回base64格式的截图
 }
 
 // 扩展 Window 接口
