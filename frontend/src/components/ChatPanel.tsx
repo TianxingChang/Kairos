@@ -85,14 +85,22 @@ export function ChatPanel() {
     setChatInput("");
 
     try {
-      // 检查是否有视频时间点上下文
+      // 检查是否有视频相关上下文（时间点或完整视频）
       const videoTimeContext = selectedContexts.find(ctx => 
         ctx.type === 'video' && ctx.timestamp !== undefined
       );
+      
+      const fullVideoContext = selectedContexts.find(ctx => 
+        ctx.type === 'video' && ctx.id === 'full-video'
+      );
 
-      if (videoTimeContext && currentVideo.videoId) {
+      if ((videoTimeContext || fullVideoContext) && currentVideo.videoId) {
         // 使用视频QA功能
-        await handleVideoQA(userMessage, videoTimeContext);
+        if (videoTimeContext) {
+          await handleVideoQA(userMessage, videoTimeContext);
+        } else if (fullVideoContext) {
+          await handleFullVideoQA(userMessage, fullVideoContext);
+        }
       } else {
         // 默认使用 web search agent
         await sendToWebAgent(userMessage);
@@ -108,6 +116,11 @@ export function ChatPanel() {
     
     // 方案1: 创建一个包装函数来统一处理状态
     return await sendVideoQAMessage(question, context);
+  };
+
+  const handleFullVideoQA = async (question: string, context: any) => {
+    // 处理完整视频问答
+    return await sendFullVideoQAMessage(question, context);
   };
 
   // 使用useChat模式的video QA发送函数
@@ -157,6 +170,51 @@ export function ChatPanel() {
       setIsVideoQASending(false);
     }
   }, [isAnySending, addMessage, currentVideoTime, currentVideo.videoId]);
+
+  // 完整视频QA发送函数
+  const sendFullVideoQAMessage = useCallback(async (question: string, context: any) => {
+    if (isAnySending) return;
+
+    setIsVideoQASending(true);
+
+    try {
+      const { videoQAService } = await import('@/services/videoQAService');
+      
+      // 添加用户消息
+      addMessage({
+        content: `@完整视频 ${question}`,
+        isUser: true,
+      });
+
+      // 使用askFullVideoQuestionWithAgent来获得更好的分析能力
+      const response = await videoQAService.askFullVideoQuestionWithAgent({
+        video_id: currentVideo.videoId,
+        question: question,
+        user_id: 'frontend_user',
+        session_id: `session_${Date.now()}`,
+      });
+
+      if (response.success) {
+        // 添加AI回复
+        addMessage({
+          content: response.answer,
+          isUser: false,
+        });
+      } else {
+        throw new Error(response.error || '完整视频问答失败');
+      }
+    } catch (error) {
+      console.error('Full Video QA failed:', error);
+      
+      // 添加错误消息
+      addMessage({
+        content: '抱歉，完整视频问答失败。请稍后再试。',
+        isUser: false,
+      });
+    } finally {
+      setIsVideoQASending(false);
+    }
+  }, [isAnySending, addMessage, currentVideo.videoId]);
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
