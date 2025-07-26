@@ -12,6 +12,7 @@ import { LoadingDots } from "./ui/loading-dots";
 import { ChatMessage } from "./ChatMessage";
 import { TiptapEditor } from "./TiptapEditor";
 import { useCallback } from "react";
+import type { ChatMessage as ChatMessageType } from "@/types";
 
 export function ChatPanel() {
   const [chatInput, setChatInput] = useState("");
@@ -222,6 +223,44 @@ export function ChatPanel() {
     return `${minutes}:${secs.toString().padStart(2, "0")}`;
   };
 
+  // 处理用户点击"没听懂"按钮
+  const handleNeedHelp = useCallback(async (message: any) => {
+    if (isAnySending) return;
+    
+    try {
+      // 构建teacher agent请求
+      const helpQuestion = `我对以下回答有疑问，请帮我分析我可能缺乏哪些前置知识，并为我详细解释：\n\n${message.content}`;
+      
+      // 添加用户消息
+      addMessage({
+        content: "[Teacher Agent] " + helpQuestion,
+        isUser: true,
+      });
+      
+      // TODO: 调用teacher agent API
+      // 暂时使用placeholder响应
+      setTimeout(() => {
+        addMessage({
+          content: "Teacher Agent功能正在开发中，将很快为您提供知识盲区分析和详细解释。",
+          isUser: false,
+        });
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Teacher agent failed:', error);
+      addMessage({
+        content: '抱歉，Teacher Agent暂时无法使用。请稍后再试。',
+        isUser: false,
+      });
+    }
+  }, [isAnySending, addMessage]);
+
+  // 处理用户点击"记笔记"按钮  
+  const handleTakeNotes = useCallback(async (message: any) => {
+    // TODO: 实现记笔记功能
+    console.log('Take notes for message:', message.content);
+  }, []);
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -250,8 +289,15 @@ export function ChatPanel() {
           {/* 聊天消息区域 */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             <AnimatePresence>
-              {messages.map((message) => (
-                <ChatMessage key={message.id} message={message} mounted={mounted} />
+              {messages.map((message, index) => (
+                <ChatMessage 
+                  key={message.id} 
+                  message={message} 
+                  mounted={mounted}
+                  onNeedHelp={handleNeedHelp}
+                  onTakeNotes={handleTakeNotes}
+                  isLatest={index === messages.length - 1 && !message.isUser}
+                />
               ))}
 
               {/* 加载消息 */}

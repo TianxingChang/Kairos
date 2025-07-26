@@ -5,11 +5,16 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
+import { Button } from "@/components/ui/button";
+import { HelpCircle, PenTool } from "lucide-react";
 import type { ChatMessage } from "@/types";
 
 interface ChatMessageProps {
   message: ChatMessage;
   mounted?: boolean;
+  onNeedHelp?: (message: ChatMessage) => void;
+  onTakeNotes?: (message: ChatMessage) => void;
+  isLatest?: boolean;
 }
 
 // 预留的媒体内容类型接口
@@ -30,7 +35,7 @@ interface ExtendedMessage extends ChatMessage {
   mentions?: string[];
 }
 
-export function ChatMessage({ message, mounted = true }: ChatMessageProps) {
+export function ChatMessage({ message, mounted = true, onNeedHelp, onTakeNotes, isLatest = false }: ChatMessageProps) {
   const isUser = message.isUser;
 
   // 预留的媒体渲染函数
@@ -183,16 +188,29 @@ export function ChatMessage({ message, mounted = true }: ChatMessageProps) {
           {mounted ? message.timestamp.toLocaleTimeString() : ""}
         </p>
 
-        {/* 预留：互动按钮区域 */}
-        {/* TODO: 实现反应、回复等功能 */}
-        {/* <div className="flex items-center gap-1 mt-2">
-          <button onClick={handleReply} className="text-xs opacity-60 hover:opacity-100">
-            回复
-          </button>
-          <button onClick={() => handleReaction("👍")} className="text-xs opacity-60 hover:opacity-100">
-            👍
-          </button>
-        </div> */}
+        {/* AI消息操作按钮 - 只在最新消息显示 */}
+        {!isUser && isLatest && (
+          <div className="flex items-center gap-2 mt-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs opacity-60 hover:opacity-100 hover:bg-muted/50"
+              onClick={() => onNeedHelp?.(message)}
+            >
+              <HelpCircle className="w-3 h-3 mr-1" />
+              没听懂
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs opacity-60 hover:opacity-100 hover:bg-muted/50"
+              onClick={() => onTakeNotes?.(message)}
+            >
+              <PenTool className="w-3 h-3 mr-1" />
+              记笔记
+            </Button>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
