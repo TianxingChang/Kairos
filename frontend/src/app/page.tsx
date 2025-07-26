@@ -84,12 +84,12 @@ export default function Home() {
 
   return (
     <div className="app-container">
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
+      <div className="min-h-screen bg-gray-50 flex flex-col">
         {/* Header */}
-        <header className="w-full p-6">
+        <header className="w-full p-6 bg-white shadow-sm">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-semibold text-gray-800">SteepAI</span>
@@ -98,7 +98,7 @@ export default function Home() {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 flex flex-col items-center justify-center px-6 -mt-20">
+        <main className="flex-1 flex flex-col items-center justify-center px-6 py-16">
           <div className="w-full max-w-2xl">
             {/* Hero Section */}
             <div className="text-center mb-12">
@@ -109,9 +109,7 @@ export default function Home() {
               >
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                   开始你的
-                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    智能学习
-                  </span>
+                  <span className="text-blue-600">智能学习</span>
                   之旅
                 </h1>
                 <p className="text-lg text-gray-600 mb-8">
@@ -127,7 +125,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="mb-8"
             >
-              <Card className="p-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <Card className="p-4 shadow-lg border bg-white">
                 <div className="relative">
                   <Textarea
                     ref={inputRef}
@@ -152,7 +150,7 @@ export default function Home() {
                       onClick={handleSubmit}
                       disabled={!inputValue.trim()}
                       size="sm"
-                      className="h-8 w-8 rounded-full p-0 bg-gray-900 hover:bg-gray-800"
+                      className="h-8 w-8 rounded-full p-0 bg-blue-600 hover:bg-blue-700"
                     >
                       <ArrowUp className="h-4 w-4" />
                     </Button>
@@ -182,7 +180,7 @@ export default function Home() {
               className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
             >
               {/* Create Learning Plan */}
-              <Card className="p-6 hover:shadow-lg transition-all duration-200 cursor-pointer border-0 bg-gradient-to-br from-blue-50 to-blue-100">
+              <Card className="p-6 hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-2 hover:border-blue-200">
                 <Button
                   variant="ghost"
                   className="w-full h-auto p-0 flex flex-col items-start space-y-3"
@@ -201,7 +199,7 @@ export default function Home() {
               </Card>
 
               {/* Browse Courses */}
-              <Card className="p-6 hover:shadow-lg transition-all duration-200 cursor-pointer border-0 bg-gradient-to-br from-purple-50 to-purple-100">
+              <Card className="p-6 hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-2 hover:border-purple-200">
                 <Button
                   variant="ghost"
                   className="w-full h-auto p-0 flex flex-col items-start space-y-3"
@@ -391,11 +389,11 @@ export default function Home() {
                       .map((course) => (
                         <Card
                           key={course.id}
-                          className="p-4 hover:shadow-md transition-all duration-200 cursor-pointer border border-gray-200"
+                          className="p-4 hover:shadow-md transition-all duration-200 cursor-pointer border border-gray-200 hover:border-blue-300"
                           onClick={() => handleCourseSelect(course.id)}
                         >
                           <div className="flex items-start space-x-3">
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
                               <BookOpen className="w-5 h-5 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
