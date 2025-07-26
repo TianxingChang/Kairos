@@ -79,6 +79,7 @@ export function TiptapEditor({
         defaultLanguage: "plaintext",
         HTMLAttributes: {
           class: "code-block-custom",
+          style: "padding: 0; margin: 0;",
         },
       }),
       Dropcursor.configure({
@@ -421,54 +422,163 @@ export function TiptapEditor({
         }
 
         .tiptap-content .ProseMirror code {
-          background: hsl(var(--muted));
-          padding: 0.125rem 0.25rem;
+          background: #f6f8fa;
+          color: #d73a49;
+          padding: 0.15rem 0.4rem;
           border-radius: 0.25rem;
           font-size: 0.875rem;
+          font-weight: 500;
+          border: 1px solid #e1e4e8;
           font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
             monospace;
         }
 
         .tiptap-content .ProseMirror .code-block-custom {
-          background: #f8f9fa;
-          border: 1px solid #e9ecef;
+          background: #f6f8fa;
+          border: 1px solid #e1e4e8;
           border-radius: 0.5rem;
-          margin: 1rem 0;
+          margin: 1.25rem 0;
           overflow: hidden;
           position: relative;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+          transition: all 0.2s ease;
         }
 
-        .tiptap-content .ProseMirror .code-block-custom pre {
-          background: #f8f9fa !important;
-          padding: 1rem !important;
+        .tiptap-content .ProseMirror .code-block-custom:hover {
+          border-color: #c6cbd1;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .tiptap-content .code-block-custom pre,
+        .tiptap-content [data-type="codeBlock"] pre {
+          background: #f6f8fa !important;
+          padding: 1.25rem 1.5rem !important;
           margin: 0 !important;
           border-radius: 0 !important;
           border: none !important;
           overflow-x: auto;
           font-size: 0.875rem;
-          line-height: 1.5;
+          line-height: 1.6;
           font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
-            monospace;
+            monospace !important;
+          color: #24292e !important;
+          white-space: pre !important;
+          word-wrap: normal !important;
+          box-sizing: border-box !important;
         }
 
         .tiptap-content .ProseMirror .code-block-custom code {
           background: transparent !important;
           padding: 0 !important;
           border-radius: 0 !important;
+          border: none !important;
           font-size: inherit !important;
           color: inherit !important;
           font-family: inherit !important;
+          line-height: inherit !important;
+          display: block;
+          margin: 0;
+          min-height: 1.6em;
+        }
+
+        /* 确保代码块内容有正确的间距 */
+        .tiptap-content .ProseMirror .code-block-custom {
+          padding: 0 !important;
+        }
+
+        .tiptap-content .ProseMirror .code-block-custom * {
+          box-sizing: border-box;
+        }
+
+        /* 移除代码行的边框和间距 */
+        .tiptap-content .ProseMirror .code-block-custom .hljs {
+          display: block;
+          overflow-x: auto;
+          padding: 0 !important;
+          margin: 0 !important;
+          border: none !important;
+          background: transparent !important;
+        }
+
+        /* 确保代码块内容不会贴边 */
+        .tiptap-content .ProseMirror .code-block-custom > * {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+
+        /* 代码行样式 */
+        .tiptap-content .ProseMirror .code-block-custom .hljs-ln {
+          border: none !important;
+          margin: 0;
+          padding: 0;
+        }
+
+        .tiptap-content .ProseMirror .code-block-custom .hljs-ln-line {
+          border: none !important;
+          margin: 0;
+          padding: 0;
+          display: block;
+        }
+
+        /* 代码块内的段落和换行 */
+        .tiptap-content .ProseMirror .code-block-custom p {
+          margin: 0 !important;
+          padding: 0 !important;
+          border: none !important;
+          text-indent: 0 !important;
+        }
+
+        .tiptap-content .ProseMirror .code-block-custom br {
+          line-height: 1.6;
+        }
+
+        /* 强制确保代码块内容有间距 - 多重选择器 */
+        .tiptap-content pre,
+        .tiptap-content .ProseMirror pre,
+        .tiptap-content pre[class*="language-"],
+        .tiptap-content .code-block-custom pre,
+        .tiptap-content [data-type="codeBlock"] pre {
+          padding: 1.25rem 1.5rem !important;
+          margin: 0 !important;
+          background: #f6f8fa !important;
+          border-radius: 0 !important;
+          border: none !important;
+        }
+
+        /* 为代码块添加内容区域样式 */
+        .tiptap-content .ProseMirror [data-type="codeBlock"] {
+          padding: 0 !important;
+        }
+
+        .tiptap-content .ProseMirror [data-type="codeBlock"] pre {
+          padding: 1.25rem 1.5rem !important;
+          background: #f6f8fa !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+        }
+
+        /* 最终的强制样式 - 确保代码块有 padding */
+        .tiptap-content pre {
+          padding: 1.25rem 1.5rem !important;
+        }
+
+        .tiptap-content .ProseMirror-widget pre {
+          padding: 1.25rem 1.5rem !important;
         }
 
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
           .tiptap-content .ProseMirror .code-block-custom {
-            background: #1e1e1e;
-            border-color: #3e3e3e;
+            background: #f8fafc;
+            border-color: #e2e8f0;
           }
 
           .tiptap-content .ProseMirror .code-block-custom pre {
-            background: #1e1e1e !important;
+            background: #f8fafc !important;
+            color: #334155;
+            padding: 1.25rem 1.5rem !important;
+            line-height: 1.6;
+            box-sizing: border-box;
           }
         }
 
@@ -476,15 +586,17 @@ export function TiptapEditor({
         .tiptap-content .hljs {
           background: transparent !important;
           padding: 0 !important;
+          border: none !important;
+          margin: 0 !important;
         }
 
         .tiptap-content .hljs-keyword {
           color: #d73a49;
-          font-weight: bold;
+          font-weight: 600;
         }
 
         .tiptap-content .hljs-string {
-          color: #032f62;
+          color: #0366d6;
         }
 
         .tiptap-content .hljs-comment {
@@ -502,6 +614,10 @@ export function TiptapEditor({
 
         .tiptap-content .hljs-variable {
           color: #e36209;
+        }
+
+        .tiptap-content .hljs-type {
+          color: #6f42c1;
         }
 
         .tiptap-content .ProseMirror blockquote {

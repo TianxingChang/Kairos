@@ -13,9 +13,9 @@ export interface SlashCommandItem {
 export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<string>, currentVideoTime?: number): SlashCommandItem[] => {
   const commands: SlashCommandItem[] = [
     {
-      title: '标题 1',
+      title: 'Heading 1',
       description: '大号标题',
-      icon: '📝',
+      icon: 'H1',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -26,9 +26,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
       },
     },
     {
-      title: '标题 2',
+      title: 'Heading 2',
       description: '中号标题',
-      icon: '📄',
+      icon: 'H2',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -39,9 +39,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
       },
     },
     {
-      title: '标题 3',
+      title: 'Heading 3',
       description: '小号标题',
-      icon: '📃',
+      icon: 'H3',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -52,9 +52,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
       },
     },
     {
-      title: '文本',
+      title: 'Text',
       description: '普通文本段落',
-      icon: '📝',
+      icon: 'T',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -65,9 +65,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
       },
     },
     {
-      title: '无序列表',
+      title: 'Bullet List',
       description: '创建一个简单的无序列表',
-      icon: '•',
+      icon: '●',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -78,9 +78,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
       },
     },
     {
-      title: '有序列表',
+      title: 'Numbered List',
       description: '创建一个带编号的有序列表',
-      icon: '1.',
+      icon: '№',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -91,9 +91,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
       },
     },
     {
-      title: '引用',
+      title: 'Quote',
       description: '创建一个引用块',
-      icon: '💬',
+      icon: '"',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -104,9 +104,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
       },
     },
     {
-      title: '代码块',
+      title: 'Code',
       description: '创建一个代码块',
-      icon: '💻',
+      icon: '{ }',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -117,9 +117,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
       },
     },
     {
-      title: '图片',
+      title: 'Image',
       description: '插入图片',
-      icon: '🖼️',
+      icon: '🖼',
       command: ({ editor, range }: any) => {
         editor.chain().focus().deleteRange(range).run()
         
@@ -145,9 +145,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
   // 如果有截图功能，添加截图命令
   if (onScreenshot) {
     commands.push({
-      title: '截图',
+      title: 'Screenshot',
       description: '截取视频画面',
-      icon: '📷',
+      icon: '📸',
       command: async ({ editor, range }: any) => {
         editor.chain().focus().deleteRange(range).run()
         try {
@@ -163,9 +163,9 @@ export const createSlashCommands = (editor: any, onScreenshot?: () => Promise<st
   // 如果有视频时间，添加时间戳命令
   if (currentVideoTime !== undefined) {
     commands.push({
-      title: '时间戳',
+      title: 'Timestamp',
       description: '插入当前视频时间戳',
-      icon: '⏰',
+      icon: '⏱',
       command: ({ editor, range }: any) => {
         editor
           .chain()
@@ -188,27 +188,43 @@ const renderCommands = (container: HTMLElement, items: SlashCommandItem[], comma
   container.innerHTML = ''
   
   if (items.length === 0) {
-    container.innerHTML = '<div style="padding: 6px 10px; color: #999; font-size: 12px;">没有找到匹配的命令</div>'
+    container.innerHTML = '<div style="padding: 12px; color: #9ca3af; font-size: 13px; text-align: center; font-style: italic;">没有找到匹配的命令</div>'
     return
   }
   
   items.forEach((item, index) => {
     const div = document.createElement('div')
     div.style.cssText = `
-      padding: 6px 10px;
+      padding: 8px 12px;
+      margin: 2px 0;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      border-bottom: 1px solid #eee;
+      gap: 10px;
+      border-radius: 6px;
       font-size: 13px;
+      transition: all 0.15s ease;
+      color: #374151;
     `
     div.innerHTML = `
-      <span style="font-size: 14px; width: 16px; text-align: center;">${item.icon}</span>
-      <div>
-        <div style="font-weight: 500; font-size: 13px;">${item.title}</div>
-        <div style="font-size: 11px; color: #666; margin-top: 1px;">${item.description}</div>
-      </div>
+      <span style="
+        font-size: 12px; 
+        width: 24px; 
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3f4f6;
+        border-radius: 4px;
+        font-weight: 500;
+        color: #6b7280;
+      ">${item.icon}</span>
+      <div style="
+        font-weight: 500; 
+        font-size: 13px;
+        color: #374151;
+        letter-spacing: -0.01em;
+      ">${item.title}</div>
     `
     
     div.addEventListener('click', () => {
@@ -216,11 +232,23 @@ const renderCommands = (container: HTMLElement, items: SlashCommandItem[], comma
     })
     
     div.addEventListener('mouseenter', () => {
-      div.style.backgroundColor = '#f5f5f5'
+      div.style.backgroundColor = '#f8fafc'
+      div.style.borderColor = '#e2e8f0'
+      const iconSpan = div.querySelector('span') as HTMLElement
+      if (iconSpan) {
+        iconSpan.style.backgroundColor = '#e2e8f0'
+        iconSpan.style.color = '#475569'
+      }
     })
     
     div.addEventListener('mouseleave', () => {
       div.style.backgroundColor = 'transparent'
+      div.style.borderColor = 'transparent'
+      const iconSpan = div.querySelector('span') as HTMLElement
+      if (iconSpan) {
+        iconSpan.style.backgroundColor = '#f3f4f6'
+        iconSpan.style.color = '#6b7280'
+      }
     })
     
     container.appendChild(div)
@@ -260,14 +288,16 @@ export const SlashCommand = (onScreenshot?: () => Promise<string>, currentVideoT
                 popup.style.cssText = `
                   position: absolute;
                   z-index: 1000;
-                  background: white;
-                  border: 1px solid #ccc;
-                  border-radius: 6px;
-                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                  max-height: 240px;
+                  background: #ffffff;
+                  border: 1px solid #e1e5e9;
+                  border-radius: 8px;
+                  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+                  max-height: 280px;
                   overflow-y: auto;
-                  width: 240px;
+                  width: 260px;
                   font-size: 13px;
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+                  padding: 4px;
                 `
                 
                 if (props.clientRect) {
